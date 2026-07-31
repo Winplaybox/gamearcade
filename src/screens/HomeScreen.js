@@ -7,14 +7,13 @@ import {
   ScrollView,
   Image,
   TextInput,
-  FlatList,
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppLayout from '../components/AppLayout';
 import { useTranslation } from '../i18n/i18n';
 import { useTheme } from '../theme/ThemeContext';
-import { DEFAULT_GAMES, getCategoriesList } from '../services/gameService';
+import { DEFAULT_GAMES, getLiveGamesList, getCategoriesList } from '../services/gameService';
 import { getFavoriteGames, toggleFavoriteGame } from '../storage/favoritesStorage';
 
 const { width } = Dimensions.get('window');
@@ -23,6 +22,7 @@ export default function HomeScreen({ navigation }) {
   const { t } = useTranslation();
   const { theme, isDark } = useTheme();
 
+  const [games, setGames] = useState(DEFAULT_GAMES);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [favoriteIds, setFavoriteIds] = useState(new Set());
@@ -31,6 +31,9 @@ export default function HomeScreen({ navigation }) {
 
   useEffect(() => {
     (async () => {
+      const liveList = await getLiveGamesList();
+      setGames(liveList);
+
       const favs = await getFavoriteGames();
       setFavoriteIds(new Set(favs.map((f) => f.id)));
     })();
@@ -46,20 +49,24 @@ export default function HomeScreen({ navigation }) {
   };
 
   const filteredGames = useMemo(() => {
-    let list = DEFAULT_GAMES;
+    let list = games;
     if (selectedCategory !== 'All') {
-      list = list.filter((g) => g.category.toLowerCase() === selectedCategory.toLowerCase());
+      list = list.filter((g) => g.category && g.category.toLowerCase() === selectedCategory.toLowerCase());
     }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
-      list = list.filter((g) => g.title.toLowerCase().includes(q) || g.category.toLowerCase().includes(q));
+      list = list.filter(
+        (g) =>
+          (g.title && g.title.toLowerCase().includes(q)) ||
+          (g.category && g.category.toLowerCase().includes(q))
+      );
     }
     return list;
-  }, [selectedCategory, searchQuery]);
+  }, [games, selectedCategory, searchQuery]);
 
   const featuredGames = useMemo(() => {
-    return DEFAULT_GAMES.filter((g) => g.isFeatured);
-  }, []);
+    return games.filter((g) => g.isFeatured || g.status === 'approved');
+  }, [games]);
 
   return (
     <AppLayout title={t('app_name')} currentTab="Home" navigation={navigation} scrollable>
@@ -129,7 +136,7 @@ export default function HomeScreen({ navigation }) {
                       <Text style={styles.featuredCardTitle} numberOfLines={1}>
                         {game.title}
                       </Text>
-                      <Text style={styles.featuredCardCategory}>{game.category} • ★ {game.rating}</Text>
+                      <Text style={styles.featuredCardCategory}>{game.category || 'General'} • ★ {game.rating || 5.0}</Text>
                     </View>
                   </TouchableOpacity>
                 );
@@ -163,7 +170,7 @@ export default function HomeScreen({ navigation }) {
                     <Text style={[styles.gameGridTitle, { color: theme.text }]} numberOfLines={1}>
                       {game.title}
                     </Text>
-                    <Text style={[styles.gameGridSub, { color: theme.subText }]}>{game.category} • ★ {game.rating}</Text>
+                    <Text style={[styles.gameGridSub, { color: theme.subText }]}>{game.category || 'General'} • ★ {game.rating || 5.0}</Text>
                   </View>
                 </TouchableOpacity>
               );

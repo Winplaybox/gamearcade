@@ -1,3 +1,5 @@
+import { getApprovedGames as fetchFirestoreGames } from '../config/firebase';
+
 export const DEFAULT_GAMES = [
   {
     id: 'game_1',
@@ -60,6 +62,22 @@ export const DEFAULT_GAMES = [
     isFeatured: false,
   },
 ];
+
+/**
+ * Dynamically fetches live approved games from Firebase Firestore database.
+ * Falls back to DEFAULT_GAMES if offline or network failure.
+ */
+export async function getLiveGamesList() {
+  try {
+    const liveGames = await fetchFirestoreGames();
+    if (liveGames && liveGames.length > 0) {
+      return liveGames;
+    }
+  } catch (e) {
+    console.warn('Failed to fetch live Firebase games, falling back to default games:', e);
+  }
+  return DEFAULT_GAMES;
+}
 
 export function getCategoriesList() {
   return ['All', 'Action', 'Arcade', 'Puzzle', 'Sports', 'Racing', 'Casual'];
