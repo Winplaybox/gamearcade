@@ -20,6 +20,7 @@ import { useTheme } from '../theme/ThemeContext';
 import { showBackNavInterstitial } from '../ads/AdManager';
 import { isGameFavorite, toggleFavoriteGame } from '../storage/favoritesStorage';
 import { addRecentGame } from '../storage/recentGamesStorage';
+import { getUserRatings, saveGameRating } from '../storage/ratingsStorage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
@@ -30,17 +31,37 @@ const REPORT_CATEGORIES = [
   'Other Technical Issue',
 ];
 
+const RATING_LABELS = {
+  1: 'Poor 😞',
+  2: 'Fair 🙂',
+  3: 'Good 😊',
+  4: 'Very Good! 😁',
+  5: 'Excellent! Loved it! 🔥',
+};
+
 export default function GameScreen({ route, navigation }) {
   const { game } = route.params;
   const { theme } = useTheme();
 
   const [loading, setLoading] = useState(true);
   const [loadProgress, setLoadProgress] = useState(10);
+
+  // Menu & Modals State
   const [menuModalVisible, setMenuModalVisible] = useState(false);
   const [reportModalVisible, setReportModalVisible] = useState(false);
+  const [ratingModalVisible, setRatingModalVisible] = useState(false);
+
+  // Report Form State
   const [selectedReportCategory, setSelectedReportCategory] = useState(REPORT_CATEGORIES[0]);
   const [reportNotes, setReportNotes] = useState('');
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
+
+  // Rating State
+  const [selectedStars, setSelectedStars] = useState(5);
+  const [ratingReviewText, setRatingReviewText] = useState('');
+  const [userExistingRating, setUserExistingRating] = useState(null);
+  const [isSubmittingRating, setIsSubmittingRating] = useState(false);
+
   const [isFav, setIsFav] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const webviewRef = useRef(null);
@@ -76,6 +97,15 @@ export default function GameScreen({ route, navigation }) {
         const favState = await isGameFavorite(game.id);
         setIsFav(favState);
         await addRecentGame(game);
+
+        const ratingsMap = await getUserRatings();
+        if (ratingsMap[game.id]) {
+          setUserExistingRating(ratingsMap[game.id].rating);
+          setSelectedStars(ratingsMap[game.id].rating);
+          if (ratingsMap[game.id].reviewText) {
+            setRatingReviewText(ratingsMap[game.id].reviewText);
+          }
+        }
       }
     })();
   }, [game]);
@@ -120,6 +150,11 @@ export default function GameScreen({ route, navigation }) {
     setReportModalVisible(true);
   };
 
+  const handleOpenRatingModal = () => {
+    setMenuModalVisible(false);
+    setRatingModalVisible(true);
+  };
+
   const handleSubmitReport = async () => {
     if (!game?.id) return;
     setIsSubmittingReport(true);
@@ -144,6 +179,25 @@ export default function GameScreen({ route, navigation }) {
       Alert.alert(
         'Report Submitted',
         `Thank you! Your report regarding "${game?.title}" has been received. Our team will verify the game link.`,
+        [{ text: 'OK' }]
+      );
+    }
+  };
+
+  const handleSubmitRating = async () => {
+    if (!game?.id) return;
+    setIsSubmittingRating(true);
+    try {
+      await saveGameRating(game, selectedStars, ratingReviewText);
+      setUserExistingRating(selectedStars);
+    } catch (e) {
+      console.warn('Rating submit error:', e);
+    } finally {
+      setIsSubmittingRating(false);
+      setRatingModalVisible(false);
+      Alert.alert(
+        'Thank You!',
+        `Your ${selectedStars}-Star rating for "${game?.title}" has been submitted successfully!`,
         [{ text: 'OK' }]
       );
     }
@@ -226,7 +280,7 @@ export default function GameScreen({ route, navigation }) {
         </TouchableOpacity>
       )}
 
-      {/* Clean Menu Sheet Modal */}
+      {/* Menu Sheet Modal */}
       <Modal
         visible={menuModalVisible}
         transparent
@@ -237,6 +291,7 @@ export default function GameScreen({ route, navigation }) {
           <View style={styles.modalOverlay}>
             <TouchableWithoutFeedback>
               <View style={[styles.menuSheet, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
+                {/* Add to Favorites */}
                 <TouchableOpacity
                   style={[styles.menuSheetRow, { borderBottomColor: theme.border }]}
                   onPress={handleToggleFavorite}
@@ -252,6 +307,18 @@ export default function GameScreen({ route, navigation }) {
                   </Text>
                 </TouchableOpacity>
 
+                {/* Rate Game Option */}
+                <TouchableOpacity
+                  style={[styles.menuSheetRow, { borderBottomColor: theme.border }]}
+                  onPress={handleOpenRatingModal}
+                >
+                  <Ionicons name="star-outline" size={20} color="#FFC107" style={{ marginRight: 14 }} />
+                  <Text style={[styles.menuSheetLabel, { color: theme.text }]}>
+                    {userExistingRating ? `Your Rating: ★ ${userExistingRating}.0` : 'Rate Game'}
+                  </Text>
+                </TouchableOpacity>
+
+                {/* Reload Game */}
                 <TouchableOpacity
                   style={[styles.menuSheetRow, { borderBottomColor: theme.border }]}
                   onPress={handleReload}
@@ -260,12 +327,86 @@ export default function GameScreen({ route, navigation }) {
                   <Text style={[styles.menuSheetLabel, { color: theme.text }]}>Reload Game</Text>
                 </TouchableOpacity>
 
+                {/* Report Problem */}
                 <TouchableOpacity
                   style={styles.menuSheetRow}
                   onPress={handleOpenReportModal}
                 >
                   <Ionicons name="warning-outline" size={20} color="#E94560" style={{ marginRight: 14 }} />
                   <Text style={[styles.menuSheetLabel, { color: '#E94560' }]}>Report Problem</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+
+      {/* Interactive 5-Star Game Rating Modal */}
+      <Modal
+        visible={ratingModalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setRatingModalVisible(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setRatingModalVisible(false)}>
+          <View style={styles.modalCenterOverlay}>
+            <TouchableWithoutFeedback>
+              <View style={[styles.ratingCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
+                <View style={styles.reportHeader}>
+                  <Text style={[styles.reportTitle, { color: theme.text }]}>Rate Game</Text>
+                  <TouchableOpacity onPress={() => setRatingModalVisible(false)}>
+                    <Ionicons name="close" size={22} color={theme.subText} />
+                  </TouchableOpacity>
+                </View>
+
+                <Text style={[styles.ratingGameTitle, { color: theme.text }]}>{game?.title}</Text>
+                <Text style={[styles.reportSub, { color: theme.subText }]}>How would you rate this game?</Text>
+
+                {/* Interactive 5-Star Row */}
+                <View style={styles.starRow}>
+                  {[1, 2, 3, 4, 5].map((starNum) => (
+                    <TouchableOpacity
+                      key={starNum}
+                      onPress={() => setSelectedStars(starNum)}
+                      activeOpacity={0.7}
+                      style={{ padding: 6 }}
+                    >
+                      <Ionicons
+                        name={starNum <= selectedStars ? 'star' : 'star-outline'}
+                        size={36}
+                        color={starNum <= selectedStars ? '#FFC107' : theme.subText}
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </View>
+
+                <Text style={[styles.starRatingHint, { color: theme.primary }]}>
+                  {RATING_LABELS[selectedStars]}
+                </Text>
+
+                {/* Review Text Input */}
+                <TextInput
+                  style={[styles.notesInput, { backgroundColor: theme.subBg, color: theme.text, borderColor: theme.border }]}
+                  placeholder="Write a quick review (optional)..."
+                  placeholderTextColor={theme.subText}
+                  multiline
+                  numberOfLines={2}
+                  value={ratingReviewText}
+                  onChangeText={setRatingReviewText}
+                />
+
+                {/* Submit Action Button */}
+                <TouchableOpacity
+                  style={[styles.submitReportBtn, { backgroundColor: theme.primary }]}
+                  onPress={handleSubmitRating}
+                  disabled={isSubmittingRating}
+                  activeOpacity={0.85}
+                >
+                  {isSubmittingRating ? (
+                    <ActivityIndicator size="small" color="#ffffff" />
+                  ) : (
+                    <Text style={styles.submitReportBtnText}>Submit Rating</Text>
+                  )}
                 </TouchableOpacity>
               </View>
             </TouchableWithoutFeedback>
@@ -281,7 +422,7 @@ export default function GameScreen({ route, navigation }) {
         onRequestClose={() => setReportModalVisible(false)}
       >
         <TouchableWithoutFeedback onPress={() => setReportModalVisible(false)}>
-          <View style={styles.reportModalOverlay}>
+          <View style={styles.modalCenterOverlay}>
             <TouchableWithoutFeedback>
               <View style={[styles.reportCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
                 <View style={styles.reportHeader}>
@@ -479,7 +620,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
   },
-  reportModalOverlay: {
+  modalCenterOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.7)',
     justifyContent: 'center',
@@ -492,7 +633,33 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 18,
   },
+  ratingCard: {
+    width: '100%',
+    borderRadius: 20,
+    borderWidth: 1,
+    padding: 18,
+    alignItems: 'center',
+  },
+  ratingGameTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    marginTop: 4,
+    marginBottom: 2,
+    textAlign: 'center',
+  },
+  starRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  starRatingHint: {
+    fontSize: 14,
+    fontWeight: '700',
+    marginBottom: 12,
+  },
   reportHeader: {
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -520,6 +687,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   notesInput: {
+    width: '100%',
     borderRadius: 12,
     borderWidth: 1,
     paddingHorizontal: 12,
@@ -530,6 +698,7 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   submitReportBtn: {
+    width: '100%',
     height: 46,
     borderRadius: 14,
     justifyContent: 'center',
