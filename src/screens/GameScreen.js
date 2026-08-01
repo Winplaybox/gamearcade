@@ -20,7 +20,7 @@ import { useTranslation } from '../i18n/i18n';
 import { useTheme } from '../theme/ThemeContext';
 import { showBackNavInterstitial } from '../ads/AdManager';
 import { isGameFavorite, toggleFavoriteGame } from '../storage/favoritesStorage';
-import { addRecentGame } from '../storage/recentGamesStorage';
+import { addRecentGame, updateRecentGameSession } from '../storage/recentGamesStorage';
 import { getUserRatings, saveGameRating } from '../storage/ratingsStorage';
 import { collection, addDoc, serverTimestamp } from '@firebase/firestore';
 import { db } from '../config/firebase';
@@ -68,8 +68,13 @@ export default function GameScreen({ route, navigation }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const webviewRef = useRef(null);
 
-  // Orientation Locking Setup
+  // Track session start time and update duration on unmount
+  const sessionStartTimeRef = useRef(Date.now());
+
+  // Orientation Locking & Play Duration Setup
   useEffect(() => {
+    sessionStartTimeRef.current = Date.now();
+
     const applyOrientation = async () => {
       const ori = game?.orientation?.toLowerCase();
       try {
@@ -88,6 +93,10 @@ export default function GameScreen({ route, navigation }) {
     applyOrientation();
 
     return () => {
+      const elapsedMs = Date.now() - sessionStartTimeRef.current;
+      if (game?.id && elapsedMs > 2000) {
+        updateRecentGameSession(game.id, elapsedMs).catch(() => {});
+      }
       ScreenOrientation.unlockAsync().catch(() => {});
       StatusBar.setHidden(false);
     };
