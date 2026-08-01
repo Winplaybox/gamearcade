@@ -10,6 +10,7 @@ import {
   Dimensions,
   FlatList,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,7 +19,7 @@ import { useTranslation } from '../i18n/i18n';
 import { useTheme } from '../theme/ThemeContext';
 import { getLiveGamesList, getCategoriesFromGames } from '../services/gameService';
 import { getFavoriteGames, toggleFavoriteGame } from '../storage/favoritesStorage';
-import { getRecentGames } from '../storage/recentGamesStorage';
+import { getRecentGames, removeRecentGame } from '../storage/recentGamesStorage';
 import { getUserRatings } from '../storage/ratingsStorage';
 
 const { width } = Dimensions.get('window');
@@ -72,16 +73,36 @@ export default function BrowseScreen({ route, navigation }) {
     setFavoriteIds(new Set(updated.map((f) => f.id)));
   };
 
+  const handleRemoveRecent = (game) => {
+    Alert.alert(
+      'Remove from History',
+      `Remove "${game.title}" from your continue playing list?`,
+      [
+        { text: t('cancel'), style: 'cancel' },
+        {
+          text: t('remove'),
+          style: 'destructive',
+          onPress: async () => {
+            const updated = await removeRecentGame(game.id);
+            setRecentGames(updated);
+          },
+        },
+      ]
+    );
+  };
+
   const handlePlayGame = (game) => {
     navigation.navigate('Game', { game });
   };
+
+  const isRecentScreen = routeFilter === 'recent';
 
   const filteredGames = useMemo(() => {
     let result = games;
 
     // Filter by routeFilter (recent or featured)
-    if (routeFilter === 'recent') {
-      result = recentGames;
+    if (isRecentScreen) {
+      return recentGames;
     } else if (routeFilter === 'featured') {
       result = result.filter((g) => g.isFeatured || g.status === 'approved');
     }
@@ -101,7 +122,7 @@ export default function BrowseScreen({ route, navigation }) {
       );
     }
     return result;
-  }, [games, recentGames, routeFilter, selectedCategory, searchQuery]);
+  }, [games, recentGames, isRecentScreen, routeFilter, selectedCategory, searchQuery]);
 
   const pageTitle = routeTitle || (selectedCategory !== 'All' ? selectedCategory : t('tab_browse'));
 
@@ -114,24 +135,26 @@ export default function BrowseScreen({ route, navigation }) {
       scrollable={false}
     >
       <View style={[styles.container, { backgroundColor: theme.bg }]}>
-        {/* Search Bar */}
-        <View style={[styles.searchBarRow, { backgroundColor: theme.inputBg, borderColor: theme.border }]}>
-          <Ionicons name="search-outline" size={18} color={theme.subText} style={{ marginRight: 8 }} />
-          <TextInput
-            style={[styles.searchInput, { color: theme.text }]}
-            placeholder={t('search_games_placeholder')}
-            placeholderTextColor={theme.subText}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          {searchQuery ? (
-            <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <Ionicons name="close-circle" size={16} color={theme.subText} />
-            </TouchableOpacity>
-          ) : null}
-        </View>
+        {/* Search Bar (Hidden in Continue Playing Screen) */}
+        {!isRecentScreen && (
+          <View style={[styles.searchBarRow, { backgroundColor: theme.inputBg, borderColor: theme.border }]}>
+            <Ionicons name="search-outline" size={18} color={theme.subText} style={{ marginRight: 8 }} />
+            <TextInput
+              style={[styles.searchInput, { color: theme.text }]}
+              placeholder={t('search_games_placeholder')}
+              placeholderTextColor={theme.subText}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+            {searchQuery ? (
+              <TouchableOpacity onPress={() => setSearchQuery('')}>
+                <Ionicons name="close-circle" size={16} color={theme.subText} />
+              </TouchableOpacity>
+            ) : null}
+          </View>
+        )}
 
-        {/* Dynamic Category Filter Pills */}
+        {/* Dynamic Category Filter Pills (Hidden in Recent / Custom Filter Screens) */}
         {!routeFilter && (
           <View style={{ height: 44, marginBottom: 12 }}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -160,19 +183,71 @@ export default function BrowseScreen({ route, navigation }) {
           </View>
         )}
 
-        {/* Count Badge Header */}
-        <View style={styles.countHeader}>
-          <Text style={[styles.countText, { color: theme.subText }]}>
-            {filteredGames.length} {t('games_found')}
-          </Text>
-        </View>
+        {/* Count Badge Header (Hidden in Continue Playing Screen) */}
+        {!isRecentScreen && (
+          <View style={styles.countHeader}>
+            <Text style={[styles.countText, { color: theme.subText }]}>
+              {filteredGames.length} {t('games_found')}
+            </Text>
+          </View>
+        )}
 
-        {/* 2-Column Games Grid */}
+        {/* Content View: Vertical List View for Continue Playing vs Grid View for Browse */}
         {loading ? (
           <View style={styles.loaderContainer}>
             <ActivityIndicator size="large" color={theme.primary} />
           </View>
+        ) : isRecentScreen ? (
+          /* Continue Playing Vertical List View */
+          <FlatList
+            data={filteredGames}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <Ionicons name="time-outline" size={54} color={theme.subText} />
+                <Text style={[styles.emptyText, { color: theme.text }]}>No recently played games yet.</Text>
+              </View>
+            }
+            renderItem={({ item }) => {
+              const isFav = favoriteIds.has(item.id);
+              const userRating = userRatingsMap[item.id]?.rating;
+              const ratingScore = userRating ? `${userRating}.0` : (item.rating || '4.6');
+              const playedTime = item.lastPlayedTime ? `Played: ${item.lastPlayedTime}` : 'Recently Played';
+
+              return (
+                <TouchableOpacity
+                  style={[styles.recentListItem, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
+                  onPress={() => handlePlayGame(item)}
+                  activeOpacity={0.85}
+                >
+                  <Image source={{ uri: item.iconUrl }} style={styles.recentItemImage} />
+                  <View style={styles.recentItemMeta}>
+                    <Text style={[styles.recentItemTitle, { color: theme.text }]} numberOfLines={1}>
+                      {item.title}
+                    </Text>
+                    <Text style={[styles.recentItemCategory, { color: theme.subText }]}>
+                      {item.category || 'Arcade'} • ★ {ratingScore}
+                    </Text>
+                    <Text style={[styles.recentTimeStamp, { color: theme.primary }]}>
+                      🕒 {playedTime}
+                    </Text>
+                  </View>
+
+                  <TouchableOpacity
+                    style={styles.actionBtn}
+                    onPress={() => handleRemoveRecent(item)}
+                    activeOpacity={0.7}
+                  >
+                    <Ionicons name="trash-outline" size={20} color="#E94560" />
+                  </TouchableOpacity>
+                </TouchableOpacity>
+              );
+            }}
+          />
         ) : (
+          /* 2-Column Games Grid */
           <FlatList
             data={filteredGames}
             keyExtractor={(item) => item.id}
@@ -183,9 +258,7 @@ export default function BrowseScreen({ route, navigation }) {
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
                 <Ionicons name="game-controller-outline" size={48} color={theme.subText} />
-                <Text style={[styles.emptyText, { color: theme.text }]}>
-                  {routeFilter === 'recent' ? t('no_favorites_saved') : t('no_games')}
-                </Text>
+                <Text style={[styles.emptyText, { color: theme.text }]}>{t('no_games')}</Text>
               </View>
             }
             renderItem={({ item }) => {
@@ -281,6 +354,9 @@ const styles = StyleSheet.create({
   gridContent: {
     paddingBottom: 16,
   },
+  listContent: {
+    paddingBottom: 16,
+  },
   columnWrapper: {
     justifyContent: 'space-between',
   },
@@ -292,6 +368,39 @@ const styles = StyleSheet.create({
   emptyText: {
     marginTop: 12,
     fontSize: 14,
+  },
+  recentListItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 14,
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 10,
+  },
+  recentItemImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 12,
+  },
+  recentItemMeta: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  recentItemTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  recentItemCategory: {
+    fontSize: 11,
+    marginTop: 2,
+  },
+  recentTimeStamp: {
+    fontSize: 11,
+    fontWeight: '600',
+    marginTop: 4,
+  },
+  actionBtn: {
+    padding: 8,
   },
   gameGridCard: {
     width: (width - 44) / 2,
