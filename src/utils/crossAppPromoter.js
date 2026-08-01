@@ -2,8 +2,21 @@ import { Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 
-const CACHE_STORAGE_KEY = 'mvb_promoted_apps_v1';
+const CACHE_STORAGE_KEY = 'gamearcade_promoted_apps_v1';
 const HOSTED_API_URL = 'https://winplaybox.in/mvb-admin/apps_directory.php';
+
+async function fetchWithTimeout(url, timeoutMs = 5000) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    clearTimeout(id);
+    return response;
+  } catch (err) {
+    clearTimeout(id);
+    throw err;
+  }
+}
 
 export function getCurrentPackageName() {
   return Constants.expoConfig?.android?.package || 'com.winplaybox.gamearcade';
@@ -14,7 +27,7 @@ export async function getPromotedAppsList() {
   let rawList = [];
 
   try {
-    const response = await fetch(HOSTED_API_URL, { timeout: 5000 });
+    const response = await fetchWithTimeout(HOSTED_API_URL, 5000);
     const json = await response.json();
     if (json && json.status === 'success' && Array.isArray(json.data)) {
       rawList = json.data;
