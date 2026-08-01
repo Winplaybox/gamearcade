@@ -187,6 +187,7 @@ export default function GameScreen({ route, navigation }) {
   const handleSubmitRating = async () => {
     if (!game?.id) return;
     setIsSubmittingRating(true);
+    const isUpdate = !!userExistingRating;
     try {
       await saveGameRating(game, selectedStars, ratingReviewText);
       setUserExistingRating(selectedStars);
@@ -197,7 +198,9 @@ export default function GameScreen({ route, navigation }) {
       setRatingModalVisible(false);
       Alert.alert(
         'Thank You!',
-        `Your ${selectedStars}-Star rating for "${game?.title}" has been submitted successfully!`,
+        isUpdate
+          ? `Your rating for "${game?.title}" has been updated to ${selectedStars} stars!`
+          : `Your ${selectedStars}-Star rating for "${game?.title}" has been submitted successfully!`,
         [{ text: 'OK' }]
       );
     }
@@ -307,14 +310,19 @@ export default function GameScreen({ route, navigation }) {
                   </Text>
                 </TouchableOpacity>
 
-                {/* Rate Game Option */}
+                {/* Rate / Update Rating Option */}
                 <TouchableOpacity
                   style={[styles.menuSheetRow, { borderBottomColor: theme.border }]}
                   onPress={handleOpenRatingModal}
                 >
-                  <Ionicons name="star-outline" size={20} color="#FFC107" style={{ marginRight: 14 }} />
+                  <Ionicons
+                    name={userExistingRating ? 'star' : 'star-outline'}
+                    size={20}
+                    color="#FFC107"
+                    style={{ marginRight: 14 }}
+                  />
                   <Text style={[styles.menuSheetLabel, { color: theme.text }]}>
-                    {userExistingRating ? `Your Rating: ★ ${userExistingRating}.0` : 'Rate Game'}
+                    {userExistingRating ? `Your Rating: ★ ${userExistingRating} (Edit)` : 'Rate Game'}
                   </Text>
                 </TouchableOpacity>
 
@@ -353,14 +361,18 @@ export default function GameScreen({ route, navigation }) {
             <TouchableWithoutFeedback>
               <View style={[styles.ratingCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
                 <View style={styles.reportHeader}>
-                  <Text style={[styles.reportTitle, { color: theme.text }]}>Rate Game</Text>
+                  <Text style={[styles.reportTitle, { color: theme.text }]}>
+                    {userExistingRating ? 'Update Rating' : 'Rate Game'}
+                  </Text>
                   <TouchableOpacity onPress={() => setRatingModalVisible(false)}>
                     <Ionicons name="close" size={22} color={theme.subText} />
                   </TouchableOpacity>
                 </View>
 
                 <Text style={[styles.ratingGameTitle, { color: theme.text }]}>{game?.title}</Text>
-                <Text style={[styles.reportSub, { color: theme.subText }]}>How would you rate this game?</Text>
+                <Text style={[styles.reportSub, { color: theme.subText }]}>
+                  {userExistingRating ? 'Edit your score or review:' : 'How would you rate this game?'}
+                </Text>
 
                 {/* Interactive 5-Star Row */}
                 <View style={styles.starRow}>
@@ -405,7 +417,9 @@ export default function GameScreen({ route, navigation }) {
                   {isSubmittingRating ? (
                     <ActivityIndicator size="small" color="#ffffff" />
                   ) : (
-                    <Text style={styles.submitReportBtnText}>Submit Rating</Text>
+                    <Text style={styles.submitReportBtnText}>
+                      {userExistingRating ? 'Update Rating' : 'Submit Rating'}
+                    </Text>
                   )}
                 </TouchableOpacity>
               </View>
@@ -549,7 +563,7 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 20,
-    justifyContent: 'center',
+    justify.content: 'center',
     alignItems: 'center',
     marginBottom: 16,
   },
