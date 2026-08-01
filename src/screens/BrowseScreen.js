@@ -18,20 +18,32 @@ import { useTranslation } from '../i18n/i18n';
 import { useTheme } from '../theme/ThemeContext';
 import { getLiveGamesList, getCategoriesFromGames } from '../services/gameService';
 import { getFavoriteGames, toggleFavoriteGame } from '../storage/favoritesStorage';
+import { getRecentGames } from '../storage/recentGamesStorage';
 import { getUserRatings } from '../storage/ratingsStorage';
 
 const { width } = Dimensions.get('window');
 
-export default function BrowseScreen({ navigation }) {
+export default function BrowseScreen({ route, navigation }) {
   const { t } = useTranslation();
   const { theme } = useTheme();
 
+  const routeCategory = route?.params?.category || 'All';
+  const routeFilter = route?.params?.filter || null;
+  const routeTitle = route?.params?.title || null;
+
   const [games, setGames] = useState([]);
+  const [recentGames, setRecentGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState(routeCategory);
   const [favoriteIds, setFavoriteIds] = useState(new Set());
   const [userRatingsMap, setUserRatingsMap] = useState({});
+
+  useEffect(() => {
+    if (routeCategory) {
+      setSelectedCategory(routeCategory);
+    }
+  }, [routeCategory]);
 
   const categories = useMemo(() => {
     return getCategoriesFromGames(games);
@@ -46,10 +58,11 @@ export default function BrowseScreen({ navigation }) {
     })();
   }, []);
 
-  // Refresh favorite state and user ratings whenever screen comes into focus
+  // Refresh favorite state, recent games, and user ratings whenever screen comes into focus
   useFocusEffect(
     useCallback(() => {
       getFavoriteGames().then((favs) => setFavoriteIds(new Set(favs.map((f) => f.id))));
+      getRecentGames().then(setRecentGames);
       getUserRatings().then(setUserRatingsMap);
     }, [])
   );
@@ -65,9 +78,20 @@ export default function BrowseScreen({ navigation }) {
 
   const filteredGames = useMemo(() => {
     let result = games;
+
+    // Filter by routeFilter (recent or featured)
+    if (routeFilter === 'recent') {
+      result = recentGames;
+    } else if (routeFilter === 'featured') {
+      result = result.filter((g) => g.isFeatured || g.status === 'approved');
+    }
+
+    // Filter by selected category pill
     if (selectedCategory && selectedCategory !== 'All') {
       result = result.filter((g) => g.category && g.category.toLowerCase() === selectedCategory.toLowerCase());
     }
+
+    // Filter by search query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
       result = result.filter(
@@ -77,17 +101,25 @@ export default function BrowseScreen({ navigation }) {
       );
     }
     return result;
-  }, [games, selectedCategory, searchQuery]);
+  }, [games, recentGames, routeFilter, selectedCategory, searchQuery]);
+
+  const pageTitle = routeTitle || (selectedCategory !== 'All' ? selectedCategory : t('tab_browse'));
 
   return (
-    <AppLayout title={t('tab_browse')} currentTab="Browse" navigation={navigation} scrollable={false}>
+    <AppLayout
+      title={pageTitle}
+      showBack={!!routeTitle || routeCategory !== 'All'}
+      currentTab="Browse"
+      navigation={navigation}
+      scrollable={false}
+    >
       <View style={[styles.container, { backgroundColor: theme.bg }]}>
         {/* Search Bar */}
         <View style={[styles.searchBarRow, { backgroundColor: theme.inputBg, borderColor: theme.border }]}>
           <Ionicons name="search-outline" size={18} color={theme.subText} style={{ marginRight: 8 }} />
           <TextInput
             style={[styles.searchInput, { color: theme.text }]}
-            placeholder="Search games..."
+            placeholder={t('search_games_placeholder')}
             placeholderTextColor={theme.subText}
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -100,36 +132,38 @@ export default function BrowseScreen({ navigation }) {
         </View>
 
         {/* Dynamic Category Filter Pills */}
-        <View style={{ height: 44, marginBottom: 12 }}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {categories.map((cat) => {
-              const isSelected = selectedCategory === cat;
-              return (
-                <TouchableOpacity
-                  key={cat}
-                  style={[
-                    styles.catPill,
-                    {
-                      backgroundColor: isSelected ? theme.primary : theme.cardBg,
-                      borderColor: isSelected ? theme.primary : theme.border,
-                    },
-                  ]}
-                  onPress={() => setSelectedCategory(cat)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={[styles.catPillText, { color: isSelected ? '#ffffff' : theme.text }]}>
-                    {cat}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
-        </View>
+        {!routeFilter && (
+          <View style={{ height: 44, marginBottom: 12 }}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {categories.map((cat) => {
+                const isSelected = selectedCategory === cat;
+                return (
+                  <TouchableOpacity
+                    key={cat}
+                    style={[
+                      styles.catPill,
+                      {
+                        backgroundColor: isSelected ? theme.primary : theme.cardBg,
+                        borderColor: isSelected ? theme.primary : theme.border,
+                      },
+                    ]}
+                    onPress={() => setSelectedCategory(cat)}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={[styles.catPillText, { color: isSelected ? '#ffffff' : theme.text }]}>
+                      {cat}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </View>
+        )}
 
         {/* Count Badge Header */}
         <View style={styles.countHeader}>
           <Text style={[styles.countText, { color: theme.subText }]}>
-            {filteredGames.length} Games Found
+            {filteredGames.length} {t('games_found')}
           </Text>
         </View>
 
@@ -149,7 +183,9 @@ export default function BrowseScreen({ navigation }) {
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
                 <Ionicons name="game-controller-outline" size={48} color={theme.subText} />
-                <Text style={[styles.emptyText, { color: theme.text }]}>No games match your search.</Text>
+                <Text style={[styles.emptyText, { color: theme.text }]}>
+                  {routeFilter === 'recent' ? t('no_favorites_saved') : t('no_games')}
+                </Text>
               </View>
             }
             renderItem={({ item }) => {

@@ -88,16 +88,6 @@ export default function HomeScreen({ navigation }) {
     navigation.navigate('Game', { game });
   };
 
-  const filteredGames = useMemo(() => {
-    if (!searchQuery.trim()) return games;
-    const q = searchQuery.toLowerCase().trim();
-    return games.filter(
-      (g) =>
-        (g.title && g.title.toLowerCase().includes(q)) ||
-        (g.category && g.category.toLowerCase().includes(q))
-    );
-  }, [games, searchQuery]);
-
   const featuredGames = useMemo(() => {
     return games.filter((g) => g.isFeatured || g.status === 'approved').slice(0, 5);
   }, [games]);
@@ -107,7 +97,7 @@ export default function HomeScreen({ navigation }) {
       title={
         <View style={{ paddingVertical: 4 }}>
           <Text style={[styles.headerTitle, { color: theme.text }]}>🎮 Game Arcade</Text>
-          <Text style={[styles.headerSubTitle, { color: theme.subText }]}>Instant Games. No Installs.</Text>
+          <Text style={[styles.headerSubTitle, { color: theme.subText }]}>{t('instant_games_sub')}</Text>
         </View>
       }
       currentTab="Home"
@@ -120,7 +110,7 @@ export default function HomeScreen({ navigation }) {
           <Ionicons name="search-outline" size={18} color={theme.subText} style={{ marginRight: 8 }} />
           <TextInput
             style={[styles.searchInput, { color: theme.text }]}
-            placeholder="Search games..."
+            placeholder={t('search_games_placeholder')}
             placeholderTextColor={theme.subText}
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -139,7 +129,7 @@ export default function HomeScreen({ navigation }) {
         ) : games.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Ionicons name="game-controller-outline" size={48} color={theme.subText} />
-            <Text style={[styles.emptyText, { color: theme.text }]}>No games available right now.</Text>
+            <Text style={[styles.emptyText, { color: theme.text }]}>{t('no_games_available')}</Text>
           </View>
         ) : (
           <>
@@ -147,9 +137,9 @@ export default function HomeScreen({ navigation }) {
             {!searchQuery && recentGames.length > 0 && (
               <View style={styles.sectionContainer}>
                 <View style={styles.sectionHeaderRow}>
-                  <Text style={[styles.sectionTitle, { color: theme.text }]}>Continue Playing</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Browse')}>
-                    <Text style={[styles.seeAllText, { color: theme.primary }]}>See all</Text>
+                  <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('continue_playing')}</Text>
+                  <TouchableOpacity onPress={() => navigation.navigate('Browse', { filter: 'recent', title: t('continue_playing') })}>
+                    <Text style={[styles.seeAllText, { color: theme.primary }]}>{t('see_all')}</Text>
                   </TouchableOpacity>
                 </View>
 
@@ -195,9 +185,9 @@ export default function HomeScreen({ navigation }) {
             {!searchQuery && dynamicCategories.length > 0 && (
               <View style={styles.sectionContainer}>
                 <View style={styles.sectionHeaderRow}>
-                  <Text style={[styles.sectionTitle, { color: theme.text }]}>Categories</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Browse')}>
-                    <Text style={[styles.seeAllText, { color: theme.primary }]}>See all</Text>
+                  <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('categories')}</Text>
+                  <TouchableOpacity onPress={() => navigation.navigate('Browse', { category: 'All' })}>
+                    <Text style={[styles.seeAllText, { color: theme.primary }]}>{t('see_all')}</Text>
                   </TouchableOpacity>
                 </View>
 
@@ -206,7 +196,7 @@ export default function HomeScreen({ navigation }) {
                     <TouchableOpacity
                       key={cat.id}
                       style={[styles.categoryGridCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
-                      onPress={() => navigation.navigate('Browse')}
+                      onPress={() => navigation.navigate('Browse', { category: cat.id })}
                       activeOpacity={0.8}
                     >
                       <View style={[styles.categoryIconCircle, { backgroundColor: `${cat.color}20` }]}>
@@ -223,9 +213,9 @@ export default function HomeScreen({ navigation }) {
             {featuredGames.length > 0 && (
               <View style={styles.sectionContainer}>
                 <View style={styles.sectionHeaderRow}>
-                  <Text style={[styles.sectionTitle, { color: theme.text }]}>Featured Games</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Browse')}>
-                    <Text style={[styles.seeAllText, { color: theme.primary }]}>See all</Text>
+                  <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('featured_games')}</Text>
+                  <TouchableOpacity onPress={() => navigation.navigate('Browse', { filter: 'featured', title: t('featured_games') })}>
+                    <Text style={[styles.seeAllText, { color: theme.primary }]}>{t('see_all')}</Text>
                   </TouchableOpacity>
                 </View>
 

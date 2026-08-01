@@ -35,12 +35,12 @@ export default function FavoritesScreen({ navigation }) {
 
   const handleRemoveFav = (game) => {
     Alert.alert(
-      'Remove Favorite',
+      t('remove_favorite_title'),
       `Are you sure you want to remove "${game.title}" from your favorites?`,
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('cancel'), style: 'cancel' },
         {
-          text: 'Remove',
+          text: t('remove'),
           style: 'destructive',
           onPress: async () => {
             const updated = await toggleFavoriteGame(game);
@@ -53,12 +53,12 @@ export default function FavoritesScreen({ navigation }) {
 
   const handleClearAll = () => {
     Alert.alert(
-      'Clear All Favorites',
-      'Are you sure you want to remove all saved games from your favorites?',
+      t('clear_all_favorites_title'),
+      t('clear_all_favorites_msg'),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('cancel'), style: 'cancel' },
         {
-          text: 'Clear All',
+          text: t('clear_all'),
           style: 'destructive',
           onPress: async () => {
             await AsyncStorage.removeItem('gamearcade_favorites_v1');
@@ -84,14 +84,14 @@ export default function FavoritesScreen({ navigation }) {
   }, [favorites, searchQuery]);
 
   return (
-    <AppLayout title="Favorites" currentTab="Favorites" navigation={navigation} scrollable={false}>
+    <AppLayout title={t('tab_favorites')} currentTab="Favorites" navigation={navigation} scrollable={false}>
       <View style={[styles.container, { backgroundColor: theme.bg }]}>
         {/* Search Input */}
         <View style={[styles.searchBarRow, { backgroundColor: theme.inputBg, borderColor: theme.border }]}>
           <Ionicons name="search-outline" size={18} color={theme.subText} style={{ marginRight: 8 }} />
           <TextInput
             style={[styles.searchInput, { color: theme.text }]}
-            placeholder="Search favorites..."
+            placeholder={t('search_placeholder')}
             placeholderTextColor={theme.subText}
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -106,11 +106,11 @@ export default function FavoritesScreen({ navigation }) {
         {/* Count Badge & Clear All Header */}
         <View style={styles.countHeaderRow}>
           <Text style={[styles.countText, { color: theme.subText }]}>
-            {filteredFavorites.length} Saved Games
+            {filteredFavorites.length} {t('saved_games')}
           </Text>
           {favorites.length > 0 && (
             <TouchableOpacity onPress={handleClearAll}>
-              <Text style={[styles.clearAllText, { color: theme.primary }]}>Clear All</Text>
+              <Text style={[styles.clearAllText, { color: theme.primary }]}>{t('clear_all')}</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -124,9 +124,9 @@ export default function FavoritesScreen({ navigation }) {
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Ionicons name="heart-outline" size={54} color={theme.subText} />
-              <Text style={[styles.emptyTitle, { color: theme.text }]}>No favorites saved yet.</Text>
+              <Text style={[styles.emptyTitle, { color: theme.text }]}>{t('no_favorites_saved')}</Text>
               <Text style={[styles.emptySub, { color: theme.subText }]}>
-                Tap the heart icon on any game card to save it here for instant play!
+                {t('no_favorites_sub')}
               </Text>
             </View>
           }

@@ -16,6 +16,7 @@ import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import AppLayout from '../components/AppLayout';
+import { useTranslation } from '../i18n/i18n';
 import { useTheme } from '../theme/ThemeContext';
 import { showBackNavInterstitial } from '../ads/AdManager';
 import { isGameFavorite, toggleFavoriteGame } from '../storage/favoritesStorage';
@@ -41,6 +42,7 @@ const RATING_LABELS = {
 
 export default function GameScreen({ route, navigation }) {
   const { game } = route.params;
+  const { t } = useTranslation();
   const { theme } = useTheme();
 
   const [loading, setLoading] = useState(true);
@@ -177,8 +179,8 @@ export default function GameScreen({ route, navigation }) {
       setReportModalVisible(false);
       setReportNotes('');
       Alert.alert(
-        'Report Submitted',
-        `Thank you! Your report regarding "${game?.title}" has been received. Our team will verify the game link.`,
+        t('report_submitted_title'),
+        t('report_submitted_msg'),
         [{ text: 'OK' }]
       );
     }
@@ -187,7 +189,6 @@ export default function GameScreen({ route, navigation }) {
   const handleSubmitRating = async () => {
     if (!game?.id) return;
     setIsSubmittingRating(true);
-    const isUpdate = !!userExistingRating;
     try {
       await saveGameRating(game, selectedStars, ratingReviewText);
       setUserExistingRating(selectedStars);
@@ -198,9 +199,7 @@ export default function GameScreen({ route, navigation }) {
       setRatingModalVisible(false);
       Alert.alert(
         'Thank You!',
-        isUpdate
-          ? `Your rating for "${game?.title}" has been updated to ${selectedStars} stars!`
-          : `Your ${selectedStars}-Star rating for "${game?.title}" has been submitted successfully!`,
+        t('rating_submitted_msg'),
         [{ text: 'OK' }]
       );
     }
@@ -251,7 +250,7 @@ export default function GameScreen({ route, navigation }) {
           </View>
 
           <Text style={[styles.loadingStatusText, { color: theme.subText }]}>
-            Loading game... {loadProgress}%
+            {t('loading')} {loadProgress}%
           </Text>
         </View>
       )}
@@ -306,7 +305,7 @@ export default function GameScreen({ route, navigation }) {
                     style={{ marginRight: 14 }}
                   />
                   <Text style={[styles.menuSheetLabel, { color: theme.text }]}>
-                    {isFav ? 'Remove from Favorites' : 'Add to Favorites'}
+                    {isFav ? t('remove_from_favorites') : t('add_to_favorites')}
                   </Text>
                 </TouchableOpacity>
 
@@ -322,7 +321,7 @@ export default function GameScreen({ route, navigation }) {
                     style={{ marginRight: 14 }}
                   />
                   <Text style={[styles.menuSheetLabel, { color: theme.text }]}>
-                    {userExistingRating ? `Your Rating: ★ ${userExistingRating} (Edit)` : 'Rate Game'}
+                    {userExistingRating ? `${t('your_rating')}: ★ ${userExistingRating}` : t('rate_game')}
                   </Text>
                 </TouchableOpacity>
 
@@ -332,7 +331,7 @@ export default function GameScreen({ route, navigation }) {
                   onPress={handleReload}
                 >
                   <Ionicons name="refresh-outline" size={20} color={theme.text} style={{ marginRight: 14 }} />
-                  <Text style={[styles.menuSheetLabel, { color: theme.text }]}>Reload Game</Text>
+                  <Text style={[styles.menuSheetLabel, { color: theme.text }]}>{t('reload_game')}</Text>
                 </TouchableOpacity>
 
                 {/* Report Problem */}
@@ -341,7 +340,7 @@ export default function GameScreen({ route, navigation }) {
                   onPress={handleOpenReportModal}
                 >
                   <Ionicons name="warning-outline" size={20} color="#E94560" style={{ marginRight: 14 }} />
-                  <Text style={[styles.menuSheetLabel, { color: '#E94560' }]}>Report Problem</Text>
+                  <Text style={[styles.menuSheetLabel, { color: '#E94560' }]}>{t('report_problem')}</Text>
                 </TouchableOpacity>
               </View>
             </TouchableWithoutFeedback>
@@ -362,7 +361,7 @@ export default function GameScreen({ route, navigation }) {
               <View style={[styles.ratingCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
                 <View style={styles.reportHeader}>
                   <Text style={[styles.reportTitle, { color: theme.text }]}>
-                    {userExistingRating ? 'Update Rating' : 'Rate Game'}
+                    {userExistingRating ? t('update_rating_title') : t('rate_game_title')}
                   </Text>
                   <TouchableOpacity onPress={() => setRatingModalVisible(false)}>
                     <Ionicons name="close" size={22} color={theme.subText} />
@@ -399,7 +398,7 @@ export default function GameScreen({ route, navigation }) {
                 {/* Review Text Input */}
                 <TextInput
                   style={[styles.notesInput, { backgroundColor: theme.subBg, color: theme.text, borderColor: theme.border }]}
-                  placeholder="Write a quick review (optional)..."
+                  placeholder={t('write_review_placeholder')}
                   placeholderTextColor={theme.subText}
                   multiline
                   numberOfLines={2}
@@ -418,7 +417,7 @@ export default function GameScreen({ route, navigation }) {
                     <ActivityIndicator size="small" color="#ffffff" />
                   ) : (
                     <Text style={styles.submitReportBtnText}>
-                      {userExistingRating ? 'Update Rating' : 'Submit Rating'}
+                      {userExistingRating ? t('update_rating_title') : t('submit_rating')}
                     </Text>
                   )}
                 </TouchableOpacity>
@@ -440,14 +439,14 @@ export default function GameScreen({ route, navigation }) {
             <TouchableWithoutFeedback>
               <View style={[styles.reportCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
                 <View style={styles.reportHeader}>
-                  <Text style={[styles.reportTitle, { color: theme.text }]}>Report a Problem</Text>
+                  <Text style={[styles.reportTitle, { color: theme.text }]}>{t('report_a_problem')}</Text>
                   <TouchableOpacity onPress={() => setReportModalVisible(false)}>
                     <Ionicons name="close" size={22} color={theme.subText} />
                   </TouchableOpacity>
                 </View>
 
                 <Text style={[styles.reportSub, { color: theme.subText }]}>
-                  Report issue with "{game?.title}":
+                  {t('report_issue_with')} "{game?.title}":
                 </Text>
 
                 {/* Category Radio Pills */}
@@ -482,7 +481,7 @@ export default function GameScreen({ route, navigation }) {
                 {/* Notes Input */}
                 <TextInput
                   style={[styles.notesInput, { backgroundColor: theme.subBg, color: theme.text, borderColor: theme.border }]}
-                  placeholder="Describe the issue (optional)..."
+                  placeholder={t('describe_issue_placeholder')}
                   placeholderTextColor={theme.subText}
                   multiline
                   numberOfLines={3}
@@ -500,7 +499,7 @@ export default function GameScreen({ route, navigation }) {
                   {isSubmittingReport ? (
                     <ActivityIndicator size="small" color="#ffffff" />
                   ) : (
-                    <Text style={styles.submitReportBtnText}>Submit Report</Text>
+                    <Text style={styles.submitReportBtnText}>{t('submit_report')}</Text>
                   )}
                 </TouchableOpacity>
               </View>
