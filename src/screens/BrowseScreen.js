@@ -110,13 +110,17 @@ export default function BrowseScreen({ route, navigation }) {
       } else {
         next.add(gameId);
       }
+      if (next.size === 0) {
+        setSelectionMode(false);
+      }
       return next;
     });
   };
 
-  const handleSelectAll = () => {
+  const handleSelectAllToggle = () => {
     if (selectedIds.size === recentGames.length) {
       setSelectedIds(new Set());
+      setSelectionMode(false);
     } else {
       setSelectedIds(new Set(recentGames.map((g) => g.id)));
     }
@@ -200,12 +204,61 @@ export default function BrowseScreen({ route, navigation }) {
     return result;
   }, [games, recentGames, isRecentScreen, routeFilter, selectedCategory, searchQuery]);
 
-  const pageTitle = routeTitle || (selectedCategory !== 'All' ? selectedCategory : t('tab_browse'));
+  // Screen Title Calculation
+  const pageTitle = isRecentScreen
+    ? selectionMode
+      ? `Selected (${selectedIds.size})`
+      : routeTitle || t('continue_playing')
+    : routeTitle || (selectedCategory !== 'All' ? selectedCategory : t('tab_browse'));
+
+  // Header Right Action Buttons (Clear All / Double Tick Select All / Delete Selected)
+  const headerRightAction = isRecentScreen ? (
+    selectionMode ? (
+      <View style={styles.headerActionRow}>
+        {/* Double Tick Rounded Icon for Select All / Deselect All */}
+        <TouchableOpacity onPress={handleSelectAllToggle} style={styles.headerIconBtn} activeOpacity={0.7}>
+          <Ionicons
+            name={selectedIds.size === recentGames.length ? 'checkmark-done-circle' : 'checkmark-done-circle-outline'}
+            size={24}
+            color={theme.primary}
+          />
+        </TouchableOpacity>
+
+        {/* Delete Selected Trash Icon */}
+        <TouchableOpacity
+          onPress={handleDeleteSelected}
+          style={[styles.headerIconBtn, { marginLeft: 8 }]}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="trash-outline" size={22} color="#E94560" />
+        </TouchableOpacity>
+
+        {/* Cancel Selection Icon */}
+        <TouchableOpacity
+          onPress={() => {
+            setSelectionMode(false);
+            setSelectedIds(new Set());
+          }}
+          style={[styles.headerIconBtn, { marginLeft: 8 }]}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="close" size={22} color={theme.subText} />
+        </TouchableOpacity>
+      </View>
+    ) : recentGames.length > 0 ? (
+      /* Clear All Button in Main Header */
+      <TouchableOpacity onPress={handleClearAllHistory} style={styles.headerClearAllBtn} activeOpacity={0.7}>
+        <Ionicons name="trash-outline" size={16} color="#E94560" style={{ marginRight: 4 }} />
+        <Text style={[styles.headerClearAllText, { color: '#E94560' }]}>Clear All</Text>
+      </TouchableOpacity>
+    ) : null
+  ) : null;
 
   return (
     <AppLayout
       title={pageTitle}
       showBack={!!routeTitle || routeCategory !== 'All'}
+      rightAction={headerRightAction}
       currentTab="Browse"
       navigation={navigation}
       scrollable={false}
@@ -268,83 +321,13 @@ export default function BrowseScreen({ route, navigation }) {
           </View>
         )}
 
-        {/* Multi-Selection Control Bar for Continue Playing Screen */}
-        {isRecentScreen && recentGames.length > 0 && (
-          <View style={[styles.selectionControlRow, { borderColor: theme.border }]}>
-            {selectionMode ? (
-              <>
-                <TouchableOpacity onPress={handleSelectAll} activeOpacity={0.7} style={styles.selectControlBtn}>
-                  <Ionicons
-                    name={selectedIds.size === recentGames.length ? 'checkbox' : 'square-outline'}
-                    size={20}
-                    color={theme.primary}
-                  />
-                  <Text style={[styles.selectControlText, { color: theme.text }]}>
-                    {selectedIds.size === recentGames.length ? 'Deselect All' : 'Select All'}
-                  </Text>
-                </TouchableOpacity>
-
-                <View style={styles.selectionRightRow}>
-                  {selectedIds.size > 0 && (
-                    <TouchableOpacity
-                      onPress={handleDeleteSelected}
-                      activeOpacity={0.7}
-                      style={[styles.deleteBatchBtn, { backgroundColor: '#E94560' }]}
-                    >
-                      <Ionicons name="trash-outline" size={16} color="#ffffff" style={{ marginRight: 4 }} />
-                      <Text style={styles.deleteBatchText}>Delete ({selectedIds.size})</Text>
-                    </TouchableOpacity>
-                  )}
-
-                  <TouchableOpacity
-                    onPress={() => {
-                      setSelectionMode(false);
-                      setSelectedIds(new Set());
-                    }}
-                    activeOpacity={0.7}
-                    style={{ marginLeft: 10 }}
-                  >
-                    <Text style={[styles.cancelSelectionText, { color: theme.subText }]}>{t('cancel')}</Text>
-                  </TouchableOpacity>
-                </View>
-              </>
-            ) : (
-              <>
-                <Text style={[styles.recentHeaderCount, { color: theme.subText }]}>
-                  {recentGames.length} Saved in History
-                </Text>
-
-                <View style={styles.selectionRightRow}>
-                  <TouchableOpacity
-                    onPress={() => setSelectionMode(true)}
-                    activeOpacity={0.7}
-                    style={[styles.actionChipBtn, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
-                  >
-                    <Ionicons name="checkmark-circle-outline" size={16} color={theme.primary} style={{ marginRight: 4 }} />
-                    <Text style={[styles.actionChipText, { color: theme.text }]}>Select</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={handleClearAllHistory}
-                    activeOpacity={0.7}
-                    style={[styles.actionChipBtn, { backgroundColor: theme.cardBg, borderColor: theme.border, marginLeft: 8 }]}
-                  >
-                    <Ionicons name="trash-outline" size={16} color="#E94560" style={{ marginRight: 4 }} />
-                    <Text style={[styles.actionChipText, { color: '#E94560' }]}>Clear All</Text>
-                  </TouchableOpacity>
-                </View>
-              </>
-            )}
-          </View>
-        )}
-
         {/* Content View: Vertical List View for Continue Playing vs Grid View for Browse */}
         {loading ? (
           <View style={styles.loaderContainer}>
             <ActivityIndicator size="large" color={theme.primary} />
           </View>
         ) : isRecentScreen ? (
-          /* Continue Playing Vertical List View with Played Duration & Multi-Select */
+          /* Continue Playing Vertical List View with Played Duration & Card Highlight Selection */
           <FlatList
             data={filteredGames}
             keyExtractor={(item) => item.id}
@@ -369,8 +352,9 @@ export default function BrowseScreen({ route, navigation }) {
                   style={[
                     styles.recentListItem,
                     {
-                      backgroundColor: isSelected ? 'rgba(233,69,96,0.1)' : theme.cardBg,
+                      backgroundColor: isSelected ? 'rgba(233,69,96,0.16)' : theme.cardBg,
                       borderColor: isSelected ? theme.primary : theme.border,
+                      borderWidth: isSelected ? 1.5 : 1,
                     },
                   ]}
                   onPress={() => handlePlayGame(item)}
@@ -380,21 +364,6 @@ export default function BrowseScreen({ route, navigation }) {
                   }}
                   activeOpacity={0.85}
                 >
-                  {/* Selection Checkbox */}
-                  {selectionMode && (
-                    <TouchableOpacity
-                      onPress={() => handleToggleSelect(item.id)}
-                      style={styles.checkboxContainer}
-                      activeOpacity={0.7}
-                    >
-                      <Ionicons
-                        name={isSelected ? 'checkbox' : 'square-outline'}
-                        size={22}
-                        color={isSelected ? theme.primary : theme.subText}
-                      />
-                    </TouchableOpacity>
-                  )}
-
                   <Image source={{ uri: item.iconUrl }} style={styles.recentItemImage} />
 
                   <View style={styles.recentItemMeta}>
@@ -409,7 +378,20 @@ export default function BrowseScreen({ route, navigation }) {
                     </Text>
                   </View>
 
-                  {!selectionMode && (
+                  {/* Right side indicator: Selection tick when in selection mode, trash icon when normal */}
+                  {selectionMode ? (
+                    <TouchableOpacity
+                      style={styles.actionBtn}
+                      onPress={() => handleToggleSelect(item.id)}
+                      activeOpacity={0.7}
+                    >
+                      <Ionicons
+                        name={isSelected ? 'checkmark-circle' : 'ellipse-outline'}
+                        size={22}
+                        color={isSelected ? theme.primary : theme.subText}
+                      />
+                    </TouchableOpacity>
+                  ) : (
                     <TouchableOpacity
                       style={styles.actionBtn}
                       onPress={() => handleRemoveRecent(item)}
@@ -523,58 +505,22 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
   },
-  selectionControlRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    marginBottom: 10,
-    borderBottomWidth: 1,
-  },
-  selectControlBtn: {
+  headerActionRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  selectControlText: {
+  headerIconBtn: {
+    padding: 4,
+  },
+  headerClearAllBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
+  headerClearAllText: {
     fontSize: 13,
     fontWeight: '700',
-    marginLeft: 6,
-  },
-  selectionRightRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  recentHeaderCount: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  actionChipBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 12,
-    borderWidth: 1,
-  },
-  actionChipText: {
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  deleteBatchBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
-  },
-  deleteBatchText: {
-    color: '#ffffff',
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  cancelSelectionText: {
-    fontSize: 13,
-    fontWeight: '600',
   },
   loaderContainer: {
     paddingVertical: 60,
@@ -591,7 +537,7 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justify.content: 'center',
     paddingVertical: 60,
   },
   emptyText: {
@@ -602,12 +548,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 14,
-    borderWidth: 1,
     padding: 10,
     marginBottom: 10,
-  },
-  checkboxContainer: {
-    marginRight: 10,
   },
   recentItemImage: {
     width: 60,
