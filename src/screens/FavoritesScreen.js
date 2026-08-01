@@ -15,6 +15,7 @@ import AppLayout from '../components/AppLayout';
 import { useTranslation } from '../i18n/i18n';
 import { useTheme } from '../theme/ThemeContext';
 import { getFavoriteGames, toggleFavoriteGame } from '../storage/favoritesStorage';
+import { getUserRatings } from '../storage/ratingsStorage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function FavoritesScreen({ navigation }) {
@@ -23,10 +24,12 @@ export default function FavoritesScreen({ navigation }) {
 
   const [favorites, setFavorites] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [userRatingsMap, setUserRatingsMap] = useState({});
 
   useFocusEffect(
     useCallback(() => {
       getFavoriteGames().then(setFavorites);
+      getUserRatings().then(setUserRatingsMap);
     }, [])
   );
 
@@ -127,34 +130,38 @@ export default function FavoritesScreen({ navigation }) {
               </Text>
             </View>
           }
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={[styles.favListItem, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
-              onPress={() => handlePlayGame(item)}
-              activeOpacity={0.85}
-            >
-              <Image source={{ uri: item.iconUrl }} style={styles.favItemImage} />
-              <View style={styles.favItemMeta}>
-                <Text style={[styles.favItemTitle, { color: theme.text }]} numberOfLines={1}>
-                  {item.title}
-                </Text>
-                <Text style={[styles.favItemCategory, { color: theme.subText }]}>{item.category || 'Arcade'}</Text>
-                <View style={styles.ratingRow}>
-                  <Ionicons name="star" size={12} color="#FFC107" />
-                  <Text style={[styles.ratingText, { color: theme.subText }]}>
-                    {item.rating || '4.6'}
-                  </Text>
-                </View>
-              </View>
+          renderItem={({ item }) => {
+            const userRating = userRatingsMap[item.id]?.rating;
+            const ratingScore = userRating ? `${userRating}.0` : (item.rating || '4.6');
+            return (
               <TouchableOpacity
-                style={styles.unfavBtn}
-                onPress={() => handleRemoveFav(item)}
-                activeOpacity={0.7}
+                style={[styles.favListItem, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
+                onPress={() => handlePlayGame(item)}
+                activeOpacity={0.85}
               >
-                <Ionicons name="trash-outline" size={20} color="#E94560" />
+                <Image source={{ uri: item.iconUrl }} style={styles.favItemImage} />
+                <View style={styles.favItemMeta}>
+                  <Text style={[styles.favItemTitle, { color: theme.text }]} numberOfLines={1}>
+                    {item.title}
+                  </Text>
+                  <Text style={[styles.favItemCategory, { color: theme.subText }]}>{item.category || 'Arcade'}</Text>
+                  <View style={styles.ratingRow}>
+                    <Ionicons name="star" size={12} color="#FFC107" />
+                    <Text style={[styles.ratingText, { color: theme.subText }]}>
+                      {ratingScore}
+                    </Text>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  style={styles.unfavBtn}
+                  onPress={() => handleRemoveFav(item)}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons name="trash-outline" size={20} color="#E94560" />
+                </TouchableOpacity>
               </TouchableOpacity>
-            </TouchableOpacity>
-          )}
+            );
+          }}
         />
       </View>
     </AppLayout>
@@ -199,7 +206,7 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justify.content: 'center',
     paddingVertical: 80,
     paddingHorizontal: 24,
   },

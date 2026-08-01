@@ -18,6 +18,7 @@ import { useTheme } from '../theme/ThemeContext';
 import { getLiveGamesList, getCategoriesFromGames } from '../services/gameService';
 import { getFavoriteGames, toggleFavoriteGame } from '../storage/favoritesStorage';
 import { getRecentGames } from '../storage/recentGamesStorage';
+import { getUserRatings } from '../storage/ratingsStorage';
 
 const { width } = Dimensions.get('window');
 
@@ -39,6 +40,7 @@ export default function HomeScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [favoriteIds, setFavoriteIds] = useState(new Set());
+  const [userRatingsMap, setUserRatingsMap] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -49,14 +51,18 @@ export default function HomeScreen({ navigation }) {
 
       const favs = await getFavoriteGames();
       setFavoriteIds(new Set(favs.map((f) => f.id)));
+
+      const ratings = await getUserRatings();
+      setUserRatingsMap(ratings);
     })();
   }, []);
 
-  // Refresh recent games and favorite state whenever screen comes into focus
+  // Refresh recent games, favorites, and user ratings whenever screen comes into focus
   useFocusEffect(
     useCallback(() => {
       getRecentGames().then(setRecentGames);
       getFavoriteGames().then((favs) => setFavoriteIds(new Set(favs.map((f) => f.id))));
+      getUserRatings().then(setUserRatingsMap);
     }, [])
   );
 
@@ -137,7 +143,7 @@ export default function HomeScreen({ navigation }) {
           </View>
         ) : (
           <>
-            {/* Continue Playing Section (Only shown when user has recently played games) */}
+            {/* Continue Playing Section */}
             {!searchQuery && recentGames.length > 0 && (
               <View style={styles.sectionContainer}>
                 <View style={styles.sectionHeaderRow}>
@@ -226,6 +232,8 @@ export default function HomeScreen({ navigation }) {
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 10 }}>
                   {featuredGames.map((game) => {
                     const isFav = favoriteIds.has(game.id);
+                    const userRating = userRatingsMap[game.id]?.rating;
+                    const ratingScore = userRating ? `${userRating}.0` : (game.rating || '4.6');
                     return (
                       <TouchableOpacity
                         key={game.id}
@@ -250,7 +258,7 @@ export default function HomeScreen({ navigation }) {
                             {game.title}
                           </Text>
                           <Text style={styles.featuredCardCategory}>
-                            {game.category || 'Arcade'} • ★ {game.rating || '4.6'}
+                            {game.category || 'Arcade'} • ★ {ratingScore}
                           </Text>
                         </View>
                       </TouchableOpacity>

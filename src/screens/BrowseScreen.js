@@ -18,6 +18,7 @@ import { useTranslation } from '../i18n/i18n';
 import { useTheme } from '../theme/ThemeContext';
 import { getLiveGamesList, getCategoriesFromGames } from '../services/gameService';
 import { getFavoriteGames, toggleFavoriteGame } from '../storage/favoritesStorage';
+import { getUserRatings } from '../storage/ratingsStorage';
 
 const { width } = Dimensions.get('window');
 
@@ -30,6 +31,7 @@ export default function BrowseScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [favoriteIds, setFavoriteIds] = useState(new Set());
+  const [userRatingsMap, setUserRatingsMap] = useState({});
 
   const categories = useMemo(() => {
     return getCategoriesFromGames(games);
@@ -44,10 +46,11 @@ export default function BrowseScreen({ navigation }) {
     })();
   }, []);
 
-  // Refresh favorite state whenever screen comes into focus
+  // Refresh favorite state and user ratings whenever screen comes into focus
   useFocusEffect(
     useCallback(() => {
       getFavoriteGames().then((favs) => setFavoriteIds(new Set(favs.map((f) => f.id))));
+      getUserRatings().then(setUserRatingsMap);
     }, [])
   );
 
@@ -61,27 +64,25 @@ export default function BrowseScreen({ navigation }) {
   };
 
   const filteredGames = useMemo(() => {
-    let list = games;
-    if (selectedCategory !== 'All') {
-      list = list.filter(
-        (g) => g.category && g.category.toLowerCase() === selectedCategory.toLowerCase()
-      );
+    let result = games;
+    if (selectedCategory && selectedCategory !== 'All') {
+      result = result.filter((g) => g.category && g.category.toLowerCase() === selectedCategory.toLowerCase());
     }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
-      list = list.filter(
+      result = result.filter(
         (g) =>
           (g.title && g.title.toLowerCase().includes(q)) ||
           (g.category && g.category.toLowerCase().includes(q))
       );
     }
-    return list;
+    return result;
   }, [games, selectedCategory, searchQuery]);
 
   return (
-    <AppLayout title="Browse Games" currentTab="Browse" navigation={navigation} scrollable={false}>
+    <AppLayout title={t('tab_browse')} currentTab="Browse" navigation={navigation} scrollable={false}>
       <View style={[styles.container, { backgroundColor: theme.bg }]}>
-        {/* Search Input */}
+        {/* Search Bar */}
         <View style={[styles.searchBarRow, { backgroundColor: theme.inputBg, borderColor: theme.border }]}>
           <Ionicons name="search-outline" size={18} color={theme.subText} style={{ marginRight: 8 }} />
           <TextInput
@@ -99,38 +100,40 @@ export default function BrowseScreen({ navigation }) {
         </View>
 
         {/* Dynamic Category Filter Pills */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesScroll}>
-          {categories.map((cat) => {
-            const isSelected = selectedCategory === cat;
-            return (
-              <TouchableOpacity
-                key={cat}
-                style={[
-                  styles.categoryPill,
-                  {
-                    backgroundColor: isSelected ? theme.primary : theme.inputBg,
-                    borderColor: theme.border,
-                  },
-                ]}
-                onPress={() => setSelectedCategory(cat)}
-                activeOpacity={0.8}
-              >
-                <Text style={[styles.categoryPillText, { color: isSelected ? '#ffffff' : theme.text }]}>
-                  {cat === 'All' ? 'All' : cat}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+        <View style={{ height: 44, marginBottom: 12 }}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {categories.map((cat) => {
+              const isSelected = selectedCategory === cat;
+              return (
+                <TouchableOpacity
+                  key={cat}
+                  style={[
+                    styles.catPill,
+                    {
+                      backgroundColor: isSelected ? theme.primary : theme.cardBg,
+                      borderColor: isSelected ? theme.primary : theme.border,
+                    },
+                  ]}
+                  onPress={() => setSelectedCategory(cat)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={[styles.catPillText, { color: isSelected ? '#ffffff' : theme.text }]}>
+                    {cat}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+        </View>
 
-        {/* Games Found Count Header */}
+        {/* Count Badge Header */}
         <View style={styles.countHeader}>
           <Text style={[styles.countText, { color: theme.subText }]}>
             {filteredGames.length} Games Found
           </Text>
         </View>
 
-        {/* 2-Column Game Grid */}
+        {/* 2-Column Games Grid */}
         {loading ? (
           <View style={styles.loaderContainer}>
             <ActivityIndicator size="large" color={theme.primary} />
@@ -140,24 +143,27 @@ export default function BrowseScreen({ navigation }) {
             data={filteredGames}
             keyExtractor={(item) => item.id}
             numColumns={2}
+            columnWrapperStyle={styles.columnWrapper}
             contentContainerStyle={styles.gridContent}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
                 <Ionicons name="game-controller-outline" size={48} color={theme.subText} />
-                <Text style={[styles.emptyText, { color: theme.text }]}>No games found.</Text>
+                <Text style={[styles.emptyText, { color: theme.text }]}>No games match your search.</Text>
               </View>
             }
             renderItem={({ item }) => {
               const isFav = favoriteIds.has(item.id);
+              const userRating = userRatingsMap[item.id]?.rating;
+              const ratingScore = userRating ? `${userRating}.0` : (item.rating || '4.6');
               return (
                 <TouchableOpacity
-                  style={[styles.gameCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
+                  style={[styles.gameGridCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
                   onPress={() => handlePlayGame(item)}
                   activeOpacity={0.85}
                 >
                   <View style={styles.imageContainer}>
-                    <Image source={{ uri: item.iconUrl }} style={styles.gameImage} />
+                    <Image source={{ uri: item.iconUrl }} style={styles.gameCardImage} />
                     <TouchableOpacity
                       style={styles.favFloatingBtn}
                       onPress={() => handleToggleFav(item)}
@@ -170,6 +176,7 @@ export default function BrowseScreen({ navigation }) {
                       />
                     </TouchableOpacity>
                   </View>
+
                   <View style={styles.cardMeta}>
                     <Text style={[styles.cardTitle, { color: theme.text }]} numberOfLines={1}>
                       {item.title}
@@ -178,7 +185,7 @@ export default function BrowseScreen({ navigation }) {
                     <View style={styles.ratingRow}>
                       <Ionicons name="star" size={12} color="#FFC107" />
                       <Text style={[styles.ratingText, { color: theme.subText }]}>
-                        {item.rating || '4.6'}
+                        {ratingScore}
                       </Text>
                     </View>
                   </View>
@@ -211,11 +218,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
   },
-  categoriesScroll: {
-    maxHeight: 40,
-    marginBottom: 12,
-  },
-  categoryPill: {
+  catPill: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
@@ -224,7 +227,7 @@ const styles = StyleSheet.create({
     height: 36,
     justifyContent: 'center',
   },
-  categoryPillText: {
+  catPillText: {
     fontSize: 13,
     fontWeight: '600',
   },
@@ -239,31 +242,34 @@ const styles = StyleSheet.create({
     paddingVertical: 60,
     alignItems: 'center',
   },
+  gridContent: {
+    paddingBottom: 16,
+  },
+  columnWrapper: {
+    justifyContent: 'space-between',
+  },
   emptyContainer: {
-    paddingVertical: 60,
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 60,
   },
   emptyText: {
     marginTop: 12,
     fontSize: 14,
   },
-  gridContent: {
-    paddingBottom: 16,
-  },
-  gameCard: {
+  gameGridCard: {
     width: (width - 44) / 2,
-    borderRadius: 14,
+    borderRadius: 16,
     borderWidth: 1,
-    marginBottom: 12,
-    marginRight: 12,
+    marginBottom: 14,
     overflow: 'hidden',
   },
   imageContainer: {
-    position: 'relative',
-    height: 110,
     width: '100%',
+    height: 110,
+    position: 'relative',
   },
-  gameImage: {
+  gameCardImage: {
     width: '100%',
     height: '100%',
   },
