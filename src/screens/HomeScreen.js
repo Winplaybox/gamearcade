@@ -42,6 +42,10 @@ export default function HomeScreen({ navigation }) {
   const [favoriteIds, setFavoriteIds] = useState(new Set());
   const [userRatingsMap, setUserRatingsMap] = useState({});
 
+  // Horizontal scroll tracking states (chevron appears only when first card scrolls off screen)
+  const [showRecentChevron, setShowRecentChevron] = useState(false);
+  const [showFeaturedChevron, setShowFeaturedChevron] = useState(false);
+
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -92,6 +96,16 @@ export default function HomeScreen({ navigation }) {
     return games.filter((g) => g.isFeatured || g.status === 'approved').slice(0, 5);
   }, [games]);
 
+  const handleRecentScroll = (event) => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+    setShowRecentChevron(offsetX > 35);
+  };
+
+  const handleFeaturedScroll = (event) => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+    setShowFeaturedChevron(offsetX > 35);
+  };
+
   return (
     <AppLayout
       title={
@@ -138,12 +152,26 @@ export default function HomeScreen({ navigation }) {
               <View style={styles.sectionContainer}>
                 <View style={styles.sectionHeaderRow}>
                   <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('continue_playing')}</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Browse', { filter: 'recent', title: t('continue_playing') })}>
-                    <Text style={[styles.seeAllText, { color: theme.primary }]}>{t('see_all')}</Text>
-                  </TouchableOpacity>
+
+                  {/* Right Chevron Icon (Shown ONLY when user scrolls horizontal past 1st card) */}
+                  {showRecentChevron && (
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('Browse', { filter: 'recent', title: t('continue_playing') })}
+                      activeOpacity={0.7}
+                      style={styles.chevronBtn}
+                    >
+                      <Ionicons name="chevron-forward-circle" size={26} color={theme.primary} />
+                    </TouchableOpacity>
+                  )}
                 </View>
 
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 10 }}>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  style={{ marginTop: 10 }}
+                  onScroll={handleRecentScroll}
+                  scrollEventThrottle={16}
+                >
                   {recentGames.map((game) => {
                     const isFav = favoriteIds.has(game.id);
                     return (
@@ -186,9 +214,6 @@ export default function HomeScreen({ navigation }) {
               <View style={styles.sectionContainer}>
                 <View style={styles.sectionHeaderRow}>
                   <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('categories')}</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Browse', { category: 'All' })}>
-                    <Text style={[styles.seeAllText, { color: theme.primary }]}>{t('see_all')}</Text>
-                  </TouchableOpacity>
                 </View>
 
                 <View style={styles.categoriesGrid}>
@@ -214,12 +239,26 @@ export default function HomeScreen({ navigation }) {
               <View style={styles.sectionContainer}>
                 <View style={styles.sectionHeaderRow}>
                   <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('featured_games')}</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Browse', { filter: 'featured', title: t('featured_games') })}>
-                    <Text style={[styles.seeAllText, { color: theme.primary }]}>{t('see_all')}</Text>
-                  </TouchableOpacity>
+
+                  {/* Right Chevron Icon (Shown ONLY when user scrolls horizontal past 1st card) */}
+                  {showFeaturedChevron && (
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('Browse', { filter: 'featured', title: t('featured_games') })}
+                      activeOpacity={0.7}
+                      style={styles.chevronBtn}
+                    >
+                      <Ionicons name="chevron-forward-circle" size={26} color={theme.primary} />
+                    </TouchableOpacity>
+                  )}
                 </View>
 
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 10 }}>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  style={{ marginTop: 10 }}
+                  onScroll={handleFeaturedScroll}
+                  scrollEventThrottle={16}
+                >
                   {featuredGames.map((game) => {
                     const isFav = favoriteIds.has(game.id);
                     const userRating = userRatingsMap[game.id]?.rating;
@@ -309,6 +348,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    minHeight: 28,
     marginBottom: 4,
   },
   sectionTitle: {
@@ -316,9 +356,8 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     letterSpacing: 0.3,
   },
-  seeAllText: {
-    fontSize: 13,
-    fontWeight: '700',
+  chevronBtn: {
+    padding: 2,
   },
   continueCard: {
     width: 150,
