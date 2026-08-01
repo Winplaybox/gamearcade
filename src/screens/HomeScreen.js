@@ -153,16 +153,15 @@ export default function HomeScreen({ navigation }) {
                 <View style={styles.sectionHeaderRow}>
                   <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('continue_playing')}</Text>
 
-                  {/* Right Chevron Icon (Shown ONLY when user scrolls horizontal past 1st card) */}
-                  {showRecentChevron && (
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate('Browse', { filter: 'recent', title: t('continue_playing') })}
-                      activeOpacity={0.7}
-                      style={styles.chevronBtn}
-                    >
-                      <Ionicons name="chevron-forward-circle" size={26} color={theme.primary} />
-                    </TouchableOpacity>
-                  )}
+                  {/* Clean chevron-forward with fixed height container to prevent layout shift */}
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('Browse', { filter: 'recent', title: t('continue_playing') })}
+                    activeOpacity={0.7}
+                    disabled={!showRecentChevron}
+                    style={[styles.chevronBtn, { opacity: showRecentChevron ? 1 : 0 }]}
+                  >
+                    <Ionicons name="chevron-forward" size={20} color={theme.primary} />
+                  </TouchableOpacity>
                 </View>
 
                 <ScrollView
@@ -240,16 +239,15 @@ export default function HomeScreen({ navigation }) {
                 <View style={styles.sectionHeaderRow}>
                   <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('featured_games')}</Text>
 
-                  {/* Right Chevron Icon (Shown ONLY when user scrolls horizontal past 1st card) */}
-                  {showFeaturedChevron && (
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate('Browse', { filter: 'featured', title: t('featured_games') })}
-                      activeOpacity={0.7}
-                      style={styles.chevronBtn}
-                    >
-                      <Ionicons name="chevron-forward-circle" size={26} color={theme.primary} />
-                    </TouchableOpacity>
-                  )}
+                  {/* Clean chevron-forward with fixed height container to prevent layout shift */}
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('Browse', { filter: 'featured', title: t('featured_games') })}
+                    activeOpacity={0.7}
+                    disabled={!showFeaturedChevron}
+                    style={[styles.chevronBtn, { opacity: showFeaturedChevron ? 1 : 0 }]}
+                  >
+                    <Ionicons name="chevron-forward" size={20} color={theme.primary} />
+                  </TouchableOpacity>
                 </View>
 
                 <ScrollView
@@ -345,10 +343,10 @@ const styles = StyleSheet.create({
     marginBottom: 22,
   },
   sectionHeaderRow: {
+    height: 28,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    minHeight: 28,
     marginBottom: 4,
   },
   sectionTitle: {
@@ -357,7 +355,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
   chevronBtn: {
-    padding: 2,
+    padding: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   continueCard: {
     width: 150,
