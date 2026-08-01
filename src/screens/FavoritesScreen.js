@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     alignItems: 'center',
-    justify.content: 'center',
+    justifyContent: 'center',
     paddingVertical: 80,
     paddingHorizontal: 24,
   },
