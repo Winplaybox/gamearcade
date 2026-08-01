@@ -6,18 +6,18 @@
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "backgroundColor": "#1a1a2e",
+    "backgroundColor": "#0B0D12",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1a1a2e"
+      "backgroundColor": "#0B0D12"
     },
     "android": {
       "package": "com.winplaybox.gamearcade",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#1a1a2e"
+        "backgroundColor": "#0B0D12"
       }
     },
     "plugins": [
@@ -25,7 +25,8 @@
       [
         "react-native-google-mobile-ads",
         {
-          "androidAppId": "ca-app-pub-2699537002342677~2164113966",
+          "androidAppId": "ca-app-pub-2699537002342677~7598338278",
+          "iosAppId": "ca-app-pub-2699537002342677~7598338278",
           "delayAppMeasurementInit": true
         }
       ]

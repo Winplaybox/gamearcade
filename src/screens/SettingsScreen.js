@@ -8,7 +8,6 @@ import {
   Linking,
   Alert,
   Modal,
-  TextInput,
   FlatList,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -21,10 +20,9 @@ import { getPromotedAppsList, launchAppOrPlayStore } from '../utils/crossAppProm
 
 export default function SettingsScreen({ navigation }) {
   const { t, currentLanguage, setLanguage } = useTranslation();
-  const { theme, mode, setMode, isDark } = useTheme();
+  const { theme } = useTheme();
 
   const [langModalVisible, setLangModalVisible] = useState(false);
-  const [themeModalVisible, setThemeModalVisible] = useState(false);
   const [langSearchQuery, setLangSearchQuery] = useState('');
   const [promotedApps, setPromotedApps] = useState([]);
 
@@ -40,12 +38,6 @@ export default function SettingsScreen({ navigation }) {
   const appPackage = Constants.expoConfig?.android?.package || 'com.winplaybox.gamearcade';
 
   const activeLangObj = SUPPORTED_LANGUAGES.find((l) => l.code === currentLanguage) || SUPPORTED_LANGUAGES[0];
-
-  const THEME_OPTIONS = [
-    { id: 'system', labelKey: 'theme_system', icon: 'hardware-chip-outline' },
-    { id: 'light', labelKey: 'theme_light', icon: 'sunny-outline' },
-    { id: 'dark', labelKey: 'theme_dark', icon: 'moon-outline' },
-  ];
 
   const filteredLanguages = useMemo(() => {
     let list = SUPPORTED_LANGUAGES;
@@ -96,16 +88,6 @@ export default function SettingsScreen({ navigation }) {
             </Text>
             <Ionicons name="chevron-forward" size={16} color={theme.subText} style={{ marginLeft: 4 }} />
           </View>
-        </TouchableOpacity>
-
-        {/* Theme Mode Selection */}
-        <TouchableOpacity
-          style={[styles.menuRow, { borderBottomColor: theme.border }]}
-          onPress={() => setThemeModalVisible(true)}
-          activeOpacity={0.7}
-        >
-          <Ionicons name={isDark ? 'moon-outline' : 'sunny-outline'} size={24} color={theme.text} style={styles.menuIcon} />
-          <Text style={[styles.menuLabel, { color: theme.text }]}>{t('theme_mode')}</Text>
         </TouchableOpacity>
 
         {/* About App */}
@@ -214,44 +196,6 @@ export default function SettingsScreen({ navigation }) {
                     );
                   }}
                 />
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-
-      {/* Theme Selection Modal */}
-      <Modal visible={themeModalVisible} transparent animationType="fade" onRequestClose={() => setThemeModalVisible(false)}>
-        <TouchableWithoutFeedback onPress={() => setThemeModalVisible(false)}>
-          <View style={styles.modalOverlay}>
-            <TouchableWithoutFeedback>
-              <View style={[styles.modalBox, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
-                <View style={styles.modalHeader}>
-                  <Text style={[styles.modalTitle, { color: theme.text }]}>{t('theme_mode')}</Text>
-                  <TouchableOpacity onPress={() => setThemeModalVisible(false)}>
-                    <Ionicons name="close" size={22} color={theme.subText} />
-                  </TouchableOpacity>
-                </View>
-
-                {THEME_OPTIONS.map((item) => {
-                  const isSelected = item.id === mode;
-                  return (
-                    <TouchableOpacity
-                      key={item.id}
-                      style={[styles.langItemRow, { borderBottomColor: theme.border }]}
-                      onPress={() => {
-                        setMode(item.id);
-                        setThemeModalVisible(false);
-                      }}
-                    >
-                      <Ionicons name={item.icon} size={22} color={isSelected ? theme.primary : theme.subText} style={{ marginRight: 12 }} />
-                      <Text style={[styles.langLabel, { color: isSelected ? theme.primary : theme.text, flex: 1 }]}>
-                        {item.id.toUpperCase()}
-                      </Text>
-                      {isSelected && <Ionicons name="checkmark-circle" size={20} color={theme.primary} />}
-                    </TouchableOpacity>
-                  );
-                })}
               </View>
             </TouchableWithoutFeedback>
           </View>

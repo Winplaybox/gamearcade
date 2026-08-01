@@ -1,18 +1,28 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Dimensions } from 'react-native';
+import React, { useState, useCallback, useMemo } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  Image,
+  TextInput,
+  Alert,
+} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import AppLayout from '../components/AppLayout';
 import { useTranslation } from '../i18n/i18n';
 import { useTheme } from '../theme/ThemeContext';
 import { getFavoriteGames, toggleFavoriteGame } from '../storage/favoritesStorage';
-
-const { width } = Dimensions.get('window');
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function FavoritesScreen({ navigation }) {
   const { t } = useTranslation();
   const { theme } = useTheme();
+
   const [favorites, setFavorites] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useFocusEffect(
     useCallback(() => {
@@ -20,50 +30,129 @@ export default function FavoritesScreen({ navigation }) {
     }, [])
   );
 
-  const handleRemoveFav = async (game) => {
-    const updated = await toggleFavoriteGame(game);
-    setFavorites(updated);
+  const handleRemoveFav = (game) => {
+    Alert.alert(
+      'Remove Favorite',
+      `Are you sure you want to remove "${game.title}" from your favorites?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Remove',
+          style: 'destructive',
+          onPress: async () => {
+            const updated = await toggleFavoriteGame(game);
+            setFavorites(updated);
+          },
+        },
+      ]
+    );
+  };
+
+  const handleClearAll = () => {
+    Alert.alert(
+      'Clear All Favorites',
+      'Are you sure you want to remove all saved games from your favorites?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Clear All',
+          style: 'destructive',
+          onPress: async () => {
+            await AsyncStorage.removeItem('gamearcade_favorites_v1');
+            setFavorites([]);
+          },
+        },
+      ]
+    );
   };
 
   const handlePlayGame = (game) => {
     navigation.navigate('Game', { game });
   };
 
+  const filteredFavorites = useMemo(() => {
+    if (!searchQuery.trim()) return favorites;
+    const q = searchQuery.toLowerCase().trim();
+    return favorites.filter(
+      (g) =>
+        (g.title && g.title.toLowerCase().includes(q)) ||
+        (g.category && g.category.toLowerCase().includes(q))
+    );
+  }, [favorites, searchQuery]);
+
   return (
-    <AppLayout title={t('tab_favorites')} currentTab="Favorites" navigation={navigation} scrollable={false}>
+    <AppLayout title="Favorites" currentTab="Favorites" navigation={navigation} scrollable={false}>
       <View style={[styles.container, { backgroundColor: theme.bg }]}>
+        {/* Search Input */}
+        <View style={[styles.searchBarRow, { backgroundColor: theme.inputBg, borderColor: theme.border }]}>
+          <Ionicons name="search-outline" size={18} color={theme.subText} style={{ marginRight: 8 }} />
+          <TextInput
+            style={[styles.searchInput, { color: theme.text }]}
+            placeholder="Search favorites..."
+            placeholderTextColor={theme.subText}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          {searchQuery ? (
+            <TouchableOpacity onPress={() => setSearchQuery('')}>
+              <Ionicons name="close-circle" size={16} color={theme.subText} />
+            </TouchableOpacity>
+          ) : null}
+        </View>
+
+        {/* Count Badge & Clear All Header */}
+        <View style={styles.countHeaderRow}>
+          <Text style={[styles.countText, { color: theme.subText }]}>
+            {filteredFavorites.length} Saved Games
+          </Text>
+          {favorites.length > 0 && (
+            <TouchableOpacity onPress={handleClearAll}>
+              <Text style={[styles.clearAllText, { color: theme.primary }]}>Clear All</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* Favorites List */}
         <FlatList
-          data={favorites}
+          data={filteredFavorites}
           keyExtractor={(item) => item.id}
-          numColumns={2}
           contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Ionicons name="heart-outline" size={54} color={theme.subText} />
-              <Text style={[styles.emptyTitle, { color: theme.text }]}>{t('no_favorites')}</Text>
-              <Text style={[styles.emptySub, { color: theme.subText }]}>{t('no_favorites_sub')}</Text>
+              <Text style={[styles.emptyTitle, { color: theme.text }]}>No favorites saved yet.</Text>
+              <Text style={[styles.emptySub, { color: theme.subText }]}>
+                Tap the heart icon on any game card to save it here for instant play!
+              </Text>
             </View>
           }
           renderItem={({ item }) => (
             <TouchableOpacity
-              style={[styles.gameGridCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
+              style={[styles.favListItem, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
               onPress={() => handlePlayGame(item)}
               activeOpacity={0.85}
             >
-              <Image source={{ uri: item.iconUrl }} style={styles.gameGridImage} />
+              <Image source={{ uri: item.iconUrl }} style={styles.favItemImage} />
+              <View style={styles.favItemMeta}>
+                <Text style={[styles.favItemTitle, { color: theme.text }]} numberOfLines={1}>
+                  {item.title}
+                </Text>
+                <Text style={[styles.favItemCategory, { color: theme.subText }]}>{item.category || 'Arcade'}</Text>
+                <View style={styles.ratingRow}>
+                  <Ionicons name="star" size={12} color="#FFC107" />
+                  <Text style={[styles.ratingText, { color: theme.subText }]}>
+                    {item.rating || '4.6'}
+                  </Text>
+                </View>
+              </View>
               <TouchableOpacity
-                style={styles.gridFavBtn}
+                style={styles.unfavBtn}
                 onPress={() => handleRemoveFav(item)}
                 activeOpacity={0.7}
               >
-                <Ionicons name="heart" size={16} color="#e94560" />
+                <Ionicons name="trash-outline" size={20} color="#E94560" />
               </TouchableOpacity>
-              <View style={styles.gameGridMeta}>
-                <Text style={[styles.gameGridTitle, { color: theme.text }]} numberOfLines={1}>
-                  {item.title}
-                </Text>
-                <Text style={[styles.gameGridSub, { color: theme.subText }]}>{item.category} • ★ {item.rating}</Text>
-              </View>
             </TouchableOpacity>
           )}
         />
@@ -75,9 +164,38 @@ export default function FavoritesScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+  },
+  searchBarRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 14,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginBottom: 12,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 14,
+  },
+  countHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  countText: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  clearAllText: {
+    fontSize: 12,
+    fontWeight: '700',
   },
   listContent: {
-    padding: 16,
+    paddingBottom: 16,
   },
   emptyContainer: {
     alignItems: 'center',
@@ -96,35 +214,42 @@ const styles = StyleSheet.create({
     marginTop: 6,
     lineHeight: 18,
   },
-  gameGridCard: {
-    width: (width - 44) / 2,
+  favListItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderRadius: 14,
     borderWidth: 1,
-    marginBottom: 12,
-    marginRight: 12,
-    overflow: 'hidden',
+    padding: 10,
+    marginBottom: 10,
   },
-  gameGridImage: {
-    width: '100%',
-    height: 110,
-  },
-  gridFavBtn: {
-    position: 'absolute',
-    top: 6,
-    right: 6,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    padding: 5,
+  favItemImage: {
+    width: 60,
+    height: 60,
     borderRadius: 12,
   },
-  gameGridMeta: {
-    padding: 10,
+  favItemMeta: {
+    flex: 1,
+    marginLeft: 12,
   },
-  gameGridTitle: {
-    fontSize: 13,
+  favItemTitle: {
+    fontSize: 14,
     fontWeight: '700',
   },
-  gameGridSub: {
+  favItemCategory: {
     fontSize: 11,
-    marginTop: 3,
+    marginTop: 2,
+  },
+  ratingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  ratingText: {
+    fontSize: 11,
+    marginLeft: 4,
+    fontWeight: '600',
+  },
+  unfavBtn: {
+    padding: 8,
   },
 });

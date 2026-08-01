@@ -9,9 +9,10 @@ export default function BottomFooter({ currentTab, navigation }) {
   const { theme } = useTheme();
 
   const TABS = [
-    { key: 'Home', label: t('tab_games'), icon: 'game-controller' },
-    { key: 'Favorites', label: t('tab_favorites'), icon: 'heart' },
-    { key: 'Settings', label: t('tab_settings'), icon: 'settings' },
+    { key: 'Home', label: t('tab_home') || 'Home', icon: 'home' },
+    { key: 'Browse', label: t('tab_browse') || 'Browse', icon: 'grid' },
+    { key: 'Favorites', label: t('tab_favorites') || 'Favorites', icon: 'heart' },
+    { key: 'Settings', label: t('tab_settings') || 'Settings', icon: 'settings' },
   ];
 
   const handleTabPress = (tabKey) => {

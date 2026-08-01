@@ -1,5 +1,22 @@
+# Dependencies
 node_modules/
 .expo/
-npm-debug.*
+dist/
+web-build/
+
+# Build & Cache Outputs
+android/.gradle
+android/app/build/
+android/build/
+android/.cxx/
 *.log
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# OS & Editor temp files
 .DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
