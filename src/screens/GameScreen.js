@@ -21,7 +21,7 @@ import { showBackNavInterstitial } from '../ads/AdManager';
 import { isGameFavorite, toggleFavoriteGame } from '../storage/favoritesStorage';
 import { addRecentGame } from '../storage/recentGamesStorage';
 import { getUserRatings, saveGameRating } from '../storage/ratingsStorage';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp } from '@firebase/firestore';
 import { db } from '../config/firebase';
 
 const REPORT_CATEGORIES = [

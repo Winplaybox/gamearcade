@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp } from '@firebase/firestore';
 import { db } from '../config/firebase';
 
 const RATINGS_KEY = 'gamearcade_user_ratings_v1';
