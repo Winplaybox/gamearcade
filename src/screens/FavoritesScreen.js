@@ -1,17 +1,16 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   FlatList,
-  Image,
-  TextInput,
   Alert,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import AppLayout from '../components/AppLayout';
+import GameListCard from '../components/GameListCard';
 import { useTranslation } from '../i18n/i18n';
 import { useTheme } from '../theme/ThemeContext';
 import { getFavoriteGames, toggleFavoriteGame } from '../storage/favoritesStorage';
@@ -23,8 +22,11 @@ export default function FavoritesScreen({ navigation }) {
   const { theme } = useTheme();
 
   const [favorites, setFavorites] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
   const [userRatingsMap, setUserRatingsMap] = useState({});
+
+  // Multi-select state
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState(new Set());
 
   useFocusEffect(
     useCallback(() => {
@@ -33,7 +35,7 @@ export default function FavoritesScreen({ navigation }) {
     }, [])
   );
 
-  const handleRemoveFav = (game) => {
+  const handleRemoveFav = async (game) => {
     Alert.alert(
       t('remove_favorite_title'),
       `Are you sure you want to remove "${game.title}" from your favorites?`,
@@ -45,6 +47,52 @@ export default function FavoritesScreen({ navigation }) {
           onPress: async () => {
             const updated = await toggleFavoriteGame(game);
             setFavorites(updated);
+          },
+        },
+      ]
+    );
+  };
+
+  const handleToggleSelect = (gameId) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(gameId)) {
+        next.delete(gameId);
+      } else {
+        next.add(gameId);
+      }
+      if (next.size === 0) {
+        setSelectionMode(false);
+      }
+      return next;
+    });
+  };
+
+  const handleSelectAllToggle = () => {
+    if (selectedIds.size === favorites.length) {
+      setSelectedIds(new Set());
+      setSelectionMode(false);
+    } else {
+      setSelectedIds(new Set(favorites.map((g) => g.id)));
+    }
+  };
+
+  const handleDeleteSelected = () => {
+    if (selectedIds.size === 0) return;
+    Alert.alert(
+      'Remove Selected Favorites',
+      `Are you sure you want to remove ${selectedIds.size} game(s) from your favorites?`,
+      [
+        { text: t('cancel'), style: 'cancel' },
+        {
+          text: 'Remove',
+          style: 'destructive',
+          onPress: async () => {
+            const updated = favorites.filter((g) => !selectedIds.has(g.id));
+            await AsyncStorage.setItem('gamearcade_favorites_v1', JSON.stringify(updated));
+            setFavorites(updated);
+            setSelectedIds(new Set());
+            setSelectionMode(false);
           },
         },
       ]
@@ -63,6 +111,8 @@ export default function FavoritesScreen({ navigation }) {
           onPress: async () => {
             await AsyncStorage.removeItem('gamearcade_favorites_v1');
             setFavorites([]);
+            setSelectedIds(new Set());
+            setSelectionMode(false);
           },
         },
       ]
@@ -70,54 +120,70 @@ export default function FavoritesScreen({ navigation }) {
   };
 
   const handlePlayGame = (game) => {
+    if (selectionMode) {
+      handleToggleSelect(game.id);
+      return;
+    }
     navigation.navigate('Game', { game });
   };
 
-  const filteredFavorites = useMemo(() => {
-    if (!searchQuery.trim()) return favorites;
-    const q = searchQuery.toLowerCase().trim();
-    return favorites.filter(
-      (g) =>
-        (g.title && g.title.toLowerCase().includes(q)) ||
-        (g.category && g.category.toLowerCase().includes(q))
-    );
-  }, [favorites, searchQuery]);
+  const pageTitle = selectionMode ? `Selected (${selectedIds.size})` : t('tab_favorites');
+
+  const headerRightAction = selectionMode ? (
+    <View style={styles.headerActionRow}>
+      <TouchableOpacity onPress={handleSelectAllToggle} style={styles.headerIconBtn} activeOpacity={0.7}>
+        <Ionicons
+          name={selectedIds.size === favorites.length ? 'checkmark-done-circle' : 'checkmark-done-circle-outline'}
+          size={24}
+          color={theme.primary}
+        />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={handleDeleteSelected}
+        style={[styles.headerIconBtn, { marginLeft: 8 }]}
+        activeOpacity={0.7}
+      >
+        <Ionicons name="trash-outline" size={22} color="#E94560" />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => {
+          setSelectionMode(false);
+          setSelectedIds(new Set());
+        }}
+        style={[styles.headerIconBtn, { marginLeft: 8 }]}
+        activeOpacity={0.7}
+      >
+        <Ionicons name="close" size={22} color={theme.subText} />
+      </TouchableOpacity>
+    </View>
+  ) : favorites.length > 0 ? (
+    <TouchableOpacity onPress={handleClearAll} style={styles.headerClearAllBtn} activeOpacity={0.7}>
+      <Ionicons name="trash-outline" size={16} color="#E94560" style={{ marginRight: 4 }} />
+      <Text style={[styles.headerClearAllText, { color: '#E94560' }]}>{t('clear_all')}</Text>
+    </TouchableOpacity>
+  ) : null;
 
   return (
-    <AppLayout title={t('tab_favorites')} currentTab="Favorites" navigation={navigation} scrollable={false}>
+    <AppLayout
+      title={pageTitle}
+      rightAction={headerRightAction}
+      currentTab="Favorites"
+      navigation={navigation}
+      scrollable={false}
+    >
       <View style={[styles.container, { backgroundColor: theme.bg }]}>
-        {/* Search Input */}
-        <View style={[styles.searchBarRow, { backgroundColor: theme.inputBg, borderColor: theme.border }]}>
-          <Ionicons name="search-outline" size={18} color={theme.subText} style={{ marginRight: 8 }} />
-          <TextInput
-            style={[styles.searchInput, { color: theme.text }]}
-            placeholder={t('search_placeholder')}
-            placeholderTextColor={theme.subText}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          {searchQuery ? (
-            <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <Ionicons name="close-circle" size={16} color={theme.subText} />
-            </TouchableOpacity>
-          ) : null}
-        </View>
-
-        {/* Count Badge & Clear All Header */}
+        {/* Count Badge Header */}
         <View style={styles.countHeaderRow}>
           <Text style={[styles.countText, { color: theme.subText }]}>
-            {filteredFavorites.length} {t('saved_games')}
+            {favorites.length} {t('saved_games')}
           </Text>
-          {favorites.length > 0 && (
-            <TouchableOpacity onPress={handleClearAll}>
-              <Text style={[styles.clearAllText, { color: theme.primary }]}>{t('clear_all')}</Text>
-            </TouchableOpacity>
-          )}
         </View>
 
-        {/* Favorites List */}
+        {/* Reused GameListCard Component for Vertical Favorites List View */}
         <FlatList
-          data={filteredFavorites}
+          data={favorites}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
@@ -131,35 +197,29 @@ export default function FavoritesScreen({ navigation }) {
             </View>
           }
           renderItem={({ item }) => {
+            const isSelected = selectedIds.has(item.id);
             const userRating = userRatingsMap[item.id]?.rating;
             const ratingScore = userRating ? `${userRating}.0` : (item.rating || '4.6');
+
             return (
-              <TouchableOpacity
-                style={[styles.favListItem, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
+              <GameListCard
+                key={item.id}
+                game={item}
+                ratingScore={ratingScore}
+                subText={`${item.category || 'Arcade'} • ★ ${ratingScore}`}
+                rightActionType={selectionMode ? 'select' : 'trash'}
+                selectionMode={selectionMode}
+                isSelected={isSelected}
                 onPress={() => handlePlayGame(item)}
-                activeOpacity={0.85}
-              >
-                <Image source={{ uri: item.iconUrl }} style={styles.favItemImage} />
-                <View style={styles.favItemMeta}>
-                  <Text style={[styles.favItemTitle, { color: theme.text }]} numberOfLines={1}>
-                    {item.title}
-                  </Text>
-                  <Text style={[styles.favItemCategory, { color: theme.subText }]}>{item.category || 'Arcade'}</Text>
-                  <View style={styles.ratingRow}>
-                    <Ionicons name="star" size={12} color="#FFC107" />
-                    <Text style={[styles.ratingText, { color: theme.subText }]}>
-                      {ratingScore}
-                    </Text>
-                  </View>
-                </View>
-                <TouchableOpacity
-                  style={styles.unfavBtn}
-                  onPress={() => handleRemoveFav(item)}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons name="trash-outline" size={20} color="#E94560" />
-                </TouchableOpacity>
-              </TouchableOpacity>
+                onLongPress={() => {
+                  setSelectionMode(true);
+                  handleToggleSelect(item.id);
+                }}
+                onRightAction={() => {
+                  if (selectionMode) handleToggleSelect(item.id);
+                  else handleRemoveFav(item);
+                }}
+              />
             );
           }}
         />
@@ -171,34 +231,31 @@ export default function FavoritesScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     paddingTop: 12,
   },
-  searchBarRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 14,
-    borderWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginBottom: 12,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 14,
-  },
   countHeaderRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     marginBottom: 10,
   },
   countText: {
     fontSize: 13,
     fontWeight: '600',
   },
-  clearAllText: {
-    fontSize: 12,
+  headerActionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerIconBtn: {
+    padding: 4,
+  },
+  headerClearAllBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
+  headerClearAllText: {
+    fontSize: 13,
     fontWeight: '700',
   },
   listContent: {
@@ -220,43 +277,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 6,
     lineHeight: 18,
-  },
-  favListItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 14,
-    borderWidth: 1,
-    padding: 10,
-    marginBottom: 10,
-  },
-  favItemImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 12,
-  },
-  favItemMeta: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  favItemTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  favItemCategory: {
-    fontSize: 11,
-    marginTop: 2,
-  },
-  ratingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  ratingText: {
-    fontSize: 11,
-    marginLeft: 4,
-    fontWeight: '600',
-  },
-  unfavBtn: {
-    padding: 8,
   },
 });

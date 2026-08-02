@@ -2,22 +2,22 @@
   "expo": {
     "name": "Game Arcade",
     "slug": "game-arcade",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "default",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "automatic",
-    "backgroundColor": "#0B0D12",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#1D1011",
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0B0D12"
+      "backgroundColor": "#1D1011"
     },
     "android": {
       "package": "com.winplaybox.gamearcade",
-      "versionCode": 1,
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#0B0D12"
+        "backgroundColor": "#1D1011"
       }
     },
     "plugins": [

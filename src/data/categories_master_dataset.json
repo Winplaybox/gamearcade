@@ -1,0 +1,4813 @@
+{
+  "version": "1.0.0",
+  "app": "Game Arcade",
+  "totalCategories": 123,
+  "totalSubCategories": 617,
+  "categories": [
+    {
+      "id": "action",
+      "slug": "action",
+      "title": "Action",
+      "description": "Explore the best Action games online! Play instant free action games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "flash-outline",
+      "themeColor": "#E94560",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Action category inside a rounded square, modern gaming emblem style, color #E94560, transparent background.",
+      "backgroundPrompt": "Epic cinematic action gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane action gaming artwork, dark obsidian atmosphere with glowing #E94560 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": true,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 1,
+      "subCategories": [
+        {
+          "id": "beat-em-up",
+          "title": "Beat 'Em Up"
+        },
+        {
+          "id": "hack-slash",
+          "title": "Hack & Slash"
+        },
+        {
+          "id": "platform-action",
+          "title": "Platform Action"
+        },
+        {
+          "id": "fighting-games",
+          "title": "Fighting Games"
+        },
+        {
+          "id": "melee-combat",
+          "title": "Melee Combat"
+        }
+      ]
+    },
+    {
+      "id": "adventure",
+      "slug": "adventure",
+      "title": "Adventure",
+      "description": "Explore the best Adventure games online! Play instant free adventure games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "compass-outline",
+      "themeColor": "#3A86FF",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Adventure category inside a rounded square, modern gaming emblem style, color #3A86FF, transparent background.",
+      "backgroundPrompt": "Epic cinematic adventure gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane adventure gaming artwork, dark obsidian atmosphere with glowing #3A86FF lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": true,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 2,
+      "subCategories": [
+        {
+          "id": "quest-exploration",
+          "title": "Quest & Exploration"
+        },
+        {
+          "id": "dungeon-crawler",
+          "title": "Dungeon Crawler"
+        },
+        {
+          "id": "story-rich",
+          "title": "Story Rich"
+        },
+        {
+          "id": "point-click",
+          "title": "Point & Click"
+        },
+        {
+          "id": "island-adventure",
+          "title": "Island Adventure"
+        }
+      ]
+    },
+    {
+      "id": "arcade",
+      "slug": "arcade",
+      "title": "Arcade",
+      "description": "Explore the best Arcade games online! Play instant free arcade games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "game-controller-outline",
+      "themeColor": "#8338EC",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Arcade category inside a rounded square, modern gaming emblem style, color #8338EC, transparent background.",
+      "backgroundPrompt": "Epic cinematic arcade gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane arcade gaming artwork, dark obsidian atmosphere with glowing #8338EC lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": true,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 3,
+      "subCategories": [
+        {
+          "id": "classic-arcade",
+          "title": "Classic Arcade"
+        },
+        {
+          "id": "pinball",
+          "title": "Pinball"
+        },
+        {
+          "id": "brick-breaker",
+          "title": "Brick Breaker"
+        },
+        {
+          "id": "retro-coin-op",
+          "title": "Retro Coin-Op"
+        },
+        {
+          "id": "maze-runner",
+          "title": "Maze Runner"
+        }
+      ]
+    },
+    {
+      "id": "racing",
+      "slug": "racing",
+      "title": "Racing",
+      "description": "Explore the best Racing games online! Play instant free racing games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "car-sport-outline",
+      "themeColor": "#FFBE0B",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Racing category inside a rounded square, modern gaming emblem style, color #FFBE0B, transparent background.",
+      "backgroundPrompt": "Epic cinematic racing gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane racing gaming artwork, dark obsidian atmosphere with glowing #FFBE0B lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": true,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 4,
+      "subCategories": [
+        {
+          "id": "car-racing",
+          "title": "Car Racing"
+        },
+        {
+          "id": "bike-racing",
+          "title": "Bike Racing"
+        },
+        {
+          "id": "drift-racing",
+          "title": "Drift Racing"
+        },
+        {
+          "id": "formula-racing",
+          "title": "Formula Racing"
+        },
+        {
+          "id": "offroad-racing",
+          "title": "Offroad Racing"
+        }
+      ]
+    },
+    {
+      "id": "sports",
+      "slug": "sports",
+      "title": "Sports",
+      "description": "Explore the best Sports games online! Play instant free sports games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "football-outline",
+      "themeColor": "#FF006E",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Sports category inside a rounded square, modern gaming emblem style, color #FF006E, transparent background.",
+      "backgroundPrompt": "Epic cinematic sports gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane sports gaming artwork, dark obsidian atmosphere with glowing #FF006E lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": true,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 5,
+      "subCategories": [
+        {
+          "id": "soccer-football",
+          "title": "Soccer & Football"
+        },
+        {
+          "id": "basketball",
+          "title": "Basketball"
+        },
+        {
+          "id": "tennis",
+          "title": "Tennis"
+        },
+        {
+          "id": "cricket",
+          "title": "Cricket"
+        },
+        {
+          "id": "golf",
+          "title": "Golf"
+        }
+      ]
+    },
+    {
+      "id": "puzzle",
+      "slug": "puzzle",
+      "title": "Puzzle",
+      "description": "Explore the best Puzzle games online! Play instant free puzzle games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "extension-puzzle-outline",
+      "themeColor": "#00F5D4",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Puzzle category inside a rounded square, modern gaming emblem style, color #00F5D4, transparent background.",
+      "backgroundPrompt": "Epic cinematic puzzle gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane puzzle gaming artwork, dark obsidian atmosphere with glowing #00F5D4 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": true,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 6,
+      "subCategories": [
+        {
+          "id": "logic-puzzles",
+          "title": "Logic Puzzles"
+        },
+        {
+          "id": "physics-puzzles",
+          "title": "Physics Puzzles"
+        },
+        {
+          "id": "match-3",
+          "title": "Match 3"
+        },
+        {
+          "id": "jigsaw-puzzles",
+          "title": "Jigsaw Puzzles"
+        },
+        {
+          "id": "sliding-puzzles",
+          "title": "Sliding Puzzles"
+        }
+      ]
+    },
+    {
+      "id": "shooting",
+      "slug": "shooting",
+      "title": "Shooting",
+      "description": "Explore the best Shooting games online! Play instant free shooting games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "locate-outline",
+      "themeColor": "#FB5607",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Shooting category inside a rounded square, modern gaming emblem style, color #FB5607, transparent background.",
+      "backgroundPrompt": "Epic cinematic shooting gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane shooting gaming artwork, dark obsidian atmosphere with glowing #FB5607 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": true,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 7,
+      "subCategories": [
+        {
+          "id": "target-shooting",
+          "title": "Target Shooting"
+        },
+        {
+          "id": "gun-games",
+          "title": "Gun Games"
+        },
+        {
+          "id": "artillery-battles",
+          "title": "Artillery Battles"
+        },
+        {
+          "id": "archery",
+          "title": "Archery"
+        },
+        {
+          "id": "hunting-targets",
+          "title": "Hunting & Targets"
+        }
+      ]
+    },
+    {
+      "id": "fps",
+      "slug": "fps",
+      "title": "FPS",
+      "description": "Explore the best FPS games online! Play instant free fps games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "disc-outline",
+      "themeColor": "#EF4444",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for FPS category inside a rounded square, modern gaming emblem style, color #EF4444, transparent background.",
+      "backgroundPrompt": "Epic cinematic fps gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane fps gaming artwork, dark obsidian atmosphere with glowing #EF4444 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": true,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 8,
+      "subCategories": [
+        {
+          "id": "tactical-fps",
+          "title": "Tactical FPS"
+        },
+        {
+          "id": "arena-shooter",
+          "title": "Arena Shooter"
+        },
+        {
+          "id": "sci-fi-fps",
+          "title": "Sci-Fi FPS"
+        },
+        {
+          "id": "ww2-shooter",
+          "title": "WW2 Shooter"
+        },
+        {
+          "id": "zombie-fps",
+          "title": "Zombie FPS"
+        }
+      ]
+    },
+    {
+      "id": "battle-royale",
+      "slug": "battle-royale",
+      "title": "Battle Royale",
+      "description": "Explore the best Battle Royale games online! Play instant free battle royale games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "shield-checkmark-outline",
+      "themeColor": "#F59E0B",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Battle Royale category inside a rounded square, modern gaming emblem style, color #F59E0B, transparent background.",
+      "backgroundPrompt": "Epic cinematic battle royale gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane battle royale gaming artwork, dark obsidian atmosphere with glowing #F59E0B lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": true,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 9,
+      "subCategories": [
+        {
+          "id": "last-man-standing",
+          "title": "Last Man Standing"
+        },
+        {
+          "id": "squad-survival",
+          "title": "Squad Survival"
+        },
+        {
+          "id": "loot-shoot",
+          "title": "Loot & Shoot"
+        },
+        {
+          "id": "skyfall-arena",
+          "title": "Skyfall Arena"
+        },
+        {
+          "id": "solo-royale",
+          "title": "Solo Royale"
+        }
+      ]
+    },
+    {
+      "id": "strategy",
+      "slug": "strategy",
+      "title": "Strategy",
+      "description": "Explore the best Strategy games online! Play instant free strategy games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "planet-outline",
+      "themeColor": "#10B981",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Strategy category inside a rounded square, modern gaming emblem style, color #10B981, transparent background.",
+      "backgroundPrompt": "Epic cinematic strategy gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane strategy gaming artwork, dark obsidian atmosphere with glowing #10B981 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": true,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 10,
+      "subCategories": [
+        {
+          "id": "real-time-strategy-rts",
+          "title": "Real-Time Strategy (RTS)"
+        },
+        {
+          "id": "turn-based-strategy",
+          "title": "Turn-Based Strategy"
+        },
+        {
+          "id": "tactical-strategy",
+          "title": "Tactical Strategy"
+        },
+        {
+          "id": "grand-strategy",
+          "title": "Grand Strategy"
+        },
+        {
+          "id": "hex-grid-strategy",
+          "title": "Hex Grid Strategy"
+        }
+      ]
+    },
+    {
+      "id": "rpg",
+      "slug": "rpg",
+      "title": "RPG",
+      "description": "Explore the best RPG games online! Play instant free rpg games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "shield-outline",
+      "themeColor": "#8B5CF6",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for RPG category inside a rounded square, modern gaming emblem style, color #8B5CF6, transparent background.",
+      "backgroundPrompt": "Epic cinematic rpg gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane rpg gaming artwork, dark obsidian atmosphere with glowing #8B5CF6 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 11,
+      "subCategories": [
+        {
+          "id": "action-rpg",
+          "title": "Action RPG"
+        },
+        {
+          "id": "turn-based-rpg",
+          "title": "Turn-Based RPG"
+        },
+        {
+          "id": "jrpg",
+          "title": "JRPG"
+        },
+        {
+          "id": "dungeon-crawler",
+          "title": "Dungeon Crawler"
+        },
+        {
+          "id": "open-world-rpg",
+          "title": "Open World RPG"
+        }
+      ]
+    },
+    {
+      "id": "mmorpg",
+      "slug": "mmorpg",
+      "title": "MMORPG",
+      "description": "Explore the best MMORPG games online! Play instant free mmorpg games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "globe-outline",
+      "themeColor": "#6366F1",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for MMORPG category inside a rounded square, modern gaming emblem style, color #6366F1, transparent background.",
+      "backgroundPrompt": "Epic cinematic mmorpg gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane mmorpg gaming artwork, dark obsidian atmosphere with glowing #6366F1 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 12,
+      "subCategories": [
+        {
+          "id": "massive-multiplayer",
+          "title": "Massive Multiplayer"
+        },
+        {
+          "id": "guild-wars",
+          "title": "Guild Wars"
+        },
+        {
+          "id": "raid-battles",
+          "title": "Raid Battles"
+        },
+        {
+          "id": "open-realm",
+          "title": "Open Realm"
+        },
+        {
+          "id": "crafting-mmo",
+          "title": "Crafting MMO"
+        }
+      ]
+    },
+    {
+      "id": "casual",
+      "slug": "casual",
+      "title": "Casual",
+      "description": "Explore the best Casual games online! Play instant free casual games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "happy-outline",
+      "themeColor": "#EC4899",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Casual category inside a rounded square, modern gaming emblem style, color #EC4899, transparent background.",
+      "backgroundPrompt": "Epic cinematic casual gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane casual gaming artwork, dark obsidian atmosphere with glowing #EC4899 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 13,
+      "subCategories": [
+        {
+          "id": "one-tap-games",
+          "title": "One-Tap Games"
+        },
+        {
+          "id": "time-killers",
+          "title": "Time Killers"
+        },
+        {
+          "id": "tap-play",
+          "title": "Tap & Play"
+        },
+        {
+          "id": "simple-controls",
+          "title": "Simple Controls"
+        },
+        {
+          "id": "relaxing-casual",
+          "title": "Relaxing Casual"
+        }
+      ]
+    },
+    {
+      "id": "hyper-casual",
+      "slug": "hyper-casual",
+      "title": "Hyper Casual",
+      "description": "Explore the best Hyper Casual games online! Play instant free hyper casual games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "sparkles-outline",
+      "themeColor": "#F43F5E",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Hyper Casual category inside a rounded square, modern gaming emblem style, color #F43F5E, transparent background.",
+      "backgroundPrompt": "Epic cinematic hyper casual gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane hyper casual gaming artwork, dark obsidian atmosphere with glowing #F43F5E lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 14,
+      "subCategories": [
+        {
+          "id": "stacker",
+          "title": "Stacker"
+        },
+        {
+          "id": "runner",
+          "title": "Runner"
+        },
+        {
+          "id": "slicing-games",
+          "title": "Slicing Games"
+        },
+        {
+          "id": "reaction-timing",
+          "title": "Reaction & Timing"
+        },
+        {
+          "id": "falling-blocks",
+          "title": "Falling Blocks"
+        }
+      ]
+    },
+    {
+      "id": "idle",
+      "slug": "idle",
+      "title": "Idle",
+      "description": "Explore the best Idle games online! Play instant free idle games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "time-outline",
+      "themeColor": "#14B8A6",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Idle category inside a rounded square, modern gaming emblem style, color #14B8A6, transparent background.",
+      "backgroundPrompt": "Epic cinematic idle gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane idle gaming artwork, dark obsidian atmosphere with glowing #14B8A6 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 15,
+      "subCategories": [
+        {
+          "id": "idle-clicker",
+          "title": "Idle Clicker"
+        },
+        {
+          "id": "incremental-games",
+          "title": "Incremental Games"
+        },
+        {
+          "id": "automation",
+          "title": "Automation"
+        },
+        {
+          "id": "resource-generator",
+          "title": "Resource Generator"
+        },
+        {
+          "id": "offline-gains",
+          "title": "Offline Gains"
+        }
+      ]
+    },
+    {
+      "id": "clicker",
+      "slug": "clicker",
+      "title": "Clicker",
+      "description": "Explore the best Clicker games online! Play instant free clicker games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "hand-left-outline",
+      "themeColor": "#EAB308",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Clicker category inside a rounded square, modern gaming emblem style, color #EAB308, transparent background.",
+      "backgroundPrompt": "Epic cinematic clicker gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane clicker gaming artwork, dark obsidian atmosphere with glowing #EAB308 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 16,
+      "subCategories": [
+        {
+          "id": "tap-tycoon",
+          "title": "Tap Tycoon"
+        },
+        {
+          "id": "cookie-clicker-style",
+          "title": "Cookie Clicker Style"
+        },
+        {
+          "id": "coin-generator",
+          "title": "Coin Generator"
+        },
+        {
+          "id": "prestige-clicker",
+          "title": "Prestige Clicker"
+        },
+        {
+          "id": "button-masher",
+          "title": "Button Masher"
+        }
+      ]
+    },
+    {
+      "id": "simulation",
+      "slug": "simulation",
+      "title": "Simulation",
+      "description": "Explore the best Simulation games online! Play instant free simulation games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "construct-outline",
+      "themeColor": "#06B6D4",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Simulation category inside a rounded square, modern gaming emblem style, color #06B6D4, transparent background.",
+      "backgroundPrompt": "Epic cinematic simulation gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane simulation gaming artwork, dark obsidian atmosphere with glowing #06B6D4 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 17,
+      "subCategories": [
+        {
+          "id": "life-simulator",
+          "title": "Life Simulator"
+        },
+        {
+          "id": "vehicle-simulator",
+          "title": "Vehicle Simulator"
+        },
+        {
+          "id": "flight-simulator",
+          "title": "Flight Simulator"
+        },
+        {
+          "id": "job-simulator",
+          "title": "Job Simulator"
+        },
+        {
+          "id": "physics-simulator",
+          "title": "Physics Simulator"
+        }
+      ]
+    },
+    {
+      "id": "city-builder",
+      "slug": "city-builder",
+      "title": "City Builder",
+      "description": "Explore the best City Builder games online! Play instant free city builder games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "business-outline",
+      "themeColor": "#3B82F6",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for City Builder category inside a rounded square, modern gaming emblem style, color #3B82F6, transparent background.",
+      "backgroundPrompt": "Epic cinematic city builder gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane city builder gaming artwork, dark obsidian atmosphere with glowing #3B82F6 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 18,
+      "subCategories": [
+        {
+          "id": "town-planning",
+          "title": "Town Planning"
+        },
+        {
+          "id": "empire-building",
+          "title": "Empire Building"
+        },
+        {
+          "id": "island-builder",
+          "title": "Island Builder"
+        },
+        {
+          "id": "metropolis-manager",
+          "title": "Metropolis Manager"
+        },
+        {
+          "id": "traffic-transit",
+          "title": "Traffic & Transit"
+        }
+      ]
+    },
+    {
+      "id": "survival",
+      "slug": "survival",
+      "title": "Survival",
+      "description": "Explore the best Survival games online! Play instant free survival games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "bonfire-outline",
+      "themeColor": "#D97706",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Survival category inside a rounded square, modern gaming emblem style, color #D97706, transparent background.",
+      "backgroundPrompt": "Epic cinematic survival gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane survival gaming artwork, dark obsidian atmosphere with glowing #D97706 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 19,
+      "subCategories": [
+        {
+          "id": "crafting-survival",
+          "title": "Crafting Survival"
+        },
+        {
+          "id": "wilderness-survival",
+          "title": "Wilderness Survival"
+        },
+        {
+          "id": "island-survival",
+          "title": "Island Survival"
+        },
+        {
+          "id": "post-apocalyptic",
+          "title": "Post-Apocalyptic"
+        },
+        {
+          "id": "shelter-builder",
+          "title": "Shelter Builder"
+        }
+      ]
+    },
+    {
+      "id": "zombie",
+      "slug": "zombie",
+      "title": "Zombie",
+      "description": "Explore the best Zombie games online! Play instant free zombie games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "skull-outline",
+      "themeColor": "#DC2626",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Zombie category inside a rounded square, modern gaming emblem style, color #DC2626, transparent background.",
+      "backgroundPrompt": "Epic cinematic zombie gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane zombie gaming artwork, dark obsidian atmosphere with glowing #DC2626 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 20,
+      "subCategories": [
+        {
+          "id": "zombie-survival",
+          "title": "Zombie Survival"
+        },
+        {
+          "id": "undead-shooter",
+          "title": "Undead Shooter"
+        },
+        {
+          "id": "zombie-defense",
+          "title": "Zombie Defense"
+        },
+        {
+          "id": "apocalypse-runner",
+          "title": "Apocalypse Runner"
+        },
+        {
+          "id": "horde-survival",
+          "title": "Horde Survival"
+        }
+      ]
+    },
+    {
+      "id": "horror",
+      "slug": "horror",
+      "title": "Horror",
+      "description": "Explore the best Horror games online! Play instant free horror games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "eye-off-outline",
+      "themeColor": "#7F1D1D",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Horror category inside a rounded square, modern gaming emblem style, color #7F1D1D, transparent background.",
+      "backgroundPrompt": "Epic cinematic horror gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane horror gaming artwork, dark obsidian atmosphere with glowing #7F1D1D lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 21,
+      "subCategories": [
+        {
+          "id": "scary-escape",
+          "title": "Scary Escape"
+        },
+        {
+          "id": "haunted-house",
+          "title": "Haunted House"
+        },
+        {
+          "id": "creepypasta",
+          "title": "Creepypasta"
+        },
+        {
+          "id": "survival-horror",
+          "title": "Survival Horror"
+        },
+        {
+          "id": "jump-scare",
+          "title": "Jump Scare"
+        }
+      ]
+    },
+    {
+      "id": "multiplayer",
+      "slug": "multiplayer",
+      "title": "Multiplayer",
+      "description": "Explore the best Multiplayer games online! Play instant free multiplayer games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "people-outline",
+      "themeColor": "#0284C7",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Multiplayer category inside a rounded square, modern gaming emblem style, color #0284C7, transparent background.",
+      "backgroundPrompt": "Epic cinematic multiplayer gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane multiplayer gaming artwork, dark obsidian atmosphere with glowing #0284C7 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 22,
+      "subCategories": [
+        {
+          "id": "online-pvp",
+          "title": "Online PvP"
+        },
+        {
+          "id": "co-op-quests",
+          "title": "Co-Op Quests"
+        },
+        {
+          "id": "room-battle",
+          "title": "Room Battle"
+        },
+        {
+          "id": "local-2-player",
+          "title": "Local 2 Player"
+        },
+        {
+          "id": "party-games",
+          "title": "Party Games"
+        }
+      ]
+    },
+    {
+      "id": "io-games",
+      "slug": "io-games",
+      "title": "IO Games",
+      "description": "Explore the best IO Games games online! Play instant free io games games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "radio-outline",
+      "themeColor": "#059669",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for IO Games category inside a rounded square, modern gaming emblem style, color #059669, transparent background.",
+      "backgroundPrompt": "Epic cinematic io games gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane io games gaming artwork, dark obsidian atmosphere with glowing #059669 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 23,
+      "subCategories": [
+        {
+          "id": "slither-style",
+          "title": "Slither Style"
+        },
+        {
+          "id": "worm-io",
+          "title": "Worm IO"
+        },
+        {
+          "id": "arena-io",
+          "title": "Arena IO"
+        },
+        {
+          "id": "growing-io",
+          "title": "Growing IO"
+        },
+        {
+          "id": "shooter-io",
+          "title": "Shooter IO"
+        }
+      ]
+    },
+    {
+      "id": "platformer",
+      "slug": "platformer",
+      "title": "Platformer",
+      "description": "Explore the best Platformer games online! Play instant free platformer games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "layers-outline",
+      "themeColor": "#7C3AED",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Platformer category inside a rounded square, modern gaming emblem style, color #7C3AED, transparent background.",
+      "backgroundPrompt": "Epic cinematic platformer gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane platformer gaming artwork, dark obsidian atmosphere with glowing #7C3AED lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 24,
+      "subCategories": [
+        {
+          "id": "2d-platformer",
+          "title": "2D Platformer"
+        },
+        {
+          "id": "precision-platformer",
+          "title": "Precision Platformer"
+        },
+        {
+          "id": "metroidvania",
+          "title": "Metroidvania"
+        },
+        {
+          "id": "wall-jump",
+          "title": "Wall Jump"
+        },
+        {
+          "id": "runner-platformer",
+          "title": "Runner Platformer"
+        }
+      ]
+    },
+    {
+      "id": "endless-runner",
+      "slug": "endless-runner",
+      "title": "Endless Runner",
+      "description": "Explore the best Endless Runner games online! Play instant free endless runner games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "walk-outline",
+      "themeColor": "#D946EF",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Endless Runner category inside a rounded square, modern gaming emblem style, color #D946EF, transparent background.",
+      "backgroundPrompt": "Epic cinematic endless runner gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane endless runner gaming artwork, dark obsidian atmosphere with glowing #D946EF lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 25,
+      "subCategories": [
+        {
+          "id": "temple-runner-style",
+          "title": "Temple Runner Style"
+        },
+        {
+          "id": "subway-style",
+          "title": "Subway Style"
+        },
+        {
+          "id": "obstacle-dodge",
+          "title": "Obstacle Dodge"
+        },
+        {
+          "id": "infinite-dash",
+          "title": "Infinite Dash"
+        },
+        {
+          "id": "rooftop-runner",
+          "title": "Rooftop Runner"
+        }
+      ]
+    },
+    {
+      "id": "stickman",
+      "slug": "stickman",
+      "title": "Stickman",
+      "description": "Explore the best Stickman games online! Play instant free stickman games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "body-outline",
+      "themeColor": "#64748B",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Stickman category inside a rounded square, modern gaming emblem style, color #64748B, transparent background.",
+      "backgroundPrompt": "Epic cinematic stickman gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane stickman gaming artwork, dark obsidian atmosphere with glowing #64748B lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 26,
+      "subCategories": [
+        {
+          "id": "stickman-fight",
+          "title": "Stickman Fight"
+        },
+        {
+          "id": "stickman-sniper",
+          "title": "Stickman Sniper"
+        },
+        {
+          "id": "stickman-parkour",
+          "title": "Stickman Parkour"
+        },
+        {
+          "id": "ragdoll-stickman",
+          "title": "Ragdoll Stickman"
+        },
+        {
+          "id": "stickman-archery",
+          "title": "Stickman Archery"
+        }
+      ]
+    },
+    {
+      "id": "ninja",
+      "slug": "ninja",
+      "title": "Ninja",
+      "description": "Explore the best Ninja games online! Play instant free ninja games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "cut-outline",
+      "themeColor": "#334155",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Ninja category inside a rounded square, modern gaming emblem style, color #334155, transparent background.",
+      "backgroundPrompt": "Epic cinematic ninja gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane ninja gaming artwork, dark obsidian atmosphere with glowing #334155 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 27,
+      "subCategories": [
+        {
+          "id": "shadow-ninja",
+          "title": "Shadow Ninja"
+        },
+        {
+          "id": "stealth-assassin",
+          "title": "Stealth Assassin"
+        },
+        {
+          "id": "katana-fight",
+          "title": "Katana Fight"
+        },
+        {
+          "id": "shuriken-throw",
+          "title": "Shuriken Throw"
+        },
+        {
+          "id": "wall-climb",
+          "title": "Wall Climb"
+        }
+      ]
+    },
+    {
+      "id": "samurai",
+      "slug": "samurai",
+      "title": "Samurai",
+      "description": "Explore the best Samurai games online! Play instant free samurai games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "shield-half-outline",
+      "themeColor": "#475569",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Samurai category inside a rounded square, modern gaming emblem style, color #475569, transparent background.",
+      "backgroundPrompt": "Epic cinematic samurai gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane samurai gaming artwork, dark obsidian atmosphere with glowing #475569 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 28,
+      "subCategories": [
+        {
+          "id": "sword-duel",
+          "title": "Sword Duel"
+        },
+        {
+          "id": "bushido",
+          "title": "Bushido"
+        },
+        {
+          "id": "feudal-japan",
+          "title": "Feudal Japan"
+        },
+        {
+          "id": "ronin-action",
+          "title": "Ronin Action"
+        },
+        {
+          "id": "katana-master",
+          "title": "Katana Master"
+        }
+      ]
+    },
+    {
+      "id": "space",
+      "slug": "space",
+      "title": "Space",
+      "description": "Explore the best Space games online! Play instant free space games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "rocket-outline",
+      "themeColor": "#4F46E5",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Space category inside a rounded square, modern gaming emblem style, color #4F46E5, transparent background.",
+      "backgroundPrompt": "Epic cinematic space gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane space gaming artwork, dark obsidian atmosphere with glowing #4F46E5 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 29,
+      "subCategories": [
+        {
+          "id": "space-shooter",
+          "title": "Space Shooter"
+        },
+        {
+          "id": "galaxy-exploration",
+          "title": "Galaxy Exploration"
+        },
+        {
+          "id": "starship-combat",
+          "title": "Starship Combat"
+        },
+        {
+          "id": "asteroid-dodge",
+          "title": "Asteroid Dodge"
+        },
+        {
+          "id": "planet-colonization",
+          "title": "Planet Colonization"
+        }
+      ]
+    },
+    {
+      "id": "sci-fi",
+      "slug": "sci-fi",
+      "title": "Sci-Fi",
+      "description": "Explore the best Sci-Fi games online! Play instant free sci-fi games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "hardware-chip-outline",
+      "themeColor": "#0891B2",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Sci-Fi category inside a rounded square, modern gaming emblem style, color #0891B2, transparent background.",
+      "backgroundPrompt": "Epic cinematic sci-fi gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane sci-fi gaming artwork, dark obsidian atmosphere with glowing #0891B2 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 30,
+      "subCategories": [
+        {
+          "id": "futuristic-battles",
+          "title": "Futuristic Battles"
+        },
+        {
+          "id": "cyber-warfare",
+          "title": "Cyber Warfare"
+        },
+        {
+          "id": "robot-wars",
+          "title": "Robot Wars"
+        },
+        {
+          "id": "alien-invasion",
+          "title": "Alien Invasion"
+        },
+        {
+          "id": "mech-fight",
+          "title": "Mech Fight"
+        }
+      ]
+    },
+    {
+      "id": "fantasy",
+      "slug": "fantasy",
+      "title": "Fantasy",
+      "description": "Explore the best Fantasy games online! Play instant free fantasy games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "color-wand-outline",
+      "themeColor": "#9333EA",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Fantasy category inside a rounded square, modern gaming emblem style, color #9333EA, transparent background.",
+      "backgroundPrompt": "Epic cinematic fantasy gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane fantasy gaming artwork, dark obsidian atmosphere with glowing #9333EA lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 31,
+      "subCategories": [
+        {
+          "id": "magic-spells",
+          "title": "Magic Spells"
+        },
+        {
+          "id": "dragons",
+          "title": "Dragons"
+        },
+        {
+          "id": "mythical-beasts",
+          "title": "Mythical Beasts"
+        },
+        {
+          "id": "sorcery",
+          "title": "Sorcery"
+        },
+        {
+          "id": "high-fantasy",
+          "title": "High Fantasy"
+        }
+      ]
+    },
+    {
+      "id": "medieval",
+      "slug": "medieval",
+      "title": "Medieval",
+      "description": "Explore the best Medieval games online! Play instant free medieval games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "shield-outline",
+      "themeColor": "#9A3412",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Medieval category inside a rounded square, modern gaming emblem style, color #9A3412, transparent background.",
+      "backgroundPrompt": "Epic cinematic medieval gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane medieval gaming artwork, dark obsidian atmosphere with glowing #9A3412 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 32,
+      "subCategories": [
+        {
+          "id": "knights",
+          "title": "Knights"
+        },
+        {
+          "id": "castle-siege",
+          "title": "Castle Siege"
+        },
+        {
+          "id": "archery-tournament",
+          "title": "Archery Tournament"
+        },
+        {
+          "id": "sword-shield",
+          "title": "Sword & Shield"
+        },
+        {
+          "id": "kingdom-wars",
+          "title": "Kingdom Wars"
+        }
+      ]
+    },
+    {
+      "id": "pirate",
+      "slug": "pirate",
+      "title": "Pirate",
+      "description": "Explore the best Pirate games online! Play instant free pirate games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "boat-outline",
+      "themeColor": "#B45309",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Pirate category inside a rounded square, modern gaming emblem style, color #B45309, transparent background.",
+      "backgroundPrompt": "Epic cinematic pirate gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane pirate gaming artwork, dark obsidian atmosphere with glowing #B45309 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 33,
+      "subCategories": [
+        {
+          "id": "naval-combat",
+          "title": "Naval Combat"
+        },
+        {
+          "id": "treasure-hunt",
+          "title": "Treasure Hunt"
+        },
+        {
+          "id": "high-seas",
+          "title": "High Seas"
+        },
+        {
+          "id": "pirate-island",
+          "title": "Pirate Island"
+        },
+        {
+          "id": "galleon-war",
+          "title": "Galleon War"
+        }
+      ]
+    },
+    {
+      "id": "ocean",
+      "slug": "ocean",
+      "title": "Ocean",
+      "description": "Explore the best Ocean games online! Play instant free ocean games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "water-outline",
+      "themeColor": "#0284C7",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Ocean category inside a rounded square, modern gaming emblem style, color #0284C7, transparent background.",
+      "backgroundPrompt": "Epic cinematic ocean gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane ocean gaming artwork, dark obsidian atmosphere with glowing #0284C7 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 34,
+      "subCategories": [
+        {
+          "id": "deep-sea",
+          "title": "Deep Sea"
+        },
+        {
+          "id": "submarine",
+          "title": "Submarine"
+        },
+        {
+          "id": "underwater-exploration",
+          "title": "Underwater Exploration"
+        },
+        {
+          "id": "fishing-boat",
+          "title": "Fishing Boat"
+        },
+        {
+          "id": "marine-life",
+          "title": "Marine Life"
+        }
+      ]
+    },
+    {
+      "id": "farm",
+      "slug": "farm",
+      "title": "Farm",
+      "description": "Explore the best Farm games online! Play instant free farm games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "leaf-outline",
+      "themeColor": "#65A30D",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Farm category inside a rounded square, modern gaming emblem style, color #65A30D, transparent background.",
+      "backgroundPrompt": "Epic cinematic farm gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane farm gaming artwork, dark obsidian atmosphere with glowing #65A30D lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 35,
+      "subCategories": [
+        {
+          "id": "farming-simulator",
+          "title": "Farming Simulator"
+        },
+        {
+          "id": "tractor-driving",
+          "title": "Tractor Driving"
+        },
+        {
+          "id": "crop-harvesting",
+          "title": "Crop Harvesting"
+        },
+        {
+          "id": "ranch-life",
+          "title": "Ranch Life"
+        },
+        {
+          "id": "animal-care",
+          "title": "Animal Care"
+        }
+      ]
+    },
+    {
+      "id": "cooking",
+      "slug": "cooking",
+      "title": "Cooking",
+      "description": "Explore the best Cooking games online! Play instant free cooking games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "restaurant-outline",
+      "themeColor": "#EA580C",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Cooking category inside a rounded square, modern gaming emblem style, color #EA580C, transparent background.",
+      "backgroundPrompt": "Epic cinematic cooking gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane cooking gaming artwork, dark obsidian atmosphere with glowing #EA580C lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 36,
+      "subCategories": [
+        {
+          "id": "chef-kitchen",
+          "title": "Chef Kitchen"
+        },
+        {
+          "id": "restaurant-cooking",
+          "title": "Restaurant Cooking"
+        },
+        {
+          "id": "baking",
+          "title": "Baking"
+        },
+        {
+          "id": "pizza-maker",
+          "title": "Pizza Maker"
+        },
+        {
+          "id": "fast-food",
+          "title": "Fast Food"
+        }
+      ]
+    },
+    {
+      "id": "restaurant",
+      "slug": "restaurant",
+      "title": "Restaurant",
+      "description": "Explore the best Restaurant games online! Play instant free restaurant games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "cafe-outline",
+      "themeColor": "#D97706",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Restaurant category inside a rounded square, modern gaming emblem style, color #D97706, transparent background.",
+      "backgroundPrompt": "Epic cinematic restaurant gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane restaurant gaming artwork, dark obsidian atmosphere with glowing #D97706 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 37,
+      "subCategories": [
+        {
+          "id": "diner-dash",
+          "title": "Diner Dash"
+        },
+        {
+          "id": "cafe-manager",
+          "title": "Cafe Manager"
+        },
+        {
+          "id": "food-truck",
+          "title": "Food Truck"
+        },
+        {
+          "id": "kitchen-tycoon",
+          "title": "Kitchen Tycoon"
+        },
+        {
+          "id": "bakery",
+          "title": "Bakery"
+        }
+      ]
+    },
+    {
+      "id": "fashion",
+      "slug": "fashion",
+      "title": "Fashion",
+      "description": "Explore the best Fashion games online! Play instant free fashion games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "shirt-outline",
+      "themeColor": "#DB2777",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Fashion category inside a rounded square, modern gaming emblem style, color #DB2777, transparent background.",
+      "backgroundPrompt": "Epic cinematic fashion gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane fashion gaming artwork, dark obsidian atmosphere with glowing #DB2777 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 38,
+      "subCategories": [
+        {
+          "id": "catwalk",
+          "title": "Catwalk"
+        },
+        {
+          "id": "model-dress-up",
+          "title": "Model Dress Up"
+        },
+        {
+          "id": "style-designer",
+          "title": "Style Designer"
+        },
+        {
+          "id": "outfit-match",
+          "title": "Outfit Match"
+        },
+        {
+          "id": "boutique",
+          "title": "Boutique"
+        }
+      ]
+    },
+    {
+      "id": "makeup",
+      "slug": "makeup",
+      "title": "Makeup",
+      "description": "Explore the best Makeup games online! Play instant free makeup games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "brush-outline",
+      "themeColor": "#E11D48",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Makeup category inside a rounded square, modern gaming emblem style, color #E11D48, transparent background.",
+      "backgroundPrompt": "Epic cinematic makeup gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane makeup gaming artwork, dark obsidian atmosphere with glowing #E11D48 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 39,
+      "subCategories": [
+        {
+          "id": "beauty-salon",
+          "title": "Beauty Salon"
+        },
+        {
+          "id": "glamour-makeover",
+          "title": "Glamour Makeover"
+        },
+        {
+          "id": "lipstick-art",
+          "title": "Lipstick Art"
+        },
+        {
+          "id": "spa-salon",
+          "title": "Spa Salon"
+        },
+        {
+          "id": "face-paint",
+          "title": "Face Paint"
+        }
+      ]
+    },
+    {
+      "id": "dress-up",
+      "slug": "dress-up",
+      "title": "Dress Up",
+      "description": "Explore the best Dress Up games online! Play instant free dress up games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "woman-outline",
+      "themeColor": "#F43F5E",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Dress Up category inside a rounded square, modern gaming emblem style, color #F43F5E, transparent background.",
+      "backgroundPrompt": "Epic cinematic dress up gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane dress up gaming artwork, dark obsidian atmosphere with glowing #F43F5E lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 40,
+      "subCategories": [
+        {
+          "id": "princess-dress-up",
+          "title": "Princess Dress Up"
+        },
+        {
+          "id": "doll-styling",
+          "title": "Doll Styling"
+        },
+        {
+          "id": "celebrity-outfit",
+          "title": "Celebrity Outfit"
+        },
+        {
+          "id": "wedding-fashion",
+          "title": "Wedding Fashion"
+        },
+        {
+          "id": "anime-dress-up",
+          "title": "Anime Dress Up"
+        }
+      ]
+    },
+    {
+      "id": "baby",
+      "slug": "baby",
+      "title": "Baby",
+      "description": "Explore the best Baby games online! Play instant free baby games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "heart-outline",
+      "themeColor": "#F472B6",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Baby category inside a rounded square, modern gaming emblem style, color #F472B6, transparent background.",
+      "backgroundPrompt": "Epic cinematic baby gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane baby gaming artwork, dark obsidian atmosphere with glowing #F472B6 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 41,
+      "subCategories": [
+        {
+          "id": "baby-care",
+          "title": "Baby Care"
+        },
+        {
+          "id": "nursery-games",
+          "title": "Nursery Games"
+        },
+        {
+          "id": "cute-toddler",
+          "title": "Cute Toddler"
+        },
+        {
+          "id": "doctor-baby",
+          "title": "Doctor Baby"
+        },
+        {
+          "id": "feeding-sim",
+          "title": "Feeding Sim"
+        }
+      ]
+    },
+    {
+      "id": "girls",
+      "slug": "girls",
+      "title": "Girls",
+      "description": "Explore the best Girls games online! Play instant free girls games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "sparkles-outline",
+      "themeColor": "#FB7185",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Girls category inside a rounded square, modern gaming emblem style, color #FB7185, transparent background.",
+      "backgroundPrompt": "Epic cinematic girls gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane girls gaming artwork, dark obsidian atmosphere with glowing #FB7185 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 42,
+      "subCategories": [
+        {
+          "id": "girl-games",
+          "title": "Girl Games"
+        },
+        {
+          "id": "fairy-tale",
+          "title": "Fairy Tale"
+        },
+        {
+          "id": "princess-quest",
+          "title": "Princess Quest"
+        },
+        {
+          "id": "doll-house",
+          "title": "Doll House"
+        },
+        {
+          "id": "salon-manager",
+          "title": "Salon Manager"
+        }
+      ]
+    },
+    {
+      "id": "boys",
+      "slug": "boys",
+      "title": "Boys",
+      "description": "Explore the best Boys games online! Play instant free boys games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "fitness-outline",
+      "themeColor": "#2563EB",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Boys category inside a rounded square, modern gaming emblem style, color #2563EB, transparent background.",
+      "backgroundPrompt": "Epic cinematic boys gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane boys gaming artwork, dark obsidian atmosphere with glowing #2563EB lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 43,
+      "subCategories": [
+        {
+          "id": "boy-action",
+          "title": "Boy Action"
+        },
+        {
+          "id": "monster-trucks",
+          "title": "Monster Trucks"
+        },
+        {
+          "id": "battle-arena",
+          "title": "Battle Arena"
+        },
+        {
+          "id": "superhero-rush",
+          "title": "Superhero Rush"
+        },
+        {
+          "id": "stunt-driver",
+          "title": "Stunt Driver"
+        }
+      ]
+    },
+    {
+      "id": "educational",
+      "slug": "educational",
+      "title": "Educational",
+      "description": "Explore the best Educational games online! Play instant free educational games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "school-outline",
+      "themeColor": "#0D9488",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Educational category inside a rounded square, modern gaming emblem style, color #0D9488, transparent background.",
+      "backgroundPrompt": "Epic cinematic educational gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane educational gaming artwork, dark obsidian atmosphere with glowing #0D9488 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 44,
+      "subCategories": [
+        {
+          "id": "math-games",
+          "title": "Math Games"
+        },
+        {
+          "id": "spelling-bee",
+          "title": "Spelling Bee"
+        },
+        {
+          "id": "geography-quiz",
+          "title": "Geography Quiz"
+        },
+        {
+          "id": "science-fun",
+          "title": "Science Fun"
+        },
+        {
+          "id": "learning-puzzles",
+          "title": "Learning Puzzles"
+        }
+      ]
+    },
+    {
+      "id": "kids",
+      "slug": "kids",
+      "title": "Kids",
+      "description": "Explore the best Kids games online! Play instant free kids games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "balloon-outline",
+      "themeColor": "#F59E0B",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Kids category inside a rounded square, modern gaming emblem style, color #F59E0B, transparent background.",
+      "backgroundPrompt": "Epic cinematic kids gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane kids gaming artwork, dark obsidian atmosphere with glowing #F59E0B lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 45,
+      "subCategories": [
+        {
+          "id": "kids-preschool",
+          "title": "Kids Preschool"
+        },
+        {
+          "id": "color-learning",
+          "title": "Color Learning"
+        },
+        {
+          "id": "shape-matching",
+          "title": "Shape Matching"
+        },
+        {
+          "id": "toy-house",
+          "title": "Toy House"
+        },
+        {
+          "id": "animal-sounds",
+          "title": "Animal Sounds"
+        }
+      ]
+    },
+    {
+      "id": "memory",
+      "slug": "memory",
+      "title": "Memory",
+      "description": "Explore the best Memory games online! Play instant free memory games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "bulb-outline",
+      "themeColor": "#8B5CF6",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Memory category inside a rounded square, modern gaming emblem style, color #8B5CF6, transparent background.",
+      "backgroundPrompt": "Epic cinematic memory gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane memory gaming artwork, dark obsidian atmosphere with glowing #8B5CF6 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 46,
+      "subCategories": [
+        {
+          "id": "memory-match",
+          "title": "Memory Match"
+        },
+        {
+          "id": "flip-card",
+          "title": "Flip Card"
+        },
+        {
+          "id": "brain-training",
+          "title": "Brain Training"
+        },
+        {
+          "id": "sequence-memory",
+          "title": "Sequence Memory"
+        },
+        {
+          "id": "pattern-match",
+          "title": "Pattern Match"
+        }
+      ]
+    },
+    {
+      "id": "brain",
+      "slug": "brain",
+      "title": "Brain",
+      "description": "Explore the best Brain games online! Play instant free brain games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "analytics-outline",
+      "themeColor": "#6366F1",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Brain category inside a rounded square, modern gaming emblem style, color #6366F1, transparent background.",
+      "backgroundPrompt": "Epic cinematic brain gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane brain gaming artwork, dark obsidian atmosphere with glowing #6366F1 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 47,
+      "subCategories": [
+        {
+          "id": "logic-puzzles",
+          "title": "Logic Puzzles"
+        },
+        {
+          "id": "mind-games",
+          "title": "Mind Games"
+        },
+        {
+          "id": "iq-test",
+          "title": "IQ Test"
+        },
+        {
+          "id": "riddle-solver",
+          "title": "Riddle Solver"
+        },
+        {
+          "id": "maze-escape",
+          "title": "Maze Escape"
+        }
+      ]
+    },
+    {
+      "id": "sudoku",
+      "slug": "sudoku",
+      "title": "Sudoku",
+      "description": "Explore the best Sudoku games online! Play instant free sudoku games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "grid-outline",
+      "themeColor": "#4F46E5",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Sudoku category inside a rounded square, modern gaming emblem style, color #4F46E5, transparent background.",
+      "backgroundPrompt": "Epic cinematic sudoku gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane sudoku gaming artwork, dark obsidian atmosphere with glowing #4F46E5 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 48,
+      "subCategories": [
+        {
+          "id": "classic-sudoku",
+          "title": "Classic Sudoku"
+        },
+        {
+          "id": "daily-grid",
+          "title": "Daily Grid"
+        },
+        {
+          "id": "killer-sudoku",
+          "title": "Killer Sudoku"
+        },
+        {
+          "id": "9x9-logic",
+          "title": "9x9 Logic"
+        },
+        {
+          "id": "mini-sudoku",
+          "title": "Mini Sudoku"
+        }
+      ]
+    },
+    {
+      "id": "chess",
+      "slug": "chess",
+      "title": "Chess",
+      "description": "Explore the best Chess games online! Play instant free chess games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "trophy-outline",
+      "themeColor": "#374151",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Chess category inside a rounded square, modern gaming emblem style, color #374151, transparent background.",
+      "backgroundPrompt": "Epic cinematic chess gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane chess gaming artwork, dark obsidian atmosphere with glowing #374151 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 49,
+      "subCategories": [
+        {
+          "id": "classic-chess",
+          "title": "Classic Chess"
+        },
+        {
+          "id": "speed-chess",
+          "title": "Speed Chess"
+        },
+        {
+          "id": "chess-puzzles",
+          "title": "Chess Puzzles"
+        },
+        {
+          "id": "ai-challenge",
+          "title": "AI Challenge"
+        },
+        {
+          "id": "2-player-chess",
+          "title": "2-Player Chess"
+        }
+      ]
+    },
+    {
+      "id": "cards",
+      "slug": "cards",
+      "title": "Cards",
+      "description": "Explore the best Cards games online! Play instant free cards games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "card-outline",
+      "themeColor": "#1E293B",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Cards category inside a rounded square, modern gaming emblem style, color #1E293B, transparent background.",
+      "backgroundPrompt": "Epic cinematic cards gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane cards gaming artwork, dark obsidian atmosphere with glowing #1E293B lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 50,
+      "subCategories": [
+        {
+          "id": "solitaire",
+          "title": "Solitaire"
+        },
+        {
+          "id": "spider",
+          "title": "Spider"
+        },
+        {
+          "id": "freecell",
+          "title": "FreeCell"
+        },
+        {
+          "id": "blackjack",
+          "title": "Blackjack"
+        },
+        {
+          "id": "poker",
+          "title": "Poker"
+        },
+        {
+          "id": "texas-holdem",
+          "title": "Texas Holdem"
+        },
+        {
+          "id": "uno-style",
+          "title": "Uno Style"
+        }
+      ]
+    },
+    {
+      "id": "casino",
+      "slug": "casino",
+      "title": "Casino",
+      "description": "Explore the best Casino games online! Play instant free casino games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "cash-outline",
+      "themeColor": "#15803D",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Casino category inside a rounded square, modern gaming emblem style, color #15803D, transparent background.",
+      "backgroundPrompt": "Epic cinematic casino gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane casino gaming artwork, dark obsidian atmosphere with glowing #15803D lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 51,
+      "subCategories": [
+        {
+          "id": "slot-machines",
+          "title": "Slot Machines"
+        },
+        {
+          "id": "roulette",
+          "title": "Roulette"
+        },
+        {
+          "id": "blackjack",
+          "title": "Blackjack"
+        },
+        {
+          "id": "baccarat",
+          "title": "Baccarat"
+        },
+        {
+          "id": "wheel-of-fortune",
+          "title": "Wheel of Fortune"
+        }
+      ]
+    },
+    {
+      "id": "cricket",
+      "slug": "cricket",
+      "title": "Cricket",
+      "description": "Explore the best Cricket games online! Play instant free cricket games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "fitness-outline",
+      "themeColor": "#166534",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Cricket category inside a rounded square, modern gaming emblem style, color #166534, transparent background.",
+      "backgroundPrompt": "Epic cinematic cricket gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane cricket gaming artwork, dark obsidian atmosphere with glowing #166534 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 52,
+      "subCategories": [
+        {
+          "id": "ipl-style-cricket",
+          "title": "IPL Style Cricket"
+        },
+        {
+          "id": "t20-world-cup",
+          "title": "T20 World Cup"
+        },
+        {
+          "id": "super-over",
+          "title": "Super Over"
+        },
+        {
+          "id": "real-cricket-3d",
+          "title": "Real Cricket 3D"
+        },
+        {
+          "id": "batting-blast",
+          "title": "Batting Blast"
+        }
+      ]
+    },
+    {
+      "id": "football",
+      "slug": "football",
+      "title": "Football",
+      "description": "Explore the best Football games online! Play instant free football games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "football-outline",
+      "themeColor": "#15803D",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Football category inside a rounded square, modern gaming emblem style, color #15803D, transparent background.",
+      "backgroundPrompt": "Epic cinematic football gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane football gaming artwork, dark obsidian atmosphere with glowing #15803D lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 53,
+      "subCategories": [
+        {
+          "id": "penalty-shootout",
+          "title": "Penalty Shootout"
+        },
+        {
+          "id": "soccer-league",
+          "title": "Soccer League"
+        },
+        {
+          "id": "world-cup-tournament",
+          "title": "World Cup Tournament"
+        },
+        {
+          "id": "free-kick",
+          "title": "Free Kick"
+        },
+        {
+          "id": "football-manager",
+          "title": "Football Manager"
+        }
+      ]
+    },
+    {
+      "id": "basketball",
+      "slug": "basketball",
+      "title": "Basketball",
+      "description": "Explore the best Basketball games online! Play instant free basketball games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "basketball-outline",
+      "themeColor": "#C2410C",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Basketball category inside a rounded square, modern gaming emblem style, color #C2410C, transparent background.",
+      "backgroundPrompt": "Epic cinematic basketball gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane basketball gaming artwork, dark obsidian atmosphere with glowing #C2410C lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 54,
+      "subCategories": [
+        {
+          "id": "streetball",
+          "title": "Streetball"
+        },
+        {
+          "id": "dunk-contest",
+          "title": "Dunk Contest"
+        },
+        {
+          "id": "3point-shootout",
+          "title": "3Point Shootout"
+        },
+        {
+          "id": "basketball-legends",
+          "title": "Basketball Legends"
+        },
+        {
+          "id": "basketball-sim",
+          "title": "Basketball Sim"
+        }
+      ]
+    },
+    {
+      "id": "tennis",
+      "slug": "tennis",
+      "title": "Tennis",
+      "description": "Explore the best Tennis games online! Play instant free tennis games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "tennisball-outline",
+      "themeColor": "#65A30D",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Tennis category inside a rounded square, modern gaming emblem style, color #65A30D, transparent background.",
+      "backgroundPrompt": "Epic cinematic tennis gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane tennis gaming artwork, dark obsidian atmosphere with glowing #65A30D lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 55,
+      "subCategories": [
+        {
+          "id": "grand-slam",
+          "title": "Grand Slam"
+        },
+        {
+          "id": "table-tennis",
+          "title": "Table Tennis"
+        },
+        {
+          "id": "ping-pong",
+          "title": "Ping Pong"
+        },
+        {
+          "id": "court-tennis",
+          "title": "Court Tennis"
+        },
+        {
+          "id": "racket-rally",
+          "title": "Racket Rally"
+        }
+      ]
+    },
+    {
+      "id": "golf",
+      "slug": "golf",
+      "title": "Golf",
+      "description": "Explore the best Golf games online! Play instant free golf games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "golf-outline",
+      "themeColor": "#047857",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Golf category inside a rounded square, modern gaming emblem style, color #047857, transparent background.",
+      "backgroundPrompt": "Epic cinematic golf gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane golf gaming artwork, dark obsidian atmosphere with glowing #047857 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 56,
+      "subCategories": [
+        {
+          "id": "mini-golf",
+          "title": "Mini Golf"
+        },
+        {
+          "id": "pro-golf-3d",
+          "title": "Pro Golf 3D"
+        },
+        {
+          "id": "hole-in-one",
+          "title": "Hole in One"
+        },
+        {
+          "id": "disc-golf",
+          "title": "Disc Golf"
+        },
+        {
+          "id": "golf-battle",
+          "title": "Golf Battle"
+        }
+      ]
+    },
+    {
+      "id": "boxing",
+      "slug": "boxing",
+      "title": "Boxing",
+      "description": "Explore the best Boxing games online! Play instant free boxing games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "hand-left-outline",
+      "themeColor": "#991B1B",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Boxing category inside a rounded square, modern gaming emblem style, color #991B1B, transparent background.",
+      "backgroundPrompt": "Epic cinematic boxing gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane boxing gaming artwork, dark obsidian atmosphere with glowing #991B1B lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 57,
+      "subCategories": [
+        {
+          "id": "heavyweight-boxing",
+          "title": "Heavyweight Boxing"
+        },
+        {
+          "id": "punch-out",
+          "title": "Punch Out"
+        },
+        {
+          "id": "ring-fight",
+          "title": "Ring Fight"
+        },
+        {
+          "id": "knockout-challenge",
+          "title": "Knockout Challenge"
+        },
+        {
+          "id": "street-boxing",
+          "title": "Street Boxing"
+        }
+      ]
+    },
+    {
+      "id": "wrestling",
+      "slug": "wrestling",
+      "title": "Wrestling",
+      "description": "Explore the best Wrestling games online! Play instant free wrestling games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "people-circle-outline",
+      "themeColor": "#9F1239",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Wrestling category inside a rounded square, modern gaming emblem style, color #9F1239, transparent background.",
+      "backgroundPrompt": "Epic cinematic wrestling gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane wrestling gaming artwork, dark obsidian atmosphere with glowing #9F1239 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 58,
+      "subCategories": [
+        {
+          "id": "wwe-style",
+          "title": "WWE Style"
+        },
+        {
+          "id": "sumo-wrestling",
+          "title": "Sumo Wrestling"
+        },
+        {
+          "id": "royal-rumble",
+          "title": "Royal Rumble"
+        },
+        {
+          "id": "cage-fight",
+          "title": "Cage Fight"
+        },
+        {
+          "id": "wrestling-mania",
+          "title": "Wrestling Mania"
+        }
+      ]
+    },
+    {
+      "id": "parkour",
+      "slug": "parkour",
+      "title": "Parkour",
+      "description": "Explore the best Parkour games online! Play instant free parkour games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "navigate-outline",
+      "themeColor": "#0284C7",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Parkour category inside a rounded square, modern gaming emblem style, color #0284C7, transparent background.",
+      "backgroundPrompt": "Epic cinematic parkour gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane parkour gaming artwork, dark obsidian atmosphere with glowing #0284C7 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 59,
+      "subCategories": [
+        {
+          "id": "rooftop-runner",
+          "title": "Rooftop Runner"
+        },
+        {
+          "id": "free-running",
+          "title": "Free Running"
+        },
+        {
+          "id": "wall-flip",
+          "title": "Wall Flip"
+        },
+        {
+          "id": "urban-obstacle",
+          "title": "Urban Obstacle"
+        },
+        {
+          "id": "flip-master",
+          "title": "Flip Master"
+        }
+      ]
+    },
+    {
+      "id": "sniper",
+      "slug": "sniper",
+      "title": "Sniper",
+      "description": "Explore the best Sniper games online! Play instant free sniper games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "locate-outline",
+      "themeColor": "#1E3A8A",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Sniper category inside a rounded square, modern gaming emblem style, color #1E3A8A, transparent background.",
+      "backgroundPrompt": "Epic cinematic sniper gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane sniper gaming artwork, dark obsidian atmosphere with glowing #1E3A8A lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 60,
+      "subCategories": [
+        {
+          "id": "long-range-shooter",
+          "title": "Long Range Shooter"
+        },
+        {
+          "id": "silent-assassin",
+          "title": "Silent Assassin"
+        },
+        {
+          "id": "scope-target",
+          "title": "Scope Target"
+        },
+        {
+          "id": "city-sniper",
+          "title": "City Sniper"
+        },
+        {
+          "id": "tactical-marksman",
+          "title": "Tactical Marksman"
+        }
+      ]
+    },
+    {
+      "id": "defense",
+      "slug": "defense",
+      "title": "Defense",
+      "description": "Explore the best Defense games online! Play instant free defense games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "shield-checkmark-outline",
+      "themeColor": "#1E40AF",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Defense category inside a rounded square, modern gaming emblem style, color #1E40AF, transparent background.",
+      "backgroundPrompt": "Epic cinematic defense gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane defense gaming artwork, dark obsidian atmosphere with glowing #1E40AF lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 61,
+      "subCategories": [
+        {
+          "id": "base-defense",
+          "title": "Base Defense"
+        },
+        {
+          "id": "castle-defense",
+          "title": "Castle Defense"
+        },
+        {
+          "id": "wall-fortification",
+          "title": "Wall Fortification"
+        },
+        {
+          "id": "wave-survival",
+          "title": "Wave Survival"
+        },
+        {
+          "id": "kingdom-shield",
+          "title": "Kingdom Shield"
+        }
+      ]
+    },
+    {
+      "id": "tower-defense",
+      "slug": "tower-defense",
+      "title": "Tower Defense",
+      "description": "Explore the best Tower Defense games online! Play instant free tower defense games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "pricetag-outline",
+      "themeColor": "#3730A3",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Tower Defense category inside a rounded square, modern gaming emblem style, color #3730A3, transparent background.",
+      "backgroundPrompt": "Epic cinematic tower defense gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane tower defense gaming artwork, dark obsidian atmosphere with glowing #3730A3 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 62,
+      "subCategories": [
+        {
+          "id": "td-strategy",
+          "title": "TD Strategy"
+        },
+        {
+          "id": "turret-upgrades",
+          "title": "Turret Upgrades"
+        },
+        {
+          "id": "monster-waves",
+          "title": "Monster Waves"
+        },
+        {
+          "id": "creep-defense",
+          "title": "Creep Defense"
+        },
+        {
+          "id": "elemental-towers",
+          "title": "Elemental Towers"
+        }
+      ]
+    },
+    {
+      "id": "match-3",
+      "slug": "match-3",
+      "title": "Match 3",
+      "description": "Explore the best Match 3 games online! Play instant free match 3 games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "shapes-outline",
+      "themeColor": "#A21CAF",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Match 3 category inside a rounded square, modern gaming emblem style, color #A21CAF, transparent background.",
+      "backgroundPrompt": "Epic cinematic match 3 gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane match 3 gaming artwork, dark obsidian atmosphere with glowing #A21CAF lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 63,
+      "subCategories": [
+        {
+          "id": "candy-style",
+          "title": "Candy Style"
+        },
+        {
+          "id": "jewel-match",
+          "title": "Jewel Match"
+        },
+        {
+          "id": "tile-crush",
+          "title": "Tile Crush"
+        },
+        {
+          "id": "triple-match",
+          "title": "Triple Match"
+        },
+        {
+          "id": "combo-puzzle",
+          "title": "Combo Puzzle"
+        }
+      ]
+    },
+    {
+      "id": "bubble-shooter",
+      "slug": "bubble-shooter",
+      "title": "Bubble Shooter",
+      "description": "Explore the best Bubble Shooter games online! Play instant free bubble shooter games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "ellipse-outline",
+      "themeColor": "#C026D3",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Bubble Shooter category inside a rounded square, modern gaming emblem style, color #C026D3, transparent background.",
+      "backgroundPrompt": "Epic cinematic bubble shooter gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane bubble shooter gaming artwork, dark obsidian atmosphere with glowing #C026D3 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 64,
+      "subCategories": [
+        {
+          "id": "bubble-pop",
+          "title": "Bubble Pop"
+        },
+        {
+          "id": "color-match-shooter",
+          "title": "Color Match Shooter"
+        },
+        {
+          "id": "hex-bubble",
+          "title": "Hex Bubble"
+        },
+        {
+          "id": "arc-shooter",
+          "title": "Arc Shooter"
+        },
+        {
+          "id": "pop-mania",
+          "title": "Pop Mania"
+        }
+      ]
+    },
+    {
+      "id": "hidden-objects",
+      "slug": "hidden-objects",
+      "title": "Hidden Objects",
+      "description": "Explore the best Hidden Objects games online! Play instant free hidden objects games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "search-outline",
+      "themeColor": "#7E22CE",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Hidden Objects category inside a rounded square, modern gaming emblem style, color #7E22CE, transparent background.",
+      "backgroundPrompt": "Epic cinematic hidden objects gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane hidden objects gaming artwork, dark obsidian atmosphere with glowing #7E22CE lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 65,
+      "subCategories": [
+        {
+          "id": "find-difference",
+          "title": "Find Difference"
+        },
+        {
+          "id": "mystery-search",
+          "title": "Mystery Search"
+        },
+        {
+          "id": "detective-clues",
+          "title": "Detective Clues"
+        },
+        {
+          "id": "object-hunt",
+          "title": "Object Hunt"
+        },
+        {
+          "id": "secret-room",
+          "title": "Secret Room"
+        }
+      ]
+    },
+    {
+      "id": "escape-room",
+      "slug": "escape-room",
+      "title": "Escape Room",
+      "description": "Explore the best Escape Room games online! Play instant free escape room games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "key-outline",
+      "themeColor": "#6B21A8",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Escape Room category inside a rounded square, modern gaming emblem style, color #6B21A8, transparent background.",
+      "backgroundPrompt": "Epic cinematic escape room gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane escape room gaming artwork, dark obsidian atmosphere with glowing #6B21A8 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 66,
+      "subCategories": [
+        {
+          "id": "room-escape",
+          "title": "Room Escape"
+        },
+        {
+          "id": "door-unlock",
+          "title": "Door Unlock"
+        },
+        {
+          "id": "mystery-mansion",
+          "title": "Mystery Mansion"
+        },
+        {
+          "id": "secret-lab",
+          "title": "Secret Lab"
+        },
+        {
+          "id": "prison-escape",
+          "title": "Prison Escape"
+        }
+      ]
+    },
+    {
+      "id": "detective",
+      "slug": "detective",
+      "title": "Detective",
+      "description": "Explore the best Detective games online! Play instant free detective games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "search-circle-outline",
+      "themeColor": "#581C87",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Detective category inside a rounded square, modern gaming emblem style, color #581C87, transparent background.",
+      "backgroundPrompt": "Epic cinematic detective gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane detective gaming artwork, dark obsidian atmosphere with glowing #581C87 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 67,
+      "subCategories": [
+        {
+          "id": "crime-scene-investigation",
+          "title": "Crime Scene Investigation"
+        },
+        {
+          "id": "clue-solver",
+          "title": "Clue Solver"
+        },
+        {
+          "id": "mystery-case",
+          "title": "Mystery Case"
+        },
+        {
+          "id": "whodunit",
+          "title": "Whodunit"
+        },
+        {
+          "id": "interrogation",
+          "title": "Interrogation"
+        }
+      ]
+    },
+    {
+      "id": "tycoon",
+      "slug": "tycoon",
+      "title": "Tycoon",
+      "description": "Explore the best Tycoon games online! Play instant free tycoon games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "stats-chart-outline",
+      "themeColor": "#047857",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Tycoon category inside a rounded square, modern gaming emblem style, color #047857, transparent background.",
+      "backgroundPrompt": "Epic cinematic tycoon gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane tycoon gaming artwork, dark obsidian atmosphere with glowing #047857 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 68,
+      "subCategories": [
+        {
+          "id": "idle-tycoon",
+          "title": "Idle Tycoon"
+        },
+        {
+          "id": "airport-manager",
+          "title": "Airport Manager"
+        },
+        {
+          "id": "hotel-tycoon",
+          "title": "Hotel Tycoon"
+        },
+        {
+          "id": "supermarket-tycoon",
+          "title": "Supermarket Tycoon"
+        },
+        {
+          "id": "theme-park",
+          "title": "Theme Park"
+        }
+      ]
+    },
+    {
+      "id": "business",
+      "slug": "business",
+      "title": "Business",
+      "description": "Explore the best Business games online! Play instant free business games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "briefcase-outline",
+      "themeColor": "#065F46",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Business category inside a rounded square, modern gaming emblem style, color #065F46, transparent background.",
+      "backgroundPrompt": "Epic cinematic business gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane business gaming artwork, dark obsidian atmosphere with glowing #065F46 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 69,
+      "subCategories": [
+        {
+          "id": "store-manager",
+          "title": "Store Manager"
+        },
+        {
+          "id": "stock-market",
+          "title": "Stock Market"
+        },
+        {
+          "id": "factory-manager",
+          "title": "Factory Manager"
+        },
+        {
+          "id": "startup-sim",
+          "title": "Startup Sim"
+        },
+        {
+          "id": "trade-empire",
+          "title": "Trade Empire"
+        }
+      ]
+    },
+    {
+      "id": "airplane",
+      "slug": "airplane",
+      "title": "Airplane",
+      "description": "Explore the best Airplane games online! Play instant free airplane games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "airplane-outline",
+      "themeColor": "#0284C7",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Airplane category inside a rounded square, modern gaming emblem style, color #0284C7, transparent background.",
+      "backgroundPrompt": "Epic cinematic airplane gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane airplane gaming artwork, dark obsidian atmosphere with glowing #0284C7 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 70,
+      "subCategories": [
+        {
+          "id": "flight-simulator",
+          "title": "Flight Simulator"
+        },
+        {
+          "id": "airplane-pilot",
+          "title": "Airplane Pilot"
+        },
+        {
+          "id": "flight-landing",
+          "title": "Flight Landing"
+        },
+        {
+          "id": "jet-fighter",
+          "title": "Jet Fighter"
+        },
+        {
+          "id": "cargo-plane",
+          "title": "Cargo Plane"
+        }
+      ]
+    },
+    {
+      "id": "helicopter",
+      "slug": "helicopter",
+      "title": "Helicopter",
+      "description": "Explore the best Helicopter games online! Play instant free helicopter games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "airplane-sharp",
+      "themeColor": "#0369A1",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Helicopter category inside a rounded square, modern gaming emblem style, color #0369A1, transparent background.",
+      "backgroundPrompt": "Epic cinematic helicopter gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane helicopter gaming artwork, dark obsidian atmosphere with glowing #0369A1 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 71,
+      "subCategories": [
+        {
+          "id": "chopper-rescue",
+          "title": "Chopper Rescue"
+        },
+        {
+          "id": "gunship-battle",
+          "title": "Gunship Battle"
+        },
+        {
+          "id": "flight-sim",
+          "title": "Flight Sim"
+        },
+        {
+          "id": "military-chopper",
+          "title": "Military Chopper"
+        },
+        {
+          "id": "helicopter-patrol",
+          "title": "Helicopter Patrol"
+        }
+      ]
+    },
+    {
+      "id": "truck",
+      "slug": "truck",
+      "title": "Truck",
+      "description": "Explore the best Truck games online! Play instant free truck games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "bus-outline",
+      "themeColor": "#075985",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Truck category inside a rounded square, modern gaming emblem style, color #075985, transparent background.",
+      "backgroundPrompt": "Epic cinematic truck gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane truck gaming artwork, dark obsidian atmosphere with glowing #075985 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 72,
+      "subCategories": [
+        {
+          "id": "euro-truck-simulator",
+          "title": "Euro Truck Simulator"
+        },
+        {
+          "id": "cargo-delivery",
+          "title": "Cargo Delivery"
+        },
+        {
+          "id": "big-rig",
+          "title": "Big Rig"
+        },
+        {
+          "id": "offroad-truck",
+          "title": "Offroad Truck"
+        },
+        {
+          "id": "mud-runner",
+          "title": "Mud Runner"
+        }
+      ]
+    },
+    {
+      "id": "bus",
+      "slug": "bus",
+      "title": "Bus",
+      "description": "Explore the best Bus games online! Play instant free bus games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "bus-sharp",
+      "themeColor": "#0C4A6E",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Bus category inside a rounded square, modern gaming emblem style, color #0C4A6E, transparent background.",
+      "backgroundPrompt": "Epic cinematic bus gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane bus gaming artwork, dark obsidian atmosphere with glowing #0C4A6E lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 73,
+      "subCategories": [
+        {
+          "id": "city-bus-driving",
+          "title": "City Bus Driving"
+        },
+        {
+          "id": "passenger-transport",
+          "title": "Passenger Transport"
+        },
+        {
+          "id": "school-bus",
+          "title": "School Bus"
+        },
+        {
+          "id": "coach-simulator",
+          "title": "Coach Simulator"
+        },
+        {
+          "id": "bus-parking",
+          "title": "Bus Parking"
+        }
+      ]
+    },
+    {
+      "id": "taxi",
+      "slug": "taxi",
+      "title": "Taxi",
+      "description": "Explore the best Taxi games online! Play instant free taxi games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "car-outline",
+      "themeColor": "#EAB308",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Taxi category inside a rounded square, modern gaming emblem style, color #EAB308, transparent background.",
+      "backgroundPrompt": "Epic cinematic taxi gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane taxi gaming artwork, dark obsidian atmosphere with glowing #EAB308 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 74,
+      "subCategories": [
+        {
+          "id": "crazy-taxi",
+          "title": "Crazy Taxi"
+        },
+        {
+          "id": "city-cab-driving",
+          "title": "City Cab Driving"
+        },
+        {
+          "id": "passenger-pick-up",
+          "title": "Passenger Pick Up"
+        },
+        {
+          "id": "airport-taxi",
+          "title": "Airport Taxi"
+        },
+        {
+          "id": "yellow-cab",
+          "title": "Yellow Cab"
+        }
+      ]
+    },
+    {
+      "id": "train",
+      "slug": "train",
+      "title": "Train",
+      "description": "Explore the best Train games online! Play instant free train games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "subway-outline",
+      "themeColor": "#1F2937",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Train category inside a rounded square, modern gaming emblem style, color #1F2937, transparent background.",
+      "backgroundPrompt": "Epic cinematic train gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane train gaming artwork, dark obsidian atmosphere with glowing #1F2937 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 75,
+      "subCategories": [
+        {
+          "id": "train-simulator",
+          "title": "Train Simulator"
+        },
+        {
+          "id": "railway-conductor",
+          "title": "Railway Conductor"
+        },
+        {
+          "id": "bullet-train",
+          "title": "Bullet Train"
+        },
+        {
+          "id": "subway-conductor",
+          "title": "Subway Conductor"
+        },
+        {
+          "id": "train-driver",
+          "title": "Train Driver"
+        }
+      ]
+    },
+    {
+      "id": "monster-truck",
+      "slug": "monster-truck",
+      "title": "Monster Truck",
+      "description": "Explore the best Monster Truck games online! Play instant free monster truck games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "car-sport-sharp",
+      "themeColor": "#B91C1C",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Monster Truck category inside a rounded square, modern gaming emblem style, color #B91C1C, transparent background.",
+      "backgroundPrompt": "Epic cinematic monster truck gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane monster truck gaming artwork, dark obsidian atmosphere with glowing #B91C1C lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 76,
+      "subCategories": [
+        {
+          "id": "stunt-arena",
+          "title": "Stunt Arena"
+        },
+        {
+          "id": "car-crashing",
+          "title": "Car Crashing"
+        },
+        {
+          "id": "offroad-ramp",
+          "title": "Offroad Ramp"
+        },
+        {
+          "id": "big-wheel-jam",
+          "title": "Big Wheel Jam"
+        },
+        {
+          "id": "monster-rally",
+          "title": "Monster Rally"
+        }
+      ]
+    },
+    {
+      "id": "police",
+      "slug": "police",
+      "title": "Police",
+      "description": "Explore the best Police games online! Play instant free police games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "shield-sharp",
+      "themeColor": "#1D4ED8",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Police category inside a rounded square, modern gaming emblem style, color #1D4ED8, transparent background.",
+      "backgroundPrompt": "Epic cinematic police gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane police gaming artwork, dark obsidian atmosphere with glowing #1D4ED8 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 77,
+      "subCategories": [
+        {
+          "id": "police-chase",
+          "title": "Police Chase"
+        },
+        {
+          "id": "cop-patrol",
+          "title": "Cop Patrol"
+        },
+        {
+          "id": "highway-pursuit",
+          "title": "Highway Pursuit"
+        },
+        {
+          "id": "swat-officer",
+          "title": "SWAT Officer"
+        },
+        {
+          "id": "city-police",
+          "title": "City Police"
+        }
+      ]
+    },
+    {
+      "id": "firefighter",
+      "slug": "firefighter",
+      "title": "Firefighter",
+      "description": "Explore the best Firefighter games online! Play instant free firefighter games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "flame-outline",
+      "themeColor": "#C2410C",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Firefighter category inside a rounded square, modern gaming emblem style, color #C2410C, transparent background.",
+      "backgroundPrompt": "Epic cinematic firefighter gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane firefighter gaming artwork, dark obsidian atmosphere with glowing #C2410C lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 78,
+      "subCategories": [
+        {
+          "id": "fire-truck-simulator",
+          "title": "Fire Truck Simulator"
+        },
+        {
+          "id": "rescue-mission",
+          "title": "Rescue Mission"
+        },
+        {
+          "id": "hose-water-fire",
+          "title": "Hose Water Fire"
+        },
+        {
+          "id": "city-rescue",
+          "title": "City Rescue"
+        },
+        {
+          "id": "fire-chief",
+          "title": "Fire Chief"
+        }
+      ]
+    },
+    {
+      "id": "doctor",
+      "slug": "doctor",
+      "title": "Doctor",
+      "description": "Explore the best Doctor games online! Play instant free doctor games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "medkit-outline",
+      "themeColor": "#0D9488",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Doctor category inside a rounded square, modern gaming emblem style, color #0D9488, transparent background.",
+      "backgroundPrompt": "Epic cinematic doctor gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane doctor gaming artwork, dark obsidian atmosphere with glowing #0D9488 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 79,
+      "subCategories": [
+        {
+          "id": "surgery-simulator",
+          "title": "Surgery Simulator"
+        },
+        {
+          "id": "hospital-doctor",
+          "title": "Hospital Doctor"
+        },
+        {
+          "id": "er-rescue",
+          "title": "ER Rescue"
+        },
+        {
+          "id": "ambulance-driver",
+          "title": "Ambulance Driver"
+        },
+        {
+          "id": "pet-doctor",
+          "title": "Pet Doctor"
+        }
+      ]
+    },
+    {
+      "id": "hospital",
+      "slug": "hospital",
+      "title": "Hospital",
+      "description": "Explore the best Hospital games online! Play instant free hospital games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "bandage-outline",
+      "themeColor": "#0F766E",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Hospital category inside a rounded square, modern gaming emblem style, color #0F766E, transparent background.",
+      "backgroundPrompt": "Epic cinematic hospital gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane hospital gaming artwork, dark obsidian atmosphere with glowing #0F766E lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 80,
+      "subCategories": [
+        {
+          "id": "hospital-manager",
+          "title": "Hospital Manager"
+        },
+        {
+          "id": "clinic-doctor",
+          "title": "Clinic Doctor"
+        },
+        {
+          "id": "er-dash",
+          "title": "ER Dash"
+        },
+        {
+          "id": "medical-care",
+          "title": "Medical Care"
+        },
+        {
+          "id": "surgery-room",
+          "title": "Surgery Room"
+        }
+      ]
+    },
+    {
+      "id": "animal",
+      "slug": "animal",
+      "title": "Animal",
+      "description": "Explore the best Animal games online! Play instant free animal games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "paw-outline",
+      "themeColor": "#D97706",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Animal category inside a rounded square, modern gaming emblem style, color #D97706, transparent background.",
+      "backgroundPrompt": "Epic cinematic animal gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane animal gaming artwork, dark obsidian atmosphere with glowing #D97706 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 81,
+      "subCategories": [
+        {
+          "id": "wild-safari",
+          "title": "Wild Safari"
+        },
+        {
+          "id": "zoo-manager",
+          "title": "Zoo Manager"
+        },
+        {
+          "id": "jungle-animals",
+          "title": "Jungle Animals"
+        },
+        {
+          "id": "pet-shelter",
+          "title": "Pet Shelter"
+        },
+        {
+          "id": "farm-animals",
+          "title": "Farm Animals"
+        }
+      ]
+    },
+    {
+      "id": "pet",
+      "slug": "pet",
+      "title": "Pet",
+      "description": "Explore the best Pet games online! Play instant free pet games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "heart-circle-outline",
+      "themeColor": "#EC4899",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Pet category inside a rounded square, modern gaming emblem style, color #EC4899, transparent background.",
+      "backgroundPrompt": "Epic cinematic pet gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane pet gaming artwork, dark obsidian atmosphere with glowing #EC4899 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 82,
+      "subCategories": [
+        {
+          "id": "dog-care",
+          "title": "Dog Care"
+        },
+        {
+          "id": "cat-simulator",
+          "title": "Cat Simulator"
+        },
+        {
+          "id": "virtual-pet",
+          "title": "Virtual Pet"
+        },
+        {
+          "id": "puppy-salon",
+          "title": "Puppy Salon"
+        },
+        {
+          "id": "hamster-run",
+          "title": "Hamster Run"
+        }
+      ]
+    },
+    {
+      "id": "dinosaur",
+      "slug": "dinosaur",
+      "title": "Dinosaur",
+      "description": "Explore the best Dinosaur games online! Play instant free dinosaur games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "skull-sharp",
+      "themeColor": "#047857",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Dinosaur category inside a rounded square, modern gaming emblem style, color #047857, transparent background.",
+      "backgroundPrompt": "Epic cinematic dinosaur gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane dinosaur gaming artwork, dark obsidian atmosphere with glowing #047857 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 83,
+      "subCategories": [
+        {
+          "id": "t-rex-runner",
+          "title": "T-Rex Runner"
+        },
+        {
+          "id": "dino-island",
+          "title": "Dino Island"
+        },
+        {
+          "id": "prehistoric-survival",
+          "title": "Prehistoric Survival"
+        },
+        {
+          "id": "jurassic-hunt",
+          "title": "Jurassic Hunt"
+        },
+        {
+          "id": "dino-world",
+          "title": "Dino World"
+        }
+      ]
+    },
+    {
+      "id": "dragon",
+      "slug": "dragon",
+      "title": "Dragon",
+      "description": "Explore the best Dragon games online! Play instant free dragon games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "flame-sharp",
+      "themeColor": "#991B1B",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Dragon category inside a rounded square, modern gaming emblem style, color #991B1B, transparent background.",
+      "backgroundPrompt": "Epic cinematic dragon gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane dragon gaming artwork, dark obsidian atmosphere with glowing #991B1B lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 84,
+      "subCategories": [
+        {
+          "id": "dragon-trainer",
+          "title": "Dragon Trainer"
+        },
+        {
+          "id": "fire-dragon-flight",
+          "title": "Fire Dragon Flight"
+        },
+        {
+          "id": "dragon-hatchery",
+          "title": "Dragon Hatchery"
+        },
+        {
+          "id": "fantasy-war",
+          "title": "Fantasy War"
+        },
+        {
+          "id": "dragon-rider",
+          "title": "Dragon Rider"
+        }
+      ]
+    },
+    {
+      "id": "monster",
+      "slug": "monster",
+      "title": "Monster",
+      "description": "Explore the best Monster games online! Play instant free monster games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "bug-outline",
+      "themeColor": "#4C1D95",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Monster category inside a rounded square, modern gaming emblem style, color #4C1D95, transparent background.",
+      "backgroundPrompt": "Epic cinematic monster gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane monster gaming artwork, dark obsidian atmosphere with glowing #4C1D95 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 85,
+      "subCategories": [
+        {
+          "id": "monster-hunter",
+          "title": "Monster Hunter"
+        },
+        {
+          "id": "kaiju-battle",
+          "title": "Kaiju Battle"
+        },
+        {
+          "id": "evolution-monster",
+          "title": "Evolution Monster"
+        },
+        {
+          "id": "creature-collector",
+          "title": "Creature Collector"
+        },
+        {
+          "id": "monster-arena",
+          "title": "Monster Arena"
+        }
+      ]
+    },
+    {
+      "id": "magic",
+      "slug": "magic",
+      "title": "Magic",
+      "description": "Explore the best Magic games online! Play instant free magic games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "color-wand-sharp",
+      "themeColor": "#7E22CE",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Magic category inside a rounded square, modern gaming emblem style, color #7E22CE, transparent background.",
+      "backgroundPrompt": "Epic cinematic magic gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane magic gaming artwork, dark obsidian atmosphere with glowing #7E22CE lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 86,
+      "subCategories": [
+        {
+          "id": "wizard-academy",
+          "title": "Wizard Academy"
+        },
+        {
+          "id": "spell-casting",
+          "title": "Spell Casting"
+        },
+        {
+          "id": "magic-wand",
+          "title": "Magic Wand"
+        },
+        {
+          "id": "alchemy-lab",
+          "title": "Alchemy Lab"
+        },
+        {
+          "id": "sorcerers-duel",
+          "title": "Sorcerers Duel"
+        }
+      ]
+    },
+    {
+      "id": "emoji",
+      "slug": "emoji",
+      "title": "Emoji",
+      "description": "Explore the best Emoji games online! Play instant free emoji games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "happy-sharp",
+      "themeColor": "#F59E0B",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Emoji category inside a rounded square, modern gaming emblem style, color #F59E0B, transparent background.",
+      "backgroundPrompt": "Epic cinematic emoji gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane emoji gaming artwork, dark obsidian atmosphere with glowing #F59E0B lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 87,
+      "subCategories": [
+        {
+          "id": "emoji-puzzle",
+          "title": "Emoji Puzzle"
+        },
+        {
+          "id": "emoji-merge",
+          "title": "Emoji Merge"
+        },
+        {
+          "id": "match-emoji",
+          "title": "Match Emoji"
+        },
+        {
+          "id": "expression-quiz",
+          "title": "Expression Quiz"
+        },
+        {
+          "id": "emoji-slider",
+          "title": "Emoji Slider"
+        }
+      ]
+    },
+    {
+      "id": "christmas",
+      "slug": "christmas",
+      "title": "Christmas",
+      "description": "Explore the best Christmas games online! Play instant free christmas games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "gift-outline",
+      "themeColor": "#15803D",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Christmas category inside a rounded square, modern gaming emblem style, color #15803D, transparent background.",
+      "backgroundPrompt": "Epic cinematic christmas gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane christmas gaming artwork, dark obsidian atmosphere with glowing #15803D lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 88,
+      "subCategories": [
+        {
+          "id": "santa-rush",
+          "title": "Santa Rush"
+        },
+        {
+          "id": "christmas-gifts",
+          "title": "Christmas Gifts"
+        },
+        {
+          "id": "snowman-builder",
+          "title": "Snowman Builder"
+        },
+        {
+          "id": "holiday-puzzle",
+          "title": "Holiday Puzzle"
+        },
+        {
+          "id": "winter-wonder",
+          "title": "Winter Wonder"
+        }
+      ]
+    },
+    {
+      "id": "halloween",
+      "slug": "halloween",
+      "title": "Halloween",
+      "description": "Explore the best Halloween games online! Play instant free halloween games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "moon-outline",
+      "themeColor": "#C2410C",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Halloween category inside a rounded square, modern gaming emblem style, color #C2410C, transparent background.",
+      "backgroundPrompt": "Epic cinematic halloween gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane halloween gaming artwork, dark obsidian atmosphere with glowing #C2410C lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 89,
+      "subCategories": [
+        {
+          "id": "pumpkin-carver",
+          "title": "Pumpkin Carver"
+        },
+        {
+          "id": "spooky-house",
+          "title": "Spooky House"
+        },
+        {
+          "id": "ghost-hunter",
+          "title": "Ghost Hunter"
+        },
+        {
+          "id": "halloween-dress-up",
+          "title": "Halloween Dress Up"
+        },
+        {
+          "id": "monster-mash",
+          "title": "Monster Mash"
+        }
+      ]
+    },
+    {
+      "id": "easter",
+      "slug": "easter",
+      "title": "Easter",
+      "description": "Explore the best Easter games online! Play instant free easter games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "egg-outline",
+      "themeColor": "#06B6D4",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Easter category inside a rounded square, modern gaming emblem style, color #06B6D4, transparent background.",
+      "backgroundPrompt": "Epic cinematic easter gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane easter gaming artwork, dark obsidian atmosphere with glowing #06B6D4 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 90,
+      "subCategories": [
+        {
+          "id": "egg-hunt",
+          "title": "Egg Hunt"
+        },
+        {
+          "id": "easter-bunny",
+          "title": "Easter Bunny"
+        },
+        {
+          "id": "egg-painter",
+          "title": "Egg Painter"
+        },
+        {
+          "id": "spring-puzzle",
+          "title": "Spring Puzzle"
+        },
+        {
+          "id": "bunny-dash",
+          "title": "Bunny Dash"
+        }
+      ]
+    },
+    {
+      "id": "summer",
+      "slug": "summer",
+      "title": "Summer",
+      "description": "Explore the best Summer games online! Play instant free summer games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "sunny-outline",
+      "themeColor": "#F59E0B",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Summer category inside a rounded square, modern gaming emblem style, color #F59E0B, transparent background.",
+      "backgroundPrompt": "Epic cinematic summer gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane summer gaming artwork, dark obsidian atmosphere with glowing #F59E0B lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 91,
+      "subCategories": [
+        {
+          "id": "beach-party",
+          "title": "Beach Party"
+        },
+        {
+          "id": "water-park",
+          "title": "Water Park"
+        },
+        {
+          "id": "surfing",
+          "title": "Surfing"
+        },
+        {
+          "id": "poolside-cooking",
+          "title": "Poolside Cooking"
+        },
+        {
+          "id": "summer-vacation",
+          "title": "Summer Vacation"
+        }
+      ]
+    },
+    {
+      "id": "winter",
+      "slug": "winter",
+      "title": "Winter",
+      "description": "Explore the best Winter games online! Play instant free winter games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "snow-outline",
+      "themeColor": "#38BDF8",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Winter category inside a rounded square, modern gaming emblem style, color #38BDF8, transparent background.",
+      "backgroundPrompt": "Epic cinematic winter gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane winter gaming artwork, dark obsidian atmosphere with glowing #38BDF8 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 92,
+      "subCategories": [
+        {
+          "id": "snowboarder",
+          "title": "Snowboarder"
+        },
+        {
+          "id": "ice-skating",
+          "title": "Ice Skating"
+        },
+        {
+          "id": "ski-resort",
+          "title": "Ski Resort"
+        },
+        {
+          "id": "snowball-fight",
+          "title": "Snowball Fight"
+        },
+        {
+          "id": "glacier-run",
+          "title": "Glacier Run"
+        }
+      ]
+    },
+    {
+      "id": "music",
+      "slug": "music",
+      "title": "Music",
+      "description": "Explore the best Music games online! Play instant free music games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "musical-notes-outline",
+      "themeColor": "#8B5CF6",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Music category inside a rounded square, modern gaming emblem style, color #8B5CF6, transparent background.",
+      "backgroundPrompt": "Epic cinematic music gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane music gaming artwork, dark obsidian atmosphere with glowing #8B5CF6 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 93,
+      "subCategories": [
+        {
+          "id": "piano-tiles",
+          "title": "Piano Tiles"
+        },
+        {
+          "id": "rhythm-tap",
+          "title": "Rhythm Tap"
+        },
+        {
+          "id": "beat-jumper",
+          "title": "Beat Jumper"
+        },
+        {
+          "id": "guitar-hero-style",
+          "title": "Guitar Hero Style"
+        },
+        {
+          "id": "song-maker",
+          "title": "Song Maker"
+        }
+      ]
+    },
+    {
+      "id": "rhythm",
+      "slug": "rhythm",
+      "title": "Rhythm",
+      "description": "Explore the best Rhythm games online! Play instant free rhythm games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "disc-sharp",
+      "themeColor": "#A855F7",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Rhythm category inside a rounded square, modern gaming emblem style, color #A855F7, transparent background.",
+      "backgroundPrompt": "Epic cinematic rhythm gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane rhythm gaming artwork, dark obsidian atmosphere with glowing #A855F7 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 94,
+      "subCategories": [
+        {
+          "id": "dance-revolution",
+          "title": "Dance Revolution"
+        },
+        {
+          "id": "edm-beat-hop",
+          "title": "EDM Beat Hop"
+        },
+        {
+          "id": "tile-rhythm",
+          "title": "Tile Rhythm"
+        },
+        {
+          "id": "drum-beats",
+          "title": "Drum Beats"
+        },
+        {
+          "id": "rhythm-dash",
+          "title": "Rhythm Dash"
+        }
+      ]
+    },
+    {
+      "id": "pixel",
+      "slug": "pixel",
+      "title": "Pixel",
+      "description": "Explore the best Pixel games online! Play instant free pixel games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "grid-sharp",
+      "themeColor": "#4B5563",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Pixel category inside a rounded square, modern gaming emblem style, color #4B5563, transparent background.",
+      "backgroundPrompt": "Epic cinematic pixel gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane pixel gaming artwork, dark obsidian atmosphere with glowing #4B5563 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 95,
+      "subCategories": [
+        {
+          "id": "pixel-art",
+          "title": "Pixel Art"
+        },
+        {
+          "id": "8-bit-retro",
+          "title": "8-Bit Retro"
+        },
+        {
+          "id": "chiptune-platformer",
+          "title": "Chiptune Platformer"
+        },
+        {
+          "id": "pixel-dungeon",
+          "title": "Pixel Dungeon"
+        },
+        {
+          "id": "pixel-shooter",
+          "title": "Pixel Shooter"
+        }
+      ]
+    },
+    {
+      "id": "retro",
+      "slug": "retro",
+      "title": "Retro",
+      "description": "Explore the best Retro games online! Play instant free retro games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "tv-outline",
+      "themeColor": "#374151",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Retro category inside a rounded square, modern gaming emblem style, color #374151, transparent background.",
+      "backgroundPrompt": "Epic cinematic retro gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane retro gaming artwork, dark obsidian atmosphere with glowing #374151 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 96,
+      "subCategories": [
+        {
+          "id": "classic-90s",
+          "title": "Classic 90s"
+        },
+        {
+          "id": "arcade-classics",
+          "title": "Arcade Classics"
+        },
+        {
+          "id": "vintage-handheld",
+          "title": "Vintage Handheld"
+        },
+        {
+          "id": "crt-filter-games",
+          "title": "CRT Filter Games"
+        },
+        {
+          "id": "nostalgia-arcade",
+          "title": "Nostalgia Arcade"
+        }
+      ]
+    },
+    {
+      "id": "voxel",
+      "slug": "voxel",
+      "title": "Voxel",
+      "description": "Explore the best Voxel games online! Play instant free voxel games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "cube-outline",
+      "themeColor": "#1F2937",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Voxel category inside a rounded square, modern gaming emblem style, color #1F2937, transparent background.",
+      "backgroundPrompt": "Epic cinematic voxel gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane voxel gaming artwork, dark obsidian atmosphere with glowing #1F2937 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 97,
+      "subCategories": [
+        {
+          "id": "3d-block-world",
+          "title": "3D Block World"
+        },
+        {
+          "id": "voxel-runner",
+          "title": "Voxel Runner"
+        },
+        {
+          "id": "voxel-destroyer",
+          "title": "Voxel Destroyer"
+        },
+        {
+          "id": "isometric-blocks",
+          "title": "Isometric Blocks"
+        },
+        {
+          "id": "voxel-craft",
+          "title": "Voxel Craft"
+        }
+      ]
+    },
+    {
+      "id": "anime",
+      "slug": "anime",
+      "title": "Anime",
+      "description": "Explore the best Anime games online! Play instant free anime games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "sparkles-sharp",
+      "themeColor": "#EC4899",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Anime category inside a rounded square, modern gaming emblem style, color #EC4899, transparent background.",
+      "backgroundPrompt": "Epic cinematic anime gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane anime gaming artwork, dark obsidian atmosphere with glowing #EC4899 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 98,
+      "subCategories": [
+        {
+          "id": "manga-style",
+          "title": "Manga Style"
+        },
+        {
+          "id": "anime-fighter",
+          "title": "Anime Fighter"
+        },
+        {
+          "id": "high-school-sim",
+          "title": "High School Sim"
+        },
+        {
+          "id": "otome-story",
+          "title": "Otome Story"
+        },
+        {
+          "id": "anime-rpg",
+          "title": "Anime RPG"
+        }
+      ]
+    },
+    {
+      "id": "cyberpunk",
+      "slug": "cyberpunk",
+      "title": "Cyberpunk",
+      "description": "Explore the best Cyberpunk games online! Play instant free cyberpunk games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "terminal-outline",
+      "themeColor": "#06B6D4",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Cyberpunk category inside a rounded square, modern gaming emblem style, color #06B6D4, transparent background.",
+      "backgroundPrompt": "Epic cinematic cyberpunk gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane cyberpunk gaming artwork, dark obsidian atmosphere with glowing #06B6D4 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 99,
+      "subCategories": [
+        {
+          "id": "neon-city",
+          "title": "Neon City"
+        },
+        {
+          "id": "cyber-runner",
+          "title": "Cyber Runner"
+        },
+        {
+          "id": "hacker-simulator",
+          "title": "Hacker Simulator"
+        },
+        {
+          "id": "sci-fi-alley",
+          "title": "Sci-Fi Alley"
+        },
+        {
+          "id": "cyber-blade",
+          "title": "Cyber Blade"
+        }
+      ]
+    },
+    {
+      "id": "open-world",
+      "slug": "open-world",
+      "title": "Open World",
+      "description": "Explore the best Open World games online! Play instant free open world games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "map-outline",
+      "themeColor": "#10B981",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Open World category inside a rounded square, modern gaming emblem style, color #10B981, transparent background.",
+      "backgroundPrompt": "Epic cinematic open world gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane open world gaming artwork, dark obsidian atmosphere with glowing #10B981 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 100,
+      "subCategories": [
+        {
+          "id": "free-roam",
+          "title": "Free Roam"
+        },
+        {
+          "id": "city-exploration",
+          "title": "City Exploration"
+        },
+        {
+          "id": "sandbox-adventure",
+          "title": "Sandbox Adventure"
+        },
+        {
+          "id": "rpg-world",
+          "title": "RPG World"
+        },
+        {
+          "id": "open-island",
+          "title": "Open Island"
+        }
+      ]
+    },
+    {
+      "id": "sandbox",
+      "slug": "sandbox",
+      "title": "Sandbox",
+      "description": "Explore the best Sandbox games online! Play instant free sandbox games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "construct-sharp",
+      "themeColor": "#F59E0B",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Sandbox category inside a rounded square, modern gaming emblem style, color #F59E0B, transparent background.",
+      "backgroundPrompt": "Epic cinematic sandbox gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane sandbox gaming artwork, dark obsidian atmosphere with glowing #F59E0B lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 101,
+      "subCategories": [
+        {
+          "id": "block-building",
+          "title": "Block Building"
+        },
+        {
+          "id": "creative-world",
+          "title": "Creative World"
+        },
+        {
+          "id": "crafting",
+          "title": "Crafting"
+        },
+        {
+          "id": "physics-sandbox",
+          "title": "Physics Sandbox"
+        },
+        {
+          "id": "world-creator",
+          "title": "World Creator"
+        }
+      ]
+    },
+    {
+      "id": "physics",
+      "slug": "physics",
+      "title": "Physics",
+      "description": "Explore the best Physics games online! Play instant free physics games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "magnet-outline",
+      "themeColor": "#6366F1",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Physics category inside a rounded square, modern gaming emblem style, color #6366F1, transparent background.",
+      "backgroundPrompt": "Epic cinematic physics gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane physics gaming artwork, dark obsidian atmosphere with glowing #6366F1 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 102,
+      "subCategories": [
+        {
+          "id": "ragdoll-physics",
+          "title": "Ragdoll Physics"
+        },
+        {
+          "id": "destruction-sim",
+          "title": "Destruction Sim"
+        },
+        {
+          "id": "gravity-puzzles",
+          "title": "Gravity Puzzles"
+        },
+        {
+          "id": "rope-swing",
+          "title": "Rope Swing"
+        },
+        {
+          "id": "bridge-constructor",
+          "title": "Bridge Constructor"
+        }
+      ]
+    },
+    {
+      "id": "park-builder",
+      "slug": "park-builder",
+      "title": "Park Builder",
+      "description": "Explore the best Park Builder games online! Play instant free park builder games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "ticket-outline",
+      "themeColor": "#84CC16",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Park Builder category inside a rounded square, modern gaming emblem style, color #84CC16, transparent background.",
+      "backgroundPrompt": "Epic cinematic park builder gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane park builder gaming artwork, dark obsidian atmosphere with glowing #84CC16 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 103,
+      "subCategories": [
+        {
+          "id": "rollercoaster-tycoon",
+          "title": "Rollercoaster Tycoon"
+        },
+        {
+          "id": "theme-park",
+          "title": "Theme Park"
+        },
+        {
+          "id": "waterpark-manager",
+          "title": "Waterpark Manager"
+        },
+        {
+          "id": "funfair-sim",
+          "title": "Funfair Sim"
+        },
+        {
+          "id": "coaster-creator",
+          "title": "Coaster Creator"
+        }
+      ]
+    },
+    {
+      "id": "golf-cart",
+      "slug": "golf-cart",
+      "title": "Golf Cart",
+      "description": "Explore the best Golf Cart games online! Play instant free golf cart games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "car-sport-outline",
+      "themeColor": "#10B981",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Golf Cart category inside a rounded square, modern gaming emblem style, color #10B981, transparent background.",
+      "backgroundPrompt": "Epic cinematic golf cart gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane golf cart gaming artwork, dark obsidian atmosphere with glowing #10B981 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 104,
+      "subCategories": [
+        {
+          "id": "cart-racing",
+          "title": "Cart Racing"
+        },
+        {
+          "id": "country-club-rally",
+          "title": "Country Club Rally"
+        },
+        {
+          "id": "hill-climb-cart",
+          "title": "Hill Climb Cart"
+        },
+        {
+          "id": "stunt-cart",
+          "title": "Stunt Cart"
+        },
+        {
+          "id": "golf-course-dash",
+          "title": "Golf Course Dash"
+        }
+      ]
+    },
+    {
+      "id": "atv",
+      "slug": "atv",
+      "title": "ATV",
+      "description": "Explore the best ATV games online! Play instant free atv games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "bicycle-outline",
+      "themeColor": "#D97706",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for ATV category inside a rounded square, modern gaming emblem style, color #D97706, transparent background.",
+      "backgroundPrompt": "Epic cinematic atv gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane atv gaming artwork, dark obsidian atmosphere with glowing #D97706 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 105,
+      "subCategories": [
+        {
+          "id": "quad-bike-stunts",
+          "title": "Quad Bike Stunts"
+        },
+        {
+          "id": "dirt-track-atv",
+          "title": "Dirt Track ATV"
+        },
+        {
+          "id": "offroad-quad",
+          "title": "Offroad Quad"
+        },
+        {
+          "id": "mud-rally",
+          "title": "Mud Rally"
+        },
+        {
+          "id": "extreme-quad",
+          "title": "Extreme Quad"
+        }
+      ]
+    },
+    {
+      "id": "snow",
+      "slug": "snow",
+      "title": "Snow",
+      "description": "Explore the best Snow games online! Play instant free snow games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "snow-sharp",
+      "themeColor": "#0EA5E9",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Snow category inside a rounded square, modern gaming emblem style, color #0EA5E9, transparent background.",
+      "backgroundPrompt": "Epic cinematic snow gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane snow gaming artwork, dark obsidian atmosphere with glowing #0EA5E9 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 106,
+      "subCategories": [
+        {
+          "id": "snowmobile-racing",
+          "title": "Snowmobile Racing"
+        },
+        {
+          "id": "snow-shovel",
+          "title": "Snow Shovel"
+        },
+        {
+          "id": "blizzard-survival",
+          "title": "Blizzard Survival"
+        },
+        {
+          "id": "ice-racer",
+          "title": "Ice Racer"
+        },
+        {
+          "id": "snow-track",
+          "title": "Snow Track"
+        }
+      ]
+    },
+    {
+      "id": "ski",
+      "slug": "ski",
+      "title": "Ski",
+      "description": "Explore the best Ski games online! Play instant free ski games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "footsteps-outline",
+      "themeColor": "#0284C7",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Ski category inside a rounded square, modern gaming emblem style, color #0284C7, transparent background.",
+      "backgroundPrompt": "Epic cinematic ski gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane ski gaming artwork, dark obsidian atmosphere with glowing #0284C7 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 107,
+      "subCategories": [
+        {
+          "id": "alpine-skiing",
+          "title": "Alpine Skiing"
+        },
+        {
+          "id": "ski-jump",
+          "title": "Ski Jump"
+        },
+        {
+          "id": "slalom-race",
+          "title": "Slalom Race"
+        },
+        {
+          "id": "avalanche-run",
+          "title": "Avalanche Run"
+        },
+        {
+          "id": "freestyle-ski",
+          "title": "Freestyle Ski"
+        }
+      ]
+    },
+    {
+      "id": "fishing",
+      "slug": "fishing",
+      "title": "Fishing",
+      "description": "Explore the best Fishing games online! Play instant free fishing games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "fish-outline",
+      "themeColor": "#0369A1",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Fishing category inside a rounded square, modern gaming emblem style, color #0369A1, transparent background.",
+      "backgroundPrompt": "Epic cinematic fishing gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane fishing gaming artwork, dark obsidian atmosphere with glowing #0369A1 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 108,
+      "subCategories": [
+        {
+          "id": "deep-sea-fishing",
+          "title": "Deep Sea Fishing"
+        },
+        {
+          "id": "bass-fishing",
+          "title": "Bass Fishing"
+        },
+        {
+          "id": "lake-boat",
+          "title": "Lake Boat"
+        },
+        {
+          "id": "reel-tackle",
+          "title": "Reel Tackle"
+        },
+        {
+          "id": "monster-fish",
+          "title": "Monster Fish"
+        }
+      ]
+    },
+    {
+      "id": "hunting",
+      "slug": "hunting",
+      "title": "Hunting",
+      "description": "Explore the best Hunting games online! Play instant free hunting games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "locate-sharp",
+      "themeColor": "#15803D",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Hunting category inside a rounded square, modern gaming emblem style, color #15803D, transparent background.",
+      "backgroundPrompt": "Epic cinematic hunting gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane hunting gaming artwork, dark obsidian atmosphere with glowing #15803D lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 109,
+      "subCategories": [
+        {
+          "id": "wild-deer-hunter",
+          "title": "Wild Deer Hunter"
+        },
+        {
+          "id": "safari-target",
+          "title": "Safari Target"
+        },
+        {
+          "id": "bow-hunting",
+          "title": "Bow Hunting"
+        },
+        {
+          "id": "jungle-sniper",
+          "title": "Jungle Sniper"
+        },
+        {
+          "id": "duck-hunt",
+          "title": "Duck Hunt"
+        }
+      ]
+    },
+    {
+      "id": "archery",
+      "slug": "archery",
+      "title": "Archery",
+      "description": "Explore the best Archery games online! Play instant free archery games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "send-outline",
+      "themeColor": "#B45309",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Archery category inside a rounded square, modern gaming emblem style, color #B45309, transparent background.",
+      "backgroundPrompt": "Epic cinematic archery gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane archery gaming artwork, dark obsidian atmosphere with glowing #B45309 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 110,
+      "subCategories": [
+        {
+          "id": "bow-arrow",
+          "title": "Bow & Arrow"
+        },
+        {
+          "id": "bullseye-target",
+          "title": "Bullseye Target"
+        },
+        {
+          "id": "archery-king",
+          "title": "Archery King"
+        },
+        {
+          "id": "crossbow-duel",
+          "title": "Crossbow Duel"
+        },
+        {
+          "id": "longbow-master",
+          "title": "Longbow Master"
+        }
+      ]
+    },
+    {
+      "id": "mahjong",
+      "slug": "mahjong",
+      "title": "Mahjong",
+      "description": "Explore the best Mahjong games online! Play instant free mahjong games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "layers-sharp",
+      "themeColor": "#78350F",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Mahjong category inside a rounded square, modern gaming emblem style, color #78350F, transparent background.",
+      "backgroundPrompt": "Epic cinematic mahjong gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane mahjong gaming artwork, dark obsidian atmosphere with glowing #78350F lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 111,
+      "subCategories": [
+        {
+          "id": "classic-mahjong-solitaire",
+          "title": "Classic Mahjong Solitaire"
+        },
+        {
+          "id": "shanghai-tiles",
+          "title": "Shanghai Tiles"
+        },
+        {
+          "id": "3d-tile-match",
+          "title": "3D Tile Match"
+        },
+        {
+          "id": "mahjong-journey",
+          "title": "Mahjong Journey"
+        },
+        {
+          "id": "zen-tiles",
+          "title": "Zen Tiles"
+        }
+      ]
+    },
+    {
+      "id": "solitaire",
+      "slug": "solitaire",
+      "title": "Solitaire",
+      "description": "Explore the best Solitaire games online! Play instant free solitaire games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "albums-outline",
+      "themeColor": "#1E293B",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Solitaire category inside a rounded square, modern gaming emblem style, color #1E293B, transparent background.",
+      "backgroundPrompt": "Epic cinematic solitaire gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane solitaire gaming artwork, dark obsidian atmosphere with glowing #1E293B lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 112,
+      "subCategories": [
+        {
+          "id": "klondike",
+          "title": "Klondike"
+        },
+        {
+          "id": "spider-solitaire",
+          "title": "Spider Solitaire"
+        },
+        {
+          "id": "tripeaks",
+          "title": "TriPeaks"
+        },
+        {
+          "id": "pyramid-solitaire",
+          "title": "Pyramid Solitaire"
+        },
+        {
+          "id": "freecell",
+          "title": "FreeCell"
+        }
+      ]
+    },
+    {
+      "id": "domino",
+      "slug": "domino",
+      "title": "Domino",
+      "description": "Explore the best Domino games online! Play instant free domino games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "dice-outline",
+      "themeColor": "#0F172A",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Domino category inside a rounded square, modern gaming emblem style, color #0F172A, transparent background.",
+      "backgroundPrompt": "Epic cinematic domino gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane domino gaming artwork, dark obsidian atmosphere with glowing #0F172A lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 113,
+      "subCategories": [
+        {
+          "id": "domino-all-fives",
+          "title": "Domino All Fives"
+        },
+        {
+          "id": "domino-block",
+          "title": "Domino Block"
+        },
+        {
+          "id": "chain-reaction",
+          "title": "Chain Reaction"
+        },
+        {
+          "id": "mexican-train",
+          "title": "Mexican Train"
+        },
+        {
+          "id": "domino-duel",
+          "title": "Domino Duel"
+        }
+      ]
+    },
+    {
+      "id": "ludo",
+      "slug": "ludo",
+      "title": "Ludo",
+      "description": "Explore the best Ludo games online! Play instant free ludo games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "grid-outline",
+      "themeColor": "#B91C1C",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Ludo category inside a rounded square, modern gaming emblem style, color #B91C1C, transparent background.",
+      "backgroundPrompt": "Epic cinematic ludo gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane ludo gaming artwork, dark obsidian atmosphere with glowing #B91C1C lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 114,
+      "subCategories": [
+        {
+          "id": "ludo-king-style",
+          "title": "Ludo King Style"
+        },
+        {
+          "id": "4-player-ludo",
+          "title": "4-Player Ludo"
+        },
+        {
+          "id": "parchisi",
+          "title": "Parchisi"
+        },
+        {
+          "id": "board-dice",
+          "title": "Board Dice"
+        },
+        {
+          "id": "ludo-star",
+          "title": "Ludo Star"
+        }
+      ]
+    },
+    {
+      "id": "snake",
+      "slug": "snake",
+      "title": "Snake",
+      "description": "Explore the best Snake games online! Play instant free snake games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "pulse-outline",
+      "themeColor": "#15803D",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Snake category inside a rounded square, modern gaming emblem style, color #15803D, transparent background.",
+      "backgroundPrompt": "Epic cinematic snake gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane snake gaming artwork, dark obsidian atmosphere with glowing #15803D lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 115,
+      "subCategories": [
+        {
+          "id": "classic-snake",
+          "title": "Classic Snake"
+        },
+        {
+          "id": "snake-io",
+          "title": "Snake IO"
+        },
+        {
+          "id": "anaconda-run",
+          "title": "Anaconda Run"
+        },
+        {
+          "id": "worm-growing",
+          "title": "Worm Growing"
+        },
+        {
+          "id": "block-snake",
+          "title": "Block Snake"
+        }
+      ]
+    },
+    {
+      "id": "crosswords",
+      "slug": "crosswords",
+      "title": "Crosswords",
+      "description": "Explore the best Crosswords games online! Play instant free crosswords games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "text-outline",
+      "themeColor": "#475569",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Crosswords category inside a rounded square, modern gaming emblem style, color #475569, transparent background.",
+      "backgroundPrompt": "Epic cinematic crosswords gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane crosswords gaming artwork, dark obsidian atmosphere with glowing #475569 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 116,
+      "subCategories": [
+        {
+          "id": "word-cross",
+          "title": "Word Cross"
+        },
+        {
+          "id": "daily-crossword",
+          "title": "Daily Crossword"
+        },
+        {
+          "id": "vocabulary-puzzle",
+          "title": "Vocabulary Puzzle"
+        },
+        {
+          "id": "mini-crossword",
+          "title": "Mini Crossword"
+        },
+        {
+          "id": "cryptic-crossword",
+          "title": "Cryptic Crossword"
+        }
+      ]
+    },
+    {
+      "id": "word-games",
+      "slug": "word-games",
+      "title": "Word Games",
+      "description": "Explore the best Word Games games online! Play instant free word games games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "document-text-outline",
+      "themeColor": "#334155",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Word Games category inside a rounded square, modern gaming emblem style, color #334155, transparent background.",
+      "backgroundPrompt": "Epic cinematic word games gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane word games gaming artwork, dark obsidian atmosphere with glowing #334155 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 117,
+      "subCategories": [
+        {
+          "id": "word-search",
+          "title": "Word Search"
+        },
+        {
+          "id": "letter-connect",
+          "title": "Letter Connect"
+        },
+        {
+          "id": "scramble",
+          "title": "Scramble"
+        },
+        {
+          "id": "anagram-solver",
+          "title": "Anagram Solver"
+        },
+        {
+          "id": "word-link",
+          "title": "Word Link"
+        }
+      ]
+    },
+    {
+      "id": "trivia",
+      "slug": "trivia",
+      "title": "Trivia",
+      "description": "Explore the best Trivia games online! Play instant free trivia games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "help-circle-outline",
+      "themeColor": "#4F46E5",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Trivia category inside a rounded square, modern gaming emblem style, color #4F46E5, transparent background.",
+      "backgroundPrompt": "Epic cinematic trivia gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane trivia gaming artwork, dark obsidian atmosphere with glowing #4F46E5 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": false,
+      "sortOrder": 118,
+      "subCategories": [
+        {
+          "id": "general-knowledge",
+          "title": "General Knowledge"
+        },
+        {
+          "id": "quiz-show",
+          "title": "Quiz Show"
+        },
+        {
+          "id": "brain-trivia",
+          "title": "Brain Trivia"
+        },
+        {
+          "id": "picture-quiz",
+          "title": "Picture Quiz"
+        },
+        {
+          "id": "pop-culture-trivia",
+          "title": "Pop Culture Trivia"
+        }
+      ]
+    },
+    {
+      "id": "quiz",
+      "slug": "quiz",
+      "title": "Quiz",
+      "description": "Explore the best Quiz games online! Play instant free quiz games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "create-outline",
+      "themeColor": "#4338CA",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Quiz category inside a rounded square, modern gaming emblem style, color #4338CA, transparent background.",
+      "backgroundPrompt": "Epic cinematic quiz gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane quiz gaming artwork, dark obsidian atmosphere with glowing #4338CA lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 119,
+      "subCategories": [
+        {
+          "id": "personality-quiz",
+          "title": "Personality Quiz"
+        },
+        {
+          "id": "true-or-false",
+          "title": "True or False"
+        },
+        {
+          "id": "math-quiz",
+          "title": "Math Quiz"
+        },
+        {
+          "id": "pop-culture",
+          "title": "Pop Culture"
+        },
+        {
+          "id": "logo-quiz",
+          "title": "Logo Quiz"
+        }
+      ]
+    },
+    {
+      "id": "drawing",
+      "slug": "drawing",
+      "title": "Drawing",
+      "description": "Explore the best Drawing games online! Play instant free drawing games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "color-palette-outline",
+      "themeColor": "#C026D3",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Drawing category inside a rounded square, modern gaming emblem style, color #C026D3, transparent background.",
+      "backgroundPrompt": "Epic cinematic drawing gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane drawing gaming artwork, dark obsidian atmosphere with glowing #C026D3 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 120,
+      "subCategories": [
+        {
+          "id": "draw-guess",
+          "title": "Draw & Guess"
+        },
+        {
+          "id": "paint-art",
+          "title": "Paint Art"
+        },
+        {
+          "id": "sketch-pad",
+          "title": "Sketch Pad"
+        },
+        {
+          "id": "doodle-jump",
+          "title": "Doodle Jump"
+        },
+        {
+          "id": "quick-draw",
+          "title": "Quick Draw"
+        }
+      ]
+    },
+    {
+      "id": "coloring",
+      "slug": "coloring",
+      "title": "Coloring",
+      "description": "Explore the best Coloring games online! Play instant free coloring games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "brush-sharp",
+      "themeColor": "#E11D48",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Coloring category inside a rounded square, modern gaming emblem style, color #E11D48, transparent background.",
+      "backgroundPrompt": "Epic cinematic coloring gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane coloring gaming artwork, dark obsidian atmosphere with glowing #E11D48 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": true,
+      "popular": true,
+      "sortOrder": 121,
+      "subCategories": [
+        {
+          "id": "color-by-number",
+          "title": "Color by Number"
+        },
+        {
+          "id": "pixel-coloring",
+          "title": "Pixel Coloring"
+        },
+        {
+          "id": "mandala-art",
+          "title": "Mandala Art"
+        },
+        {
+          "id": "relaxing-paint",
+          "title": "Relaxing Paint"
+        },
+        {
+          "id": "3d-coloring",
+          "title": "3D Coloring"
+        }
+      ]
+    },
+    {
+      "id": "asmr",
+      "slug": "asmr",
+      "title": "ASMR",
+      "description": "Explore the best ASMR games online! Play instant free asmr games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "headset-outline",
+      "themeColor": "#059669",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for ASMR category inside a rounded square, modern gaming emblem style, color #059669, transparent background.",
+      "backgroundPrompt": "Epic cinematic asmr gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane asmr gaming artwork, dark obsidian atmosphere with glowing #059669 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": false,
+      "sortOrder": 122,
+      "subCategories": [
+        {
+          "id": "satisfying-cutting",
+          "title": "Satisfying Cutting"
+        },
+        {
+          "id": "soap-slicing",
+          "title": "Soap Slicing"
+        },
+        {
+          "id": "pop-it-fidget",
+          "title": "Pop It Fidget"
+        },
+        {
+          "id": "slime-maker",
+          "title": "Slime Maker"
+        },
+        {
+          "id": "kinetic-sand",
+          "title": "Kinetic Sand"
+        }
+      ]
+    },
+    {
+      "id": "relaxing",
+      "slug": "relaxing",
+      "title": "Relaxing",
+      "description": "Explore the best Relaxing games online! Play instant free relaxing games with no downloads.",
+      "iconLibrary": "Ionicons",
+      "icon": "leaf-sharp",
+      "themeColor": "#10B981",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+      "iconPrompt": "Minimal flat vector icon for Relaxing category inside a rounded square, modern gaming emblem style, color #10B981, transparent background.",
+      "backgroundPrompt": "Epic cinematic relaxing gaming background, dynamic lighting, high resolution 8k, dark obsidian aesthetic.",
+      "featuredBannerPrompt": "High-octane relaxing gaming artwork, dark obsidian atmosphere with glowing #10B981 lighting, 8k resolution, cinematic 16:9 aspect ratio.",
+      "featured": false,
+      "trending": false,
+      "popular": true,
+      "sortOrder": 123,
+      "subCategories": [
+        {
+          "id": "zen-puzzle",
+          "title": "Zen Puzzle"
+        },
+        {
+          "id": "calm-garden",
+          "title": "Calm Garden"
+        },
+        {
+          "id": "water-sorting",
+          "title": "Water Sorting"
+        },
+        {
+          "id": "antistress-toys",
+          "title": "Antistress Toys"
+        },
+        {
+          "id": "peaceful-sound",
+          "title": "Peaceful Sound"
+        }
+      ]
+    }
+  ]
+}

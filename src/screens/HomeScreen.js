@@ -5,53 +5,64 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Image,
   TextInput,
-  Dimensions,
   ActivityIndicator,
+  RefreshControl,
+  Image,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
 import AppLayout from '../components/AppLayout';
+import GameGridCard from '../components/GameGridCard';
+import GameListCard from '../components/GameListCard';
+import SafeIcon from '../components/SafeIcon';
 import { useTranslation } from '../i18n/i18n';
 import { useTheme } from '../theme/ThemeContext';
-import { getLiveGamesList, getCategoriesFromGames } from '../services/gameService';
+import {
+  getLiveGamesList,
+  getLiveCategoriesList,
+  getAvailableCategoriesForGames,
+} from '../services/gameService';
 import { getFavoriteGames, toggleFavoriteGame } from '../storage/favoritesStorage';
 import { getRecentGames } from '../storage/recentGamesStorage';
 import { getUserRatings } from '../storage/ratingsStorage';
-
-const { width } = Dimensions.get('window');
-
-const CATEGORY_COLOR_PALETTE = [
-  { icon: 'flame', color: '#E94560' },
-  { icon: 'car-sport', color: '#3A86FF' },
-  { icon: 'extension-puzzle', color: '#8338EC' },
-  { icon: 'football', color: '#FF006E' },
-  { icon: 'game-controller', color: '#FFBE0B' },
-  { icon: 'shield-checkmark', color: '#FB5607' },
-];
 
 export default function HomeScreen({ navigation }) {
   const { t } = useTranslation();
   const { theme } = useTheme();
 
   const [games, setGames] = useState([]);
+  const [liveCategories, setLiveCategories] = useState([]);
   const [recentGames, setRecentGames] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Popular');
   const [favoriteIds, setFavoriteIds] = useState(new Set());
   const [userRatingsMap, setUserRatingsMap] = useState({});
 
-  // Horizontal scroll tracking states (chevron appears only when first card scrolls off screen)
+  // Horizontal scroll tracking states
   const [showRecentChevron, setShowRecentChevron] = useState(false);
   const [showFeaturedChevron, setShowFeaturedChevron] = useState(false);
 
+  const fetchHomeData = async (showLoader = true) => {
+    if (showLoader) setLoading(true);
+    try {
+      const [liveList, categoriesList] = await Promise.all([
+        getLiveGamesList(),
+        getLiveCategoriesList(),
+      ]);
+      setGames(liveList);
+      setLiveCategories(categoriesList);
+    } catch (e) {
+      console.warn('Fetch home data error:', e);
+    } finally {
+      if (showLoader) setLoading(false);
+    }
+  };
+
   useEffect(() => {
     (async () => {
-      setLoading(true);
-      const liveList = await getLiveGamesList();
-      setGames(liveList);
-      setLoading(false);
+      await fetchHomeData(true);
 
       const favs = await getFavoriteGames();
       setFavoriteIds(new Set(favs.map((f) => f.id)));
@@ -61,27 +72,44 @@ export default function HomeScreen({ navigation }) {
     })();
   }, []);
 
-  // Refresh recent games, favorites, and user ratings whenever screen comes into focus
   useFocusEffect(
     useCallback(() => {
       getRecentGames().then(setRecentGames);
       getFavoriteGames().then((favs) => setFavoriteIds(new Set(favs.map((f) => f.id))));
       getUserRatings().then(setUserRatingsMap);
-    }, [])
+
+      if (games.length === 0) {
+        fetchHomeData(false);
+      }
+    }, [games.length])
   );
 
-  const dynamicCategories = useMemo(() => {
-    const rawCatList = getCategoriesFromGames(games).filter((c) => c !== 'All');
-    return rawCatList.slice(0, 6).map((catName, index) => {
-      const styleObj = CATEGORY_COLOR_PALETTE[index % CATEGORY_COLOR_PALETTE.length];
-      return {
-        id: catName,
-        label: catName,
-        icon: styleObj.icon,
-        color: styleObj.color,
-      };
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await fetchHomeData(false);
+    const favs = await getFavoriteGames();
+    setFavoriteIds(new Set(favs.map((f) => f.id)));
+    const recent = await getRecentGames();
+    setRecentGames(recent);
+    setRefreshing(false);
+  };
+
+  const availableCategories = useMemo(() => {
+    return getAvailableCategoriesForGames(games, liveCategories);
+  }, [games, liveCategories]);
+
+  const displayCategoryChips = useMemo(() => {
+    const chipList = [{ id: 'popular', title: t('popularity') || 'Popular', icon: 'sparkles-outline', themeColor: theme.primary }];
+    availableCategories.forEach((c) => {
+      chipList.push({
+        id: c.id,
+        title: c.title,
+        icon: c.icon || 'game-controller-outline',
+        themeColor: c.themeColor || theme.primary,
+      });
     });
-  }, [games]);
+    return chipList;
+  }, [availableCategories, theme, t]);
 
   const handleToggleFav = async (game) => {
     const updated = await toggleFavoriteGame(game);
@@ -96,6 +124,22 @@ export default function HomeScreen({ navigation }) {
     return games.filter((g) => g.isFeatured || g.status === 'approved').slice(0, 5);
   }, [games]);
 
+  const popularGamesList = useMemo(() => {
+    let list = games;
+    if (selectedCategory && selectedCategory !== 'Popular' && selectedCategory !== t('popularity')) {
+      list = list.filter((g) => g.category && g.category.toLowerCase() === selectedCategory.toLowerCase());
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      list = list.filter(
+        (g) =>
+          (g.title && g.title.toLowerCase().includes(q)) ||
+          (g.category && g.category.toLowerCase().includes(q))
+      );
+    }
+    return list.slice(0, 5);
+  }, [games, selectedCategory, searchQuery, t]);
+
   const handleRecentScroll = (event) => {
     const offsetX = event.nativeEvent.contentOffset.x;
     setShowRecentChevron(offsetX > 35);
@@ -109,19 +153,39 @@ export default function HomeScreen({ navigation }) {
   return (
     <AppLayout
       title={
-        <View style={{ paddingVertical: 4 }}>
-          <Text style={[styles.headerTitle, { color: theme.text }]}>🎮 Game Arcade</Text>
-          <Text style={[styles.headerSubTitle, { color: theme.subText }]}>{t('instant_games_sub')}</Text>
+        <View style={styles.brandHeaderRow}>
+          <View style={styles.brandHeaderIconBox}>
+            <Image
+              source={require('../../assets/icon.png')}
+              style={styles.brandHeaderIcon}
+              resizeMode="contain"
+            />
+          </View>
+          <View style={{ justifyContent: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={[styles.headerTitleMain, { color: theme.text }]}>Game </Text>
+              <Text style={[styles.headerTitleAccent, { color: theme.primary }]}>Arcade</Text>
+            </View>
+            <Text style={[styles.headerSubTitle, { color: theme.subText }]}>{t('instant_games_sub')}</Text>
+          </View>
         </View>
       }
       currentTab="Home"
       navigation={navigation}
       scrollable
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={theme.primary}
+          colors={[theme.primary]}
+        />
+      }
     >
       <View style={styles.container}>
-        {/* Search Bar */}
+        {/* Search Bar Input */}
         <View style={[styles.searchBarRow, { backgroundColor: theme.inputBg, borderColor: theme.border }]}>
-          <Ionicons name="search-outline" size={18} color={theme.subText} style={{ marginRight: 8 }} />
+          <SafeIcon name="search-outline" size={18} color={theme.subText} style={{ marginRight: 8 }} />
           <TextInput
             style={[styles.searchInput, { color: theme.text }]}
             placeholder={t('search_games_placeholder')}
@@ -131,7 +195,7 @@ export default function HomeScreen({ navigation }) {
           />
           {searchQuery ? (
             <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <Ionicons name="close-circle" size={16} color={theme.subText} />
+              <SafeIcon name="close-circle" size={16} color={theme.subText} />
             </TouchableOpacity>
           ) : null}
         </View>
@@ -142,25 +206,31 @@ export default function HomeScreen({ navigation }) {
           </View>
         ) : games.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Ionicons name="game-controller-outline" size={48} color={theme.subText} />
+            <SafeIcon name="game-controller-outline" size={48} color={theme.subText} />
             <Text style={[styles.emptyText, { color: theme.text }]}>{t('no_games_available')}</Text>
+            <TouchableOpacity
+              style={[styles.retryBtn, { backgroundColor: theme.primary }]}
+              onPress={() => fetchHomeData(true)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.retryBtnText}>{t('retry_loading_games')}</Text>
+            </TouchableOpacity>
           </View>
         ) : (
           <>
-            {/* Continue Playing Section */}
+            {/* Section 1: Continue Playing Horizontal Carousel */}
             {!searchQuery && recentGames.length > 0 && (
               <View style={styles.sectionContainer}>
                 <View style={styles.sectionHeaderRow}>
                   <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('continue_playing')}</Text>
 
-                  {/* Clean chevron-forward with fixed height container to prevent layout shift */}
                   <TouchableOpacity
                     onPress={() => navigation.navigate('Browse', { filter: 'recent', title: t('continue_playing') })}
                     activeOpacity={0.7}
                     disabled={!showRecentChevron}
                     style={[styles.chevronBtn, { opacity: showRecentChevron ? 1 : 0 }]}
                   >
-                    <Ionicons name="chevron-forward" size={20} color={theme.primary} />
+                    <SafeIcon name="chevron-forward" size={20} color={theme.primary} />
                   </TouchableOpacity>
                 </View>
 
@@ -173,34 +243,65 @@ export default function HomeScreen({ navigation }) {
                 >
                   {recentGames.map((game) => {
                     const isFav = favoriteIds.has(game.id);
+                    const userRating = userRatingsMap[game.id]?.rating;
+                    const ratingScore = userRating ? `${userRating}.0` : (game.rating || '4.7');
+                    return (
+                      <GameGridCard
+                        key={game.id}
+                        game={game}
+                        cardWidth={190}
+                        marginRight={14}
+                        imageHeight={118}
+                        isFavorite={isFav}
+                        ratingScore={ratingScore}
+                        showPlayOverlay={true}
+                        onPress={() => handlePlayGame(game)}
+                        onFavToggle={handleToggleFav}
+                      />
+                    );
+                  })}
+                </ScrollView>
+              </View>
+            )}
+
+            {/* Section 2: Horizontal Category Chips */}
+            {!searchQuery && displayCategoryChips.length > 0 && (
+              <View style={styles.sectionContainer}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginVertical: 4 }}>
+                  {displayCategoryChips.map((cat) => {
+                    const isSelected = selectedCategory === cat.title;
                     return (
                       <TouchableOpacity
-                        key={game.id}
-                        style={[styles.continueCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
-                        onPress={() => handlePlayGame(game)}
-                        activeOpacity={0.85}
+                        key={cat.id}
+                        style={[
+                          styles.categoryChip,
+                          {
+                            backgroundColor: isSelected ? theme.primary : theme.cardBg,
+                            borderColor: isSelected ? theme.primary : theme.border,
+                          },
+                        ]}
+                        onPress={() => {
+                          setSelectedCategory(cat.title);
+                          if (cat.title !== 'Popular' && cat.title !== t('popularity')) {
+                            navigation.navigate('Browse', { category: cat.title, categoryObj: cat });
+                          }
+                        }}
+                        activeOpacity={0.8}
                       >
-                        <Image source={{ uri: game.iconUrl }} style={styles.continueImage} />
-                        <View style={styles.playOverlayIcon}>
-                          <Ionicons name="play" size={20} color="#ffffff" />
-                        </View>
-                        <TouchableOpacity
-                          style={styles.favFloatingBtn}
-                          onPress={() => handleToggleFav(game)}
-                          activeOpacity={0.7}
+                        <SafeIcon
+                          name={cat.icon}
+                          size={14}
+                          color={isSelected ? '#ffffff' : cat.themeColor}
+                          style={{ marginRight: 6 }}
+                        />
+                        <Text
+                          style={[
+                            styles.categoryChipText,
+                            { color: isSelected ? '#ffffff' : theme.text, fontWeight: isSelected ? '700' : '500' },
+                          ]}
                         >
-                          <Ionicons
-                            name={isFav ? 'heart' : 'heart-outline'}
-                            size={16}
-                            color={isFav ? '#E94560' : '#ffffff'}
-                          />
-                        </TouchableOpacity>
-                        <View style={styles.continueMeta}>
-                          <Text style={[styles.continueTitle, { color: theme.text }]} numberOfLines={1}>
-                            {game.title}
-                          </Text>
-                          <Text style={[styles.continueCategory, { color: theme.subText }]}>{game.category || 'Arcade'}</Text>
-                        </View>
+                          {cat.title}
+                        </Text>
                       </TouchableOpacity>
                     );
                   })}
@@ -208,45 +309,19 @@ export default function HomeScreen({ navigation }) {
               </View>
             )}
 
-            {/* Dynamic Categories Grid */}
-            {!searchQuery && dynamicCategories.length > 0 && (
-              <View style={styles.sectionContainer}>
-                <View style={styles.sectionHeaderRow}>
-                  <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('categories')}</Text>
-                </View>
-
-                <View style={styles.categoriesGrid}>
-                  {dynamicCategories.map((cat) => (
-                    <TouchableOpacity
-                      key={cat.id}
-                      style={[styles.categoryGridCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
-                      onPress={() => navigation.navigate('Browse', { category: cat.id })}
-                      activeOpacity={0.8}
-                    >
-                      <View style={[styles.categoryIconCircle, { backgroundColor: `${cat.color}20` }]}>
-                        <Ionicons name={cat.icon} size={22} color={cat.color} />
-                      </View>
-                      <Text style={[styles.categoryGridLabel, { color: theme.text }]}>{cat.label}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-            )}
-
-            {/* Featured Games Carousel */}
-            {featuredGames.length > 0 && (
+            {/* Section 3: Featured Games Horizontal Carousel */}
+            {!searchQuery && featuredGames.length > 0 && (
               <View style={styles.sectionContainer}>
                 <View style={styles.sectionHeaderRow}>
                   <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('featured_games')}</Text>
 
-                  {/* Clean chevron-forward with fixed height container to prevent layout shift */}
                   <TouchableOpacity
                     onPress={() => navigation.navigate('Browse', { filter: 'featured', title: t('featured_games') })}
                     activeOpacity={0.7}
                     disabled={!showFeaturedChevron}
                     style={[styles.chevronBtn, { opacity: showFeaturedChevron ? 1 : 0 }]}
                   >
-                    <Ionicons name="chevron-forward" size={20} color={theme.primary} />
+                    <SafeIcon name="chevron-forward" size={20} color={theme.primary} />
                   </TouchableOpacity>
                 </View>
 
@@ -260,38 +335,49 @@ export default function HomeScreen({ navigation }) {
                   {featuredGames.map((game) => {
                     const isFav = favoriteIds.has(game.id);
                     const userRating = userRatingsMap[game.id]?.rating;
-                    const ratingScore = userRating ? `${userRating}.0` : (game.rating || '4.6');
+                    const ratingScore = userRating ? `${userRating}.0` : (game.rating || '4.7');
+
                     return (
-                      <TouchableOpacity
+                      <GameGridCard
                         key={game.id}
-                        style={[styles.featuredCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
+                        game={game}
+                        cardWidth={190}
+                        marginRight={14}
+                        imageHeight={118}
+                        isFavorite={isFav}
+                        ratingScore={ratingScore}
                         onPress={() => handlePlayGame(game)}
-                        activeOpacity={0.85}
-                      >
-                        <Image source={{ uri: game.iconUrl }} style={styles.featuredImage} />
-                        <TouchableOpacity
-                          style={styles.favFloatingBtn}
-                          onPress={() => handleToggleFav(game)}
-                          activeOpacity={0.7}
-                        >
-                          <Ionicons
-                            name={isFav ? 'heart' : 'heart-outline'}
-                            size={18}
-                            color={isFav ? '#E94560' : '#ffffff'}
-                          />
-                        </TouchableOpacity>
-                        <View style={styles.featuredOverlay}>
-                          <Text style={styles.featuredCardTitle} numberOfLines={1}>
-                            {game.title}
-                          </Text>
-                          <Text style={styles.featuredCardCategory}>
-                            {game.category || 'Arcade'} • ★ {ratingScore}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
+                        onFavToggle={handleToggleFav}
+                      />
                     );
                   })}
                 </ScrollView>
+              </View>
+            )}
+
+            {/* Section 4: Top 5 Popular Games Vertical List */}
+            {popularGamesList.length > 0 && (
+              <View style={styles.sectionContainer}>
+                <View style={styles.sectionHeaderRow}>
+                  <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('popular_games')}</Text>
+                </View>
+
+                <View style={styles.popularList}>
+                  {popularGamesList.map((game) => {
+                    const userRating = userRatingsMap[game.id]?.rating;
+                    const ratingScore = userRating ? `${userRating}.0` : (game.rating || '4.6');
+
+                    return (
+                      <GameListCard
+                        key={game.id}
+                        game={game}
+                        ratingScore={ratingScore}
+                        rightActionType="play"
+                        onPress={() => handlePlayGame(game)}
+                      />
+                    );
+                  })}
+                </View>
               </View>
             )}
           </>
@@ -302,9 +388,37 @@ export default function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  headerTitle: {
+  brandHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 2,
+  },
+  brandHeaderIconBox: {
+    width: 32,
+    height: 32,
+    borderRadius: 9,
+    backgroundColor: '#261819',
+    borderWidth: 1,
+    borderColor: 'rgba(233,69,96,0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+    overflow: 'hidden',
+  },
+  brandHeaderIcon: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+  },
+  headerTitleMain: {
     fontSize: 18,
     fontWeight: '800',
+    letterSpacing: -0.3,
+  },
+  headerTitleAccent: {
+    fontSize: 18,
+    fontWeight: '800',
+    letterSpacing: -0.3,
   },
   headerSubTitle: {
     fontSize: 11,
@@ -312,7 +426,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
   },
   searchBarRow: {
     flexDirection: 'row',
@@ -338,124 +452,51 @@ const styles = StyleSheet.create({
   emptyText: {
     marginTop: 12,
     fontSize: 14,
+    marginBottom: 14,
+  },
+  retryBtn: {
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    borderRadius: 12,
+  },
+  retryBtnText: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontWeight: '700',
   },
   sectionContainer: {
-    marginBottom: 22,
+    marginBottom: 24,
   },
   sectionHeaderRow: {
     height: 28,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 4,
+    marginBottom: 6,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '800',
-    letterSpacing: 0.3,
+    letterSpacing: -0.2,
   },
   chevronBtn: {
     padding: 4,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  continueCard: {
-    width: 150,
-    borderRadius: 14,
-    borderWidth: 1,
-    marginRight: 12,
-    overflow: 'hidden',
-    position: 'relative',
-  },
-  continueImage: {
-    width: '100%',
-    height: 95,
-  },
-  playOverlayIcon: {
-    position: 'absolute',
-    top: 30,
-    left: 58,
-    backgroundColor: 'rgba(233,69,96,0.85)',
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  favFloatingBtn: {
-    position: 'absolute',
-    top: 6,
-    right: 6,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    padding: 5,
-    borderRadius: 12,
-  },
-  continueMeta: {
-    padding: 8,
-  },
-  continueTitle: {
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  continueCategory: {
-    fontSize: 10,
-    marginTop: 2,
-  },
-  categoriesGrid: {
+  categoryChip: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  categoryGridCard: {
-    width: (width - 44) / 3,
-    paddingVertical: 14,
-    borderRadius: 14,
-    borderWidth: 1,
     alignItems: 'center',
-    marginBottom: 10,
-  },
-  categoryIconCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 6,
-  },
-  categoryGridLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  featuredCard: {
-    width: 210,
-    height: 135,
-    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
     borderWidth: 1,
-    marginRight: 12,
-    overflow: 'hidden',
-    position: 'relative',
+    marginRight: 8,
   },
-  featuredImage: {
-    width: '100%',
-    height: '100%',
-  },
-  featuredOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(11,13,18,0.85)',
-    padding: 8,
-  },
-  featuredCardTitle: {
-    color: '#ffffff',
+  categoryChipText: {
     fontSize: 13,
-    fontWeight: '700',
   },
-  featuredCardCategory: {
-    color: '#9298A5',
-    fontSize: 11,
-    marginTop: 2,
+  popularList: {
+    marginTop: 6,
   },
 });

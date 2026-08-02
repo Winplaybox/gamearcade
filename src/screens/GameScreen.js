@@ -6,16 +6,17 @@ import {
   StyleSheet,
   Modal,
   TouchableWithoutFeedback,
-  Image,
   Alert,
   StatusBar,
   TextInput,
-  ActivityIndicator,
+  PanResponder,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { Ionicons } from '@expo/vector-icons';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import AppLayout from '../components/AppLayout';
+import SafeIcon from '../components/SafeIcon';
+import GameLoadingOverlay from '../components/ui/GameLoadingOverlay';
+import PrimaryButton from '../components/ui/PrimaryButton';
 import { useTranslation } from '../i18n/i18n';
 import { useTheme } from '../theme/ThemeContext';
 import { showBackNavInterstitial } from '../ads/AdManager';
@@ -46,7 +47,13 @@ export default function GameScreen({ route, navigation }) {
   const { theme } = useTheme();
 
   const [loading, setLoading] = useState(true);
-  const [loadProgress, setLoadProgress] = useState(10);
+  const [loadProgress, setLoadProgress] = useState(15);
+  const [statusIndex, setStatusIndex] = useState(0);
+
+  // Fullscreen Swipe Gesture Controls state
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showFullscreenControls, setShowFullscreenControls] = useState(false);
+  const hideControlsTimerRef = useRef(null);
 
   // Menu & Modals State
   const [menuModalVisible, setMenuModalVisible] = useState(false);
@@ -65,28 +72,46 @@ export default function GameScreen({ route, navigation }) {
   const [isSubmittingRating, setIsSubmittingRating] = useState(false);
 
   const [isFav, setIsFav] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const webviewRef = useRef(null);
 
   // Track session start time and update duration on unmount
   const sessionStartTimeRef = useRef(Date.now());
 
-  // Orientation Locking & Play Duration Setup
+  // Reveal controls for 3.5s when user swipes or taps in fullscreen
+  const triggerShowFullscreenControls = () => {
+    setShowFullscreenControls(true);
+    if (hideControlsTimerRef.current) {
+      clearTimeout(hideControlsTimerRef.current);
+    }
+    hideControlsTimerRef.current = setTimeout(() => {
+      setShowFullscreenControls(false);
+    }, 3500);
+  };
+
+  // Create PanResponder to catch swipe gestures in fullscreen
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => isFullscreen,
+      onMoveShouldSetPanResponder: () => isFullscreen,
+      onPanResponderGrant: () => {
+        triggerShowFullscreenControls();
+      },
+      onPanResponderMove: () => {
+        triggerShowFullscreenControls();
+      },
+    })
+  ).current;
+
+  // Orientation Setup: Unlock orientation by default so user can rotate device freely
   useEffect(() => {
     sessionStartTimeRef.current = Date.now();
 
     const applyOrientation = async () => {
-      const ori = game?.orientation?.toLowerCase();
       try {
-        if (ori === 'portrait') {
-          await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-        } else if (ori === 'landscape') {
-          await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-        } else {
-          await ScreenOrientation.unlockAsync();
-        }
+        // Unlock orientation so user turns device freely
+        await ScreenOrientation.unlockAsync();
       } catch (err) {
-        console.warn('ScreenOrientation lock error:', err);
+        console.warn('ScreenOrientation unlock error:', err);
       }
     };
 
@@ -95,10 +120,11 @@ export default function GameScreen({ route, navigation }) {
     return () => {
       const elapsedMs = Date.now() - sessionStartTimeRef.current;
       if (game?.id && elapsedMs > 2000) {
-        updateRecentGameSession(game.id, elapsedMs).catch(() => {});
+        updateRecentGameSession(game.id, elapsedMs).catch(() => { });
       }
-      ScreenOrientation.unlockAsync().catch(() => {});
+      ScreenOrientation.unlockAsync().catch(() => { });
       StatusBar.setHidden(false);
+      if (hideControlsTimerRef.current) clearTimeout(hideControlsTimerRef.current);
     };
   }, [game]);
 
@@ -121,18 +147,12 @@ export default function GameScreen({ route, navigation }) {
     })();
   }, [game]);
 
-  // Progress loader simulation
+  // Rotate loading status strings every 2.5 seconds when loading
   useEffect(() => {
     if (loading) {
       const interval = setInterval(() => {
-        setLoadProgress((prev) => {
-          if (prev >= 90) {
-            clearInterval(interval);
-            return 90;
-          }
-          return prev + 15;
-        });
-      }, 200);
+        setStatusIndex((prev) => prev + 1);
+      }, 2500);
       return () => clearInterval(interval);
     }
   }, [loading]);
@@ -144,7 +164,8 @@ export default function GameScreen({ route, navigation }) {
   const handleReload = () => {
     setMenuModalVisible(false);
     setLoading(true);
-    setLoadProgress(10);
+    setLoadProgress(15);
+    setStatusIndex(0);
     webviewRef.current?.reload();
   };
 
@@ -218,6 +239,12 @@ export default function GameScreen({ route, navigation }) {
     setIsFullscreen((prev) => {
       const next = !prev;
       StatusBar.setHidden(next);
+      if (next) {
+        triggerShowFullscreenControls();
+      } else {
+        setShowFullscreenControls(false);
+        if (hideControlsTimerRef.current) clearTimeout(hideControlsTimerRef.current);
+      }
       return next;
     });
   };
@@ -225,53 +252,42 @@ export default function GameScreen({ route, navigation }) {
   const rightAction = (
     <View style={styles.headerRightRow}>
       <TouchableOpacity onPress={toggleFullscreen} style={styles.headerBtn} activeOpacity={0.7}>
-        <Ionicons name="expand-outline" size={20} color={theme.text} />
+        <SafeIcon name="expand-outline" size={20} color={theme.text} />
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => setMenuModalVisible(true)}
         style={[styles.headerBtn, { marginLeft: 8 }]}
         activeOpacity={0.7}
       >
-        <Ionicons name="ellipsis-vertical" size={20} color={theme.text} />
+        <SafeIcon name="ellipsis-vertical" size={20} color={theme.text} />
       </TouchableOpacity>
     </View>
   );
 
   const mainContent = (
-    <View style={styles.container}>
-      {/* Game Loading Overlay */}
+    <View style={styles.container} {...(isFullscreen ? panResponder.panHandlers : {})}>
+      {/* Modular Full-bleed Game Loading Overlay */}
       {loading && (
-        <View style={[styles.loadingOverlay, { backgroundColor: theme.bg }]}>
-          {game?.iconUrl ? (
-            <Image source={{ uri: game.iconUrl }} style={styles.loadingGameIcon} />
-          ) : (
-            <View style={[styles.loadingIconPlaceholder, { backgroundColor: theme.cardBg }]}>
-              <Ionicons name="game-controller" size={40} color={theme.primary} />
-            </View>
-          )}
-
-          <Text style={[styles.loadingTitle, { color: theme.text }]}>{game?.title}</Text>
-          <Text style={[styles.loadingCategory, { color: theme.subText }]}>{game?.category || 'Arcade'}</Text>
-
-          {/* Glowing Loading Bar */}
-          <View style={[styles.progressBarTrack, { backgroundColor: theme.subBg }]}>
-            <View style={[styles.progressBarFill, { width: `${loadProgress}%`, backgroundColor: theme.primary }]} />
-          </View>
-
-          <Text style={[styles.loadingStatusText, { color: theme.subText }]}>
-            {t('loading')} {loadProgress}%
-          </Text>
-        </View>
+        <GameLoadingOverlay
+          game={game}
+          loadProgress={loadProgress}
+          statusIndex={statusIndex}
+        />
       )}
 
+      {/* Real Game WebView */}
       <WebView
         ref={webviewRef}
         source={{ uri: game?.url }}
         style={styles.webview}
         onLoadStart={() => setLoading(true)}
+        onLoadProgress={({ nativeEvent }) => {
+          const p = Math.max(15, nativeEvent.progress * 100);
+          setLoadProgress(p);
+        }}
         onLoadEnd={() => {
           setLoadProgress(100);
-          setLoading(false);
+          setTimeout(() => setLoading(false), 250);
         }}
         allowsInlineMediaPlayback={true}
         mediaPlaybackRequiresUserAction={false}
@@ -280,15 +296,37 @@ export default function GameScreen({ route, navigation }) {
         scalesPageToFit={true}
       />
 
-      {/* Floating Exit Fullscreen Button in Fullscreen Mode */}
-      {isFullscreen && (
+      {/* Fullscreen Touch Area to trigger reveal on tap/swipe anywhere */}
+      {isFullscreen && !showFullscreenControls && (
         <TouchableOpacity
-          style={styles.floatingExitFullscreenBtn}
-          onPress={toggleFullscreen}
-          activeOpacity={0.75}
-        >
-          <Ionicons name="contract" size={22} color="#ffffff" />
-        </TouchableOpacity>
+          style={styles.fullscreenGestureOverlay}
+          onPress={triggerShowFullscreenControls}
+          activeOpacity={1}
+        />
+      )}
+
+      {/* Auto-Hiding Controls in Fullscreen Mode */}
+      {isFullscreen && showFullscreenControls && (
+        <>
+          {/* Top Glass Exit Back Button */}
+          <TouchableOpacity
+            style={styles.floatingTopExitBtn}
+            onPress={toggleFullscreen}
+            activeOpacity={0.75}
+          >
+            <SafeIcon name="arrow-back" size={20} color="#ffffff" />
+          </TouchableOpacity>
+
+          {/* Bottom Floating Exit Fullscreen Button */}
+          <TouchableOpacity
+            style={styles.floatingExitFullscreenBtn}
+            onPress={toggleFullscreen}
+            activeOpacity={0.75}
+          >
+            <SafeIcon name="contract" size={20} color="#ffffff" style={{ marginRight: 6 }} />
+            <Text style={styles.floatingExitText}>{t('exit_fullscreen')}</Text>
+          </TouchableOpacity>
+        </>
       )}
 
       {/* Menu Sheet Modal */}
@@ -307,7 +345,7 @@ export default function GameScreen({ route, navigation }) {
                   style={[styles.menuSheetRow, { borderBottomColor: theme.border }]}
                   onPress={handleToggleFavorite}
                 >
-                  <Ionicons
+                  <SafeIcon
                     name={isFav ? 'heart' : 'heart-outline'}
                     size={20}
                     color={isFav ? '#E94560' : theme.text}
@@ -323,7 +361,7 @@ export default function GameScreen({ route, navigation }) {
                   style={[styles.menuSheetRow, { borderBottomColor: theme.border }]}
                   onPress={handleOpenRatingModal}
                 >
-                  <Ionicons
+                  <SafeIcon
                     name={userExistingRating ? 'star' : 'star-outline'}
                     size={20}
                     color="#FFC107"
@@ -339,7 +377,7 @@ export default function GameScreen({ route, navigation }) {
                   style={[styles.menuSheetRow, { borderBottomColor: theme.border }]}
                   onPress={handleReload}
                 >
-                  <Ionicons name="refresh-outline" size={20} color={theme.text} style={{ marginRight: 14 }} />
+                  <SafeIcon name="refresh-outline" size={20} color={theme.text} style={{ marginRight: 14 }} />
                   <Text style={[styles.menuSheetLabel, { color: theme.text }]}>{t('reload_game')}</Text>
                 </TouchableOpacity>
 
@@ -348,7 +386,7 @@ export default function GameScreen({ route, navigation }) {
                   style={styles.menuSheetRow}
                   onPress={handleOpenReportModal}
                 >
-                  <Ionicons name="warning-outline" size={20} color="#E94560" style={{ marginRight: 14 }} />
+                  <SafeIcon name="warning-outline" size={20} color="#E94560" style={{ marginRight: 14 }} />
                   <Text style={[styles.menuSheetLabel, { color: '#E94560' }]}>{t('report_problem')}</Text>
                 </TouchableOpacity>
               </View>
@@ -373,7 +411,7 @@ export default function GameScreen({ route, navigation }) {
                     {userExistingRating ? t('update_rating_title') : t('rate_game_title')}
                   </Text>
                   <TouchableOpacity onPress={() => setRatingModalVisible(false)}>
-                    <Ionicons name="close" size={22} color={theme.subText} />
+                    <SafeIcon name="close" size={22} color={theme.subText} />
                   </TouchableOpacity>
                 </View>
 
@@ -391,7 +429,7 @@ export default function GameScreen({ route, navigation }) {
                       activeOpacity={0.7}
                       style={{ padding: 6 }}
                     >
-                      <Ionicons
+                      <SafeIcon
                         name={starNum <= selectedStars ? 'star' : 'star-outline'}
                         size={36}
                         color={starNum <= selectedStars ? '#FFC107' : theme.subText}
@@ -415,21 +453,14 @@ export default function GameScreen({ route, navigation }) {
                   onChangeText={setRatingReviewText}
                 />
 
-                {/* Submit Action Button */}
-                <TouchableOpacity
-                  style={[styles.submitReportBtn, { backgroundColor: theme.primary }]}
+                {/* Modular Primary Submit Action Button */}
+                <PrimaryButton
+                  title={userExistingRating ? t('update_rating_title') : t('submit_rating')}
                   onPress={handleSubmitRating}
-                  disabled={isSubmittingRating}
-                  activeOpacity={0.85}
-                >
-                  {isSubmittingRating ? (
-                    <ActivityIndicator size="small" color="#ffffff" />
-                  ) : (
-                    <Text style={styles.submitReportBtnText}>
-                      {userExistingRating ? t('update_rating_title') : t('submit_rating')}
-                    </Text>
-                  )}
-                </TouchableOpacity>
+                  loading={isSubmittingRating}
+                  height={46}
+                  borderRadius={14}
+                />
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -450,7 +481,7 @@ export default function GameScreen({ route, navigation }) {
                 <View style={styles.reportHeader}>
                   <Text style={[styles.reportTitle, { color: theme.text }]}>{t('report_a_problem')}</Text>
                   <TouchableOpacity onPress={() => setReportModalVisible(false)}>
-                    <Ionicons name="close" size={22} color={theme.subText} />
+                    <SafeIcon name="close" size={22} color={theme.subText} />
                   </TouchableOpacity>
                 </View>
 
@@ -474,7 +505,7 @@ export default function GameScreen({ route, navigation }) {
                       onPress={() => setSelectedReportCategory(cat)}
                       activeOpacity={0.8}
                     >
-                      <Ionicons
+                      <SafeIcon
                         name={isSelected ? 'radio-button-on' : 'radio-button-off'}
                         size={18}
                         color={isSelected ? theme.primary : theme.subText}
@@ -498,19 +529,14 @@ export default function GameScreen({ route, navigation }) {
                   onChangeText={setReportNotes}
                 />
 
-                {/* Submit Action Button */}
-                <TouchableOpacity
-                  style={[styles.submitReportBtn, { backgroundColor: theme.primary }]}
+                {/* Modular Primary Submit Action Button */}
+                <PrimaryButton
+                  title={t('submit_report')}
                   onPress={handleSubmitReport}
-                  disabled={isSubmittingReport}
-                  activeOpacity={0.85}
-                >
-                  {isSubmittingReport ? (
-                    <ActivityIndicator size="small" color="#ffffff" />
-                  ) : (
-                    <Text style={styles.submitReportBtnText}>{t('submit_report')}</Text>
-                  )}
-                </TouchableOpacity>
+                  loading={isSubmittingReport}
+                  height={46}
+                  borderRadius={14}
+                />
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -528,7 +554,7 @@ export default function GameScreen({ route, navigation }) {
       title={game?.title || 'Game Player'}
       showBack={true}
       onBack={handleBack}
-      rightAction={rightAction}
+      rightAction={loadProgress ? null : rightAction}
       scrollable={false}
     >
       {mainContent}
@@ -539,64 +565,16 @@ export default function GameScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   fullscreenRoot: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: '#1D1011',
   },
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: '#1D1011',
     position: 'relative',
   },
   webview: {
     flex: 1,
-    backgroundColor: '#000000',
-  },
-  loadingOverlay: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 10,
-    paddingHorizontal: 32,
-  },
-  loadingGameIcon: {
-    width: 90,
-    height: 90,
-    borderRadius: 20,
-    marginBottom: 16,
-  },
-  loadingIconPlaceholder: {
-    width: 90,
-    height: 90,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  loadingTitle: {
-    fontSize: 18,
-    fontWeight: '800',
-    marginBottom: 4,
-  },
-  loadingCategory: {
-    fontSize: 13,
-    marginBottom: 24,
-  },
-  progressBarTrack: {
-    width: '100%',
-    height: 6,
-    borderRadius: 3,
-    overflow: 'hidden',
-    marginBottom: 12,
-  },
-  progressBarFill: {
-    height: '100%',
-    borderRadius: 3,
-  },
-  loadingStatusText: {
-    fontSize: 12,
+    backgroundColor: '#1D1011',
   },
   headerRightRow: {
     flexDirection: 'row',
@@ -605,19 +583,47 @@ const styles = StyleSheet.create({
   headerBtn: {
     padding: 6,
   },
-  floatingExitFullscreenBtn: {
+  fullscreenGestureOverlay: {
     position: 'absolute',
-    bottom: 24,
-    right: 24,
-    backgroundColor: 'rgba(0, 0, 0, 0.65)',
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 60,
+    zIndex: 90,
+  },
+  floatingTopExitBtn: {
+    position: 'absolute',
+    top: 24,
+    left: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 99,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  floatingExitFullscreenBtn: {
+    position: 'absolute',
+    bottom: 24,
+    alignSelf: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    borderRadius: 22,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 99,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.25)',
+  },
+  floatingExitText: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontWeight: '700',
   },
   modalOverlay: {
     flex: 1,
@@ -718,17 +724,5 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     marginTop: 6,
     marginBottom: 14,
-  },
-  submitReportBtn: {
-    width: '100%',
-    height: 46,
-    borderRadius: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  submitReportBtnText: {
-    color: '#ffffff',
-    fontSize: 15,
-    fontWeight: 'bold',
   },
 });

@@ -7,10 +7,10 @@ import {
   query,
   where,
   getDocs,
-  addDoc,
-  updateDoc,
+  getDoc,
+  setDoc,
   doc,
-  increment,
+  addDoc,
   serverTimestamp,
 } from '@firebase/firestore';
 
@@ -40,6 +40,7 @@ try {
 }
 
 export const db = dbInstance;
+export { doc, getDoc, setDoc, collection, serverTimestamp };
 
 export function generateGameIcon(title) {
   if (!title) return 'https://ui-avatars.com/api/?name=Game&background=e94560&color=fff&size=128';
@@ -64,4 +65,67 @@ export async function getApprovedGames() {
     console.warn('Fetch Firestore approved games error:', e);
   }
   return [];
+}
+
+/**
+ * Fetch All Categories & Sub-Categories directly from Firestore "game_categories" collection
+ */
+export async function getFirestoreCategories() {
+  try {
+    const q = query(collection(db, 'game_categories'));
+    const snapshot = await getDocs(q);
+    if (!snapshot.empty) {
+      const list = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      return list.sort((a, b) => (a.sortOrder || 999) - (b.sortOrder || 999));
+    }
+  } catch (e) {
+    console.warn('Fetch Firestore categories error:', e);
+  }
+  return [];
+}
+
+/**
+ * Submit Game Suggestion to Firestore "game_submissions" collection
+ */
+export async function submitGameToFirestore(submissionData) {
+  try {
+    const docRef = await addDoc(collection(db, 'game_submissions'), {
+      title: submissionData.title || '',
+      ownerName: submissionData.ownerName || '',
+      ownerEmail: submissionData.ownerEmail || '',
+      gameUrl: submissionData.gameUrl || '',
+      category: submissionData.category || 'Arcade',
+      subCategory: submissionData.subCategory || '',
+      description: submissionData.description || '',
+      status: 'pending',
+      createdAt: serverTimestamp(),
+    });
+    return { success: true, id: docRef.id };
+  } catch (e) {
+    console.warn('Submit game error:', e);
+    return { success: false, error: e.message };
+  }
+}
+
+/**
+ * Submit Issue Report to Firestore "issue_reports" collection
+ */
+export async function submitIssueReportToFirestore(reportData) {
+  try {
+    const docRef = await addDoc(collection(db, 'issue_reports'), {
+      gameId: reportData.gameId || null,
+      gameTitle: reportData.gameTitle || 'General Arcade App Issue',
+      issueType: reportData.issueType || 'Other',
+      details: reportData.details || '',
+      status: 'open',
+      createdAt: serverTimestamp(),
+    });
+    return { success: true, id: docRef.id };
+  } catch (e) {
+    console.warn('Submit issue report error:', e);
+    return { success: false, error: e.message };
+  }
 }
