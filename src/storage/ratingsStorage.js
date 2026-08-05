@@ -1,47 +1,41 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { collection, addDoc, serverTimestamp } from '@firebase/firestore';
-import { db } from '../config/firebase';
-
-const RATINGS_KEY = 'gamearcade_user_ratings_v1';
+import { auth, PHP_API_BASE_URL } from '../config/firebase';
 
 export async function getUserRatings() {
   try {
-    const raw = await AsyncStorage.getItem(RATINGS_KEY);
-    return raw ? JSON.parse(raw) : {};
+    const uid = auth.currentUser?.uid;
+    if (uid) {
+      const response = await fetch(`${PHP_API_BASE_URL}?type=get_ratings&userId=${uid}`);
+      if (response.ok) {
+        return await response.json();
+      }
+    }
   } catch (e) {
-    return {};
+    console.warn('Fetch ratings error:', e);
   }
+  return {};
 }
 
 export async function saveGameRating(game, ratingValue, reviewText = '') {
   if (!game?.id || !ratingValue) return;
 
-  const currentRatings = await getUserRatings();
-  currentRatings[game.id] = {
-    rating: ratingValue,
-    reviewText: reviewText.trim(),
-    updatedAt: new Date().toISOString(),
-  };
-
   try {
-    await AsyncStorage.setItem(RATINGS_KEY, JSON.stringify(currentRatings));
-  } catch (e) {}
-
-  // Sync rating submission to Firebase Firestore if online
-  try {
-    if (db) {
-      await addDoc(collection(db, 'game_ratings'), {
-        gameId: game.id,
-        gameTitle: game.title || 'Unknown',
-        rating: ratingValue,
-        reviewText: reviewText.trim(),
-        createdAt: serverTimestamp(),
-        platform: 'android',
+    const uid = auth.currentUser?.uid;
+    if (uid) {
+      await fetch(PHP_API_BASE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'save_rating',
+          userId: uid,
+          gameId: game.id,
+          rating: ratingValue,
+          reviewText: reviewText.trim()
+        })
       });
     }
-  } catch (err) {
-    console.warn('Firestore rating save fallback:', err);
+  } catch (e) {
+    console.warn('Save rating error:', e);
   }
 
-  return currentRatings;
+  return getUserRatings();
 }

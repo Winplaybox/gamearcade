@@ -1,23 +1,23 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
-  StyleSheet,
-  FlatList,
-  Alert,
+  InteractionManager,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import AnimatedTouch from '../components/AnimatedTouch';
 import AppLayout from '../components/AppLayout';
 import GameListCard from '../components/GameListCard';
+import SafeBannerAd from '../components/ui/SafeBannerAd';
 import { useTranslation } from '../i18n/i18n';
 import { useTheme } from '../theme/ThemeContext';
-import { getFavoriteGames, toggleFavoriteGame } from '../storage/favoritesStorage';
+import { handlePlayGameWithAd } from '../utils/adNavigation';
+import { getFavoriteGames, toggleFavoriteGame, removeMultipleFavoriteGames, clearAllFavoriteGames } from '../storage/favoritesStorage';
 import { getUserRatings } from '../storage/ratingsStorage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function FavoritesScreen({ navigation }) {
+  const { showAlert } = useCustomAlert();
   const { t } = useTranslation();
   const { theme } = useTheme();
 
@@ -28,15 +28,20 @@ export default function FavoritesScreen({ navigation }) {
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
 
+  const isAllSelected = favorites.length > 0 && selectedIds.size === favorites.length;
+
   useFocusEffect(
     useCallback(() => {
-      getFavoriteGames().then(setFavorites);
-      getUserRatings().then(setUserRatingsMap);
+      const task = InteractionManager.runAfterInteractions(() => {
+        getFavoriteGames().then(setFavorites);
+        getUserRatings().then(setUserRatingsMap);
+      });
+      return () => task.cancel();
     }, [])
   );
 
   const handleRemoveFav = async (game) => {
-    Alert.alert(
+    showAlert(
       t('remove_favorite_title'),
       `Are you sure you want to remove "${game.title}" from your favorites?`,
       [
@@ -79,7 +84,7 @@ export default function FavoritesScreen({ navigation }) {
 
   const handleDeleteSelected = () => {
     if (selectedIds.size === 0) return;
-    Alert.alert(
+    showAlert(
       'Remove Selected Favorites',
       `Are you sure you want to remove ${selectedIds.size} game(s) from your favorites?`,
       [
@@ -88,8 +93,8 @@ export default function FavoritesScreen({ navigation }) {
           text: 'Remove',
           style: 'destructive',
           onPress: async () => {
-            const updated = favorites.filter((g) => !selectedIds.has(g.id));
-            await AsyncStorage.setItem('gamearcade_favorites_v1', JSON.stringify(updated));
+            const idsArray = Array.from(selectedIds);
+            const updated = await removeMultipleFavoriteGames(idsArray);
             setFavorites(updated);
             setSelectedIds(new Set());
             setSelectionMode(false);
@@ -100,7 +105,7 @@ export default function FavoritesScreen({ navigation }) {
   };
 
   const handleClearAll = () => {
-    Alert.alert(
+    showAlert(
       t('clear_all_favorites_title'),
       t('clear_all_favorites_msg'),
       [
@@ -109,7 +114,7 @@ export default function FavoritesScreen({ navigation }) {
           text: t('clear_all'),
           style: 'destructive',
           onPress: async () => {
-            await AsyncStorage.removeItem('gamearcade_favorites_v1');
+            await clearAllFavoriteGames();
             setFavorites([]);
             setSelectedIds(new Set());
             setSelectionMode(false);
@@ -124,158 +129,93 @@ export default function FavoritesScreen({ navigation }) {
       handleToggleSelect(game.id);
       return;
     }
-    navigation.navigate('Game', { game });
+    handlePlayGameWithAd(navigation, game);
   };
 
   const pageTitle = selectionMode ? `Selected (${selectedIds.size})` : t('tab_favorites');
 
   const headerRightAction = selectionMode ? (
     <View style={styles.headerActionRow}>
-      <TouchableOpacity onPress={handleSelectAllToggle} style={styles.headerIconBtn} activeOpacity={0.7}>
+      <AnimatedTouch onPress={handleSelectAllToggle} style={styles.headerIconBtn}>
         <Ionicons
-          name={selectedIds.size === favorites.length ? 'checkmark-done-circle' : 'checkmark-done-circle-outline'}
+          name={isAllSelected ? 'checkbox' : 'square-outline'}
           size={24}
           color={theme.primary}
         />
-      </TouchableOpacity>
+      </AnimatedTouch>
 
-      <TouchableOpacity
+      <AnimatedTouch
         onPress={handleDeleteSelected}
         style={[styles.headerIconBtn, { marginLeft: 8 }]}
-        activeOpacity={0.7}
       >
         <Ionicons name="trash-outline" size={22} color="#E94560" />
-      </TouchableOpacity>
+      </AnimatedTouch>
 
-      <TouchableOpacity
+      <AnimatedTouch
         onPress={() => {
           setSelectionMode(false);
           setSelectedIds(new Set());
         }}
         style={[styles.headerIconBtn, { marginLeft: 8 }]}
-        activeOpacity={0.7}
       >
         <Ionicons name="close" size={22} color={theme.subText} />
-      </TouchableOpacity>
+      </AnimatedTouch>
     </View>
   ) : favorites.length > 0 ? (
-    <TouchableOpacity onPress={handleClearAll} style={styles.headerClearAllBtn} activeOpacity={0.7}>
+    <AnimatedTouch onPress={handleClearAll} style={styles.headerClearAllBtn}>
       <Ionicons name="trash-outline" size={16} color="#E94560" style={{ marginRight: 4 }} />
       <Text style={[styles.headerClearAllText, { color: '#E94560' }]}>{t('clear_all')}</Text>
-    </TouchableOpacity>
+    </AnimatedTouch>
   ) : null;
 
   return (
     <AppLayout
-      title={pageTitle}
+      heroTitle={pageTitle}
+      heroSubtitle={`${favorites.length} saved titles for quick access`}
       rightAction={headerRightAction}
       currentTab="Favorites"
       navigation={navigation}
-      scrollable={false}
+      scrollable={true}
     >
       <View style={[styles.container, { backgroundColor: theme.bg }]}>
-        {/* Count Badge Header */}
-        <View style={styles.countHeaderRow}>
-          <Text style={[styles.countText, { color: theme.subText }]}>
-            {favorites.length} {t('saved_games')}
-          </Text>
-        </View>
+        {favorites.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Ionicons name="heart-outline" size={54} color={theme.subText} />
+            <Text style={[styles.emptyTitle, { color: theme.text }]}>{t('no_favorites_yet')}</Text>
+            <Text style={[styles.emptySub, { color: theme.subText }]}>{t('no_favorites_sub')}</Text>
+          </View>
+        ) : (
+          <View style={styles.listWrap}>
+            {favorites.map((game) => {
+              const isSelected = selectedIds.has(game.id);
+              const userRating = userRatingsMap[game.id]?.rating;
+              const ratingScore = userRating ? `${userRating}.0` : (game.rating || '4.8');
 
-        {/* Reused GameListCard Component for Vertical Favorites List View */}
-        <FlatList
-          data={favorites}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <Ionicons name="heart-outline" size={54} color={theme.subText} />
-              <Text style={[styles.emptyTitle, { color: theme.text }]}>{t('no_favorites_saved')}</Text>
-              <Text style={[styles.emptySub, { color: theme.subText }]}>
-                {t('no_favorites_sub')}
-              </Text>
-            </View>
-          }
-          renderItem={({ item }) => {
-            const isSelected = selectedIds.has(item.id);
-            const userRating = userRatingsMap[item.id]?.rating;
-            const ratingScore = userRating ? `${userRating}.0` : (item.rating || '4.6');
-
-            return (
-              <GameListCard
-                key={item.id}
-                game={item}
-                ratingScore={ratingScore}
-                subText={`${item.category || 'Arcade'} • ★ ${ratingScore}`}
-                rightActionType={selectionMode ? 'select' : 'trash'}
-                selectionMode={selectionMode}
-                isSelected={isSelected}
-                onPress={() => handlePlayGame(item)}
-                onLongPress={() => {
-                  setSelectionMode(true);
-                  handleToggleSelect(item.id);
-                }}
-                onRightAction={() => {
-                  if (selectionMode) handleToggleSelect(item.id);
-                  else handleRemoveFav(item);
-                }}
-              />
-            );
-          }}
-        />
+              return (
+                <GameListCard
+                  key={game.id}
+                  game={game}
+                  ratingScore={ratingScore}
+                  isSelected={selectionMode ? isSelected : false}
+                  rightActionType={selectionMode ? 'select' : 'trash'}
+                  onPress={() => handlePlayGame(game)}
+                  onLongPress={() => {
+                    if (!selectionMode) {
+                      setSelectionMode(true);
+                      handleToggleSelect(game.id);
+                    }
+                  }}
+                  {...(selectionMode ? { onSelect: () => handleToggleSelect(game.id) } : { onRightAction: () => handleRemoveFav(game) })}
+                />
+              );
+            })}
+          </View>
+        )}
+        <SafeBannerAd />
       </View>
     </AppLayout>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 12,
-  },
-  countHeaderRow: {
-    marginBottom: 10,
-  },
-  countText: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  headerActionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  headerIconBtn: {
-    padding: 4,
-  },
-  headerClearAllBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-  },
-  headerClearAllText: {
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  listContent: {
-    paddingBottom: 16,
-  },
-  emptyContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 80,
-    paddingHorizontal: 24,
-  },
-  emptyTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginTop: 14,
-  },
-  emptySub: {
-    fontSize: 13,
-    textAlign: 'center',
-    marginTop: 6,
-    lineHeight: 18,
-  },
-});
+import styles from '../styles/FavoritesScreen.styles.js';
+import { useCustomAlert } from '../context/AlertContext';

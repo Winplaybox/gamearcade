@@ -1,23 +1,75 @@
-import { getApprovedGames as fetchFirestoreGames, getFirestoreCategories } from '../config/firebase';
+import { PHP_API_BASE_URL, generateGameIcon, getFirestoreCategories } from '../config/firebase';
 import masterCategoriesData from '../data/categories_master_dataset.json';
 
 /**
- * Dynamically fetches live approved games directly from Firebase Firestore database.
+ * Fetch Games with Server-Side Pagination & Filtering
  */
-export async function getLiveGamesList() {
+export async function getLiveGamesList(params = {}) {
+  const { page = 1, limit = 50, search = '', category = '', rating = 0, sort = 'newest' } = params;
+  
   try {
-    const liveGames = await fetchFirestoreGames();
-    if (liveGames && Array.isArray(liveGames) && liveGames.length > 0) {
-      return liveGames;
+    let url = `${PHP_API_BASE_URL}?type=games&page=${page}&limit=${limit}&category=${encodeURIComponent(category)}&search=${encodeURIComponent(search)}&rating=${rating}&sort=${encodeURIComponent(sort)}`;
+    
+    const response = await fetch(url);
+    if (response.ok) {
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        return data.map((d) => ({
+          ...d,
+          iconUrl: d.iconUrl || generateGameIcon(d.title),
+        }));
+      }
     }
   } catch (e) {
-    console.warn('Failed to fetch live Firebase games:', e);
+    console.warn('Fetch games error:', e);
   }
   return [];
 }
 
 /**
- * Dynamically fetches all categories and sub-categories from Firebase Firestore,
+ * Fetch Featured Games (Server-Side)
+ */
+export async function getFeaturedGames() {
+  try {
+    const response = await fetch(`${PHP_API_BASE_URL}?type=featured_games`);
+    if (response.ok) {
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        return data.map((d) => ({
+          ...d,
+          iconUrl: d.iconUrl || generateGameIcon(d.title),
+        }));
+      }
+    }
+  } catch (e) {
+    console.warn('Fetch featured games error:', e);
+  }
+  return [];
+}
+
+/**
+ * Fetch Popular Games (Server-Side)
+ */
+export async function getPopularGames() {
+  try {
+    const response = await fetch(`${PHP_API_BASE_URL}?type=popular_games`);
+    if (response.ok) {
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        return data.map((d) => ({
+          ...d,
+          iconUrl: d.iconUrl || generateGameIcon(d.title),
+        }));
+      }
+    }
+  } catch (e) {
+    console.warn('Fetch popular games error:', e);
+  }
+  return [];
+}
+
+/**
+ * Dynamically fetches all categories from Firebase Firestore,
  * with local fallback to master dataset if network is offline.
  */
 export async function getLiveCategoriesList() {
@@ -49,28 +101,5 @@ export function getAvailableCategoriesForGames(gamesList = [], allCategories = [
     const catTitleLower = cat.title.trim().toLowerCase();
     const catIdLower = cat.id ? cat.id.trim().toLowerCase() : '';
     return activeCategorySet.has(catTitleLower) || activeCategorySet.has(catIdLower);
-  });
-}
-
-/**
- * Filters sub-categories of a category to only include sub-categories present in gamesList.
- */
-export function getAvailableSubCategoriesForGames(gamesList = [], subCategories = []) {
-  if (!Array.isArray(gamesList) || gamesList.length === 0 || !Array.isArray(subCategories)) {
-    return subCategories;
-  }
-
-  const activeSubSet = new Set();
-  gamesList.forEach((g) => {
-    if (g.subCategory) activeSubSet.add(g.subCategory.trim().toLowerCase());
-    if (g.tags && Array.isArray(g.tags)) {
-      g.tags.forEach((t) => activeSubSet.add(t.trim().toLowerCase()));
-    }
-  });
-
-  return subCategories.filter((sub) => {
-    if (!sub || !sub.title) return false;
-    const subTitleLower = sub.title.trim().toLowerCase();
-    return activeSubSet.has(subTitleLower);
   });
 }

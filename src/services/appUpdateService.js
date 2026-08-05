@@ -1,11 +1,11 @@
 import { Linking } from 'react-native';
 import Constants from 'expo-constants';
 import { db, doc, getDoc, setDoc } from '../config/firebase';
+import AppConfig from '../config/AppConfig';
 
 const APP_PACKAGE = Constants.expoConfig?.android?.package || 'com.winplaybox.gamearcade';
 const CURRENT_VERSION = Constants.expoConfig?.version || '1.0.0';
 const CURRENT_VERSION_CODE = Constants.expoConfig?.android?.versionCode || 1;
-const PLAY_STORE_URL = `https://play.google.com/store/apps/details?id=${APP_PACKAGE}`;
 
 /**
  * Solution A: Checks remote Firestore version info to determine if a Google Play Store update is required
@@ -26,7 +26,7 @@ export async function checkForAppUpdate() {
         latestVersionCode: CURRENT_VERSION_CODE,
         minRequiredVersionCode: CURRENT_VERSION_CODE,
         releaseNotes: 'A newer version of Game Arcade is available on Google Play with performance improvements and new games.',
-        playStoreUrl: PLAY_STORE_URL,
+        playStoreUrl: AppConfig.playStoreUrl,
         updatedAt: new Date().toISOString(),
       };
       await setDoc(versionRef, remoteData);
@@ -48,7 +48,7 @@ export async function checkForAppUpdate() {
       latestVersionCode,
       minRequiredVersionCode,
       releaseNotes: remoteData.releaseNotes || 'A newer version of Game Arcade is available with performance improvements and new games.',
-      playStoreUrl: remoteData.playStoreUrl || PLAY_STORE_URL,
+      playStoreUrl: remoteData.playStoreUrl || AppConfig.playStoreUrl,
     };
   } catch (error) {
     console.warn('App update check error:', error);
@@ -66,7 +66,7 @@ export async function checkForAppUpdate() {
  * Launches the official Google Play Store app page directly
  */
 export async function openPlayStorePage(customUrl = null) {
-  const targetUrl = customUrl || PLAY_STORE_URL;
+  const targetUrl = customUrl || AppConfig.playStoreUrl;
   try {
     const supported = await Linking.canOpenURL(targetUrl);
     if (supported) {
@@ -75,6 +75,6 @@ export async function openPlayStorePage(customUrl = null) {
       await Linking.openURL(`market://details?id=${APP_PACKAGE}`);
     }
   } catch (e) {
-    await Linking.openURL(PLAY_STORE_URL).catch(() => {});
+    await Linking.openURL(AppConfig.playStoreUrl).catch(() => {});
   }
 }

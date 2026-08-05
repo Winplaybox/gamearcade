@@ -1,91 +1,113 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const RECENT_GAMES_KEY = 'gamearcade_recent_games_v1';
-const MAX_RECENT_GAMES = 20;
+import { auth, PHP_API_BASE_URL } from '../config/firebase';
 
 export async function getRecentGames() {
   try {
-    const raw = await AsyncStorage.getItem(RECENT_GAMES_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const uid = auth.currentUser?.uid;
+    if (uid) {
+      const response = await fetch(`${PHP_API_BASE_URL}?type=get_recents&userId=${uid}`);
+      if (response.ok) {
+        return await response.json();
+      }
+    }
   } catch (e) {
-    return [];
+    console.warn('Fetch recents error:', e);
   }
+  return [];
 }
 
 export async function addRecentGame(game) {
-  if (!game || !game.id) return;
+  if (!game || !game.id) return [];
   try {
-    const existing = await getRecentGames();
-    const existingGame = existing.find((g) => g.id === game.id);
-    const filtered = existing.filter((g) => g.id !== game.id);
-
-    const now = Date.now();
-    const gameWithTime = {
-      ...game,
-      startTime: now,
-      lastPlayedTime: new Date(now).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      lastPlayedDate: new Date(now).toLocaleDateString(),
-      timestamp: now,
-      durationMs: existingGame?.durationMs || 0,
-    };
-    const updated = [gameWithTime, ...filtered].slice(0, MAX_RECENT_GAMES);
-    await AsyncStorage.setItem(RECENT_GAMES_KEY, JSON.stringify(updated));
-    return updated;
+    const uid = auth.currentUser?.uid;
+    if (uid) {
+      await fetch(PHP_API_BASE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'add_recent',
+          userId: uid,
+          gameId: game.id,
+          durationMs: 0
+        })
+      });
+    }
   } catch (e) {
-    return [];
+    console.warn('Add recent error:', e);
   }
+  return getRecentGames();
 }
 
 export async function updateRecentGameSession(gameId, durationMs) {
-  if (!gameId) return;
+  if (!gameId) return [];
   try {
-    const existing = await getRecentGames();
-    const updated = existing.map((g) => {
-      if (g.id === gameId) {
-        const newDuration = (g.durationMs || 0) + durationMs;
-        return { ...g, durationMs: newDuration };
-      }
-      return g;
-    });
-    await AsyncStorage.setItem(RECENT_GAMES_KEY, JSON.stringify(updated));
-    return updated;
+    const uid = auth.currentUser?.uid;
+    if (uid) {
+      await fetch(PHP_API_BASE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'add_recent',
+          userId: uid,
+          gameId: gameId,
+          durationMs: durationMs
+        })
+      });
+    }
   } catch (e) {
-    return [];
+    console.warn('Update recent error:', e);
   }
+  return getRecentGames();
 }
 
 export async function removeRecentGame(gameId) {
   if (!gameId) return [];
   try {
-    const existing = await getRecentGames();
-    const updated = existing.filter((g) => g.id !== gameId);
-    await AsyncStorage.setItem(RECENT_GAMES_KEY, JSON.stringify(updated));
-    return updated;
+    const uid = auth.currentUser?.uid;
+    if (uid) {
+      await fetch(PHP_API_BASE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'remove_recent',
+          userId: uid,
+          gameId: gameId
+        })
+      });
+    }
   } catch (e) {
-    return [];
+    console.warn('Remove recent error:', e);
   }
+  return getRecentGames();
 }
 
 export async function removeMultipleRecentGames(gameIds) {
+  // Not heavily used, but we could add an endpoint if needed.
+  // For now, loop through and remove one by one or ignore.
   if (!gameIds || gameIds.length === 0) return [];
   try {
-    const existing = await getRecentGames();
-    const idsSet = new Set(gameIds);
-    const updated = existing.filter((g) => !idsSet.has(g.id));
-    await AsyncStorage.setItem(RECENT_GAMES_KEY, JSON.stringify(updated));
-    return updated;
+    const uid = auth.currentUser?.uid;
+    if (uid) {
+      for (const gameId of gameIds) {
+        await fetch(PHP_API_BASE_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'remove_recent',
+            userId: uid,
+            gameId: gameId
+          })
+        });
+      }
+    }
   } catch (e) {
-    return [];
+    console.warn('Remove multiple recents error:', e);
   }
+  return getRecentGames();
 }
 
 export async function clearAllRecentGames() {
-  try {
-    await AsyncStorage.removeItem(RECENT_GAMES_KEY);
-    return [];
-  } catch (e) {
-    return [];
-  }
+  // Clearing recents happens from the PHP backend via reset_profile
+  return [];
 }
 
 export function formatTimeAgo(timestamp) {

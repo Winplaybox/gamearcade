@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import SafeIcon from '../SafeIcon';
 import ProgressBar from './ProgressBar';
 import { useTranslation } from '../../i18n/i18n';
+import { useTheme } from '../../theme/ThemeContext';
 
 const LOADING_STATUS_STRINGS = [
   'STATUS · Getting things ready',
@@ -17,7 +18,7 @@ export default function GameLoadingOverlay({
   statusIndex = 0,
 }) {
   const { t } = useTranslation();
-
+  const { theme } = useTheme();
   return (
     <View style={styles.loadingOverlay}>
       {/* Centered App Icon with Glow Frame */}
@@ -27,7 +28,7 @@ export default function GameLoadingOverlay({
             <Image source={{ uri: game.iconUrl }} style={styles.loadingGameIcon} />
           ) : (
             <View style={styles.loadingIconPlaceholder}>
-              <SafeIcon name="game-controller" size={44} color="#E94560" />
+              <SafeIcon name="game-controller" size={44} color={theme.primary} />
             </View>
           )}
         </View>
@@ -45,7 +46,7 @@ export default function GameLoadingOverlay({
           <Text style={styles.progressPercentText}>{Math.round(loadProgress)}%</Text>
         </View>
 
-        <ProgressBar progress={loadProgress} height={6} fillColor="#E94560" />
+        <ProgressBar progress={loadProgress} height={6} fillColor={theme.primary} />
       </View>
 
       {/* Bottom Rotating Status Line */}
@@ -56,89 +57,4 @@ export default function GameLoadingOverlay({
   );
 }
 
-const styles = StyleSheet.create({
-  loadingOverlay: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: '#1D1011',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 999,
-    paddingHorizontal: 28,
-  },
-  iconCenterWrapper: {
-    alignItems: 'center',
-    marginBottom: 36,
-    justifyContent: 'center',
-    display: 'flex',
-  },
-  iconGlowFrame: {
-    borderRadius: 24,
-    shadowColor: '#E94560',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.35,
-    shadowRadius: 16,
-    elevation: 10,
-    marginBottom: 16,
-  },
-  loadingGameIcon: {
-    width: 96,
-    height: 96,
-    borderRadius: 24,
-  },
-  loadingIconPlaceholder: {
-    width: 96,
-    height: 96,
-    borderRadius: 24,
-    backgroundColor: '#261819',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingTitleText: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#F7DCDD',
-    textAlign: 'center',
-    letterSpacing: -0.3,
-  },
-  loadingCategoryText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#E2BEBF',
-    letterSpacing: 1.2,
-    textTransform: 'uppercase',
-    marginTop: 4,
-  },
-  progressContainer: {
-    width: '100%',
-    paddingHorizontal: 8,
-  },
-  progressHeaderRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  progressLabelText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#E2BEBF',
-  },
-  progressPercentText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#E94560',
-  },
-  bottomStatusText: {
-    position: 'absolute',
-    bottom: 36,
-    fontSize: 11,
-    fontWeight: '600',
-    color: 'rgba(226, 190, 191, 0.6)',
-    letterSpacing: 0.8,
-    textAlign: 'center',
-  },
-});
+import styles from '../../styles/GameLoadingOverlay.styles.js';

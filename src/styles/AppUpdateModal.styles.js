@@ -1,0 +1,88 @@
+import { StyleSheet } from 'react-native';
+
+export default StyleSheet.create({
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.72)',
+    justifyContent: 'flex-end',
+  },
+  sheetContainer: {
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    borderWidth: 1,
+    paddingHorizontal: 24,
+    paddingTop: 12,
+    paddingBottom: 36,
+    alignItems: 'center',
+    width: '100%',
+  },
+  handleBar: {
+    width: 44,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.22)',
+    marginBottom: 28,
+  },
+  appIconBox: {
+    width: 80,
+    height: 80,
+    borderRadius: 22,
+    backgroundColor: '#261819',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.12)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+    overflow: 'hidden',
+  },
+  appIconImage: {
+    width: 58,
+    height: 58,
+    borderRadius: 12,
+  },
+  titleText: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#ffffff',
+    marginBottom: 10,
+    textAlign: 'center',
+    letterSpacing: -0.3,
+  },
+  descriptionText: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.65)',
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 32,
+    paddingHorizontal: 12,
+    fontWeight: '400',
+  },
+  updateNowBtn: {
+    width: '100%',
+    height: 54,
+    borderRadius: 27,
+    backgroundColor: '#FF6B7A',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnContentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  updateNowBtnText: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#210B0E',
+  },
+  laterBtn: {
+    marginTop: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+  },
+  laterBtnText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: 'rgba(255, 255, 255, 0.45)',
+  },
+});

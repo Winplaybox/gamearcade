@@ -17,3 +17,13 @@
 - Whenever an explicit release build is requested by the user:
   - Create and push a semantic version tag starting with `v` (e.g. `v1.0.0` matching `app.json` version).
   - Format release notes clearly with feature highlights, performance improvements, and multi-language Play Store XML tags.
+
+## Expo Documentation & Implementation Rule
+- ALWAYS search for and follow the official Expo documentation before implementing new features, modules, or making architectural changes (e.g., `expo-store-review`, `expo-sqlite`, `expo-blur`).
+- For modern Expo bare workflows (SDK 50+), rely on Expo Autolinking. If a module requires native setup, run `npx install-expo-modules@latest` to auto-configure `MainActivity.kt` / `MainApplication.kt` rather than editing them manually.
+- When installing ANY new Expo module that includes native code (like `expo-blur`, `expo-sqlite`, or `expo-store-review`), ALWAYS remind the user to rebuild the native app using `npx expo run:android` because JavaScript hot-reloading will not inject new native dependencies.
+
+## UI Theme Rule
+- NEVER use hardcoded hex colors (e.g. #FFFFFF, #E94560) for styling components.
+- ALWAYS use the theme tokens provided by ThemeContext (e.g., theme.text, theme.primary, theme.bg).
+- This ensures a single source of truth for all colors and enables dynamic theming (Light/Dark mode) in the future.

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -6,13 +6,14 @@ import {
   StyleSheet,
   Modal,
   TouchableWithoutFeedback,
-  Alert,
   StatusBar,
   TextInput,
   PanResponder,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import AnimatedTouch from '../components/AnimatedTouch';
 import AppLayout from '../components/AppLayout';
 import SafeIcon from '../components/SafeIcon';
 import GameLoadingOverlay from '../components/ui/GameLoadingOverlay';
@@ -23,28 +24,29 @@ import { showBackNavInterstitial } from '../ads/AdManager';
 import { isGameFavorite, toggleFavoriteGame } from '../storage/favoritesStorage';
 import { addRecentGame, updateRecentGameSession } from '../storage/recentGamesStorage';
 import { getUserRatings, saveGameRating } from '../storage/ratingsStorage';
-import { collection, addDoc, serverTimestamp } from '@firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, getDoc } from '@firebase/firestore';
 import { db } from '../config/firebase';
 
-const REPORT_CATEGORIES = [
-  'Game Not Loading',
-  'Blank / Black Screen',
-  'Controls Not Working',
-  'Other Technical Issue',
-];
-
-const RATING_LABELS = {
-  1: 'Poor 😞',
-  2: 'Fair 🙂',
-  3: 'Good 😊',
-  4: 'Very Good! 😁',
-  5: 'Excellent! Loved it! 🔥',
+const getRatingLabel = (stars, t) => {
+  switch (stars) {
+    case 1: return t('rating_1') || 'Poor 😞';
+    case 2: return t('rating_2') || 'Fair 🙂';
+    case 3: return t('rating_3') || 'Good 😊';
+    case 4: return t('rating_4') || 'Very Good! 😁';
+    case 5: return t('rating_5') || 'Excellent! Loved it! 🔥';
+    default: return '';
+  }
 };
 
 export default function GameScreen({ route, navigation }) {
-  const { game } = route.params;
+  const { showAlert } = useCustomAlert();
+  // We might receive the full `game` object (normal navigation) or just `gameId` (deep linking)
+  const [game, setGame] = useState(route.params.game || null);
+  const deepLinkGameId = route.params.gameId;
+
   const { t } = useTranslation();
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
 
   const [loading, setLoading] = useState(true);
   const [loadProgress, setLoadProgress] = useState(15);
@@ -57,13 +59,7 @@ export default function GameScreen({ route, navigation }) {
 
   // Menu & Modals State
   const [menuModalVisible, setMenuModalVisible] = useState(false);
-  const [reportModalVisible, setReportModalVisible] = useState(false);
   const [ratingModalVisible, setRatingModalVisible] = useState(false);
-
-  // Report Form State
-  const [selectedReportCategory, setSelectedReportCategory] = useState(REPORT_CATEGORIES[0]);
-  const [reportNotes, setReportNotes] = useState('');
-  const [isSubmittingReport, setIsSubmittingReport] = useState(false);
 
   // Rating State
   const [selectedStars, setSelectedStars] = useState(5);
@@ -72,7 +68,13 @@ export default function GameScreen({ route, navigation }) {
   const [isSubmittingRating, setIsSubmittingRating] = useState(false);
 
   const [isFav, setIsFav] = useState(false);
+  // Orientation: 'auto' | 'portrait' | 'landscape'
+  const [orientation, setOrientation] = useState('auto');
   const webviewRef = useRef(null);
+  const isInitialLoadRef = useRef(true);
+
+  // Stable Memoized WebView Source — prevents prop reference changes from reloading webview
+  const webViewSource = useMemo(() => ({ uri: game?.gameUrl }), [game?.gameUrl]);
 
   // Track session start time and update duration on unmount
   const sessionStartTimeRef = useRef(Date.now());
@@ -122,11 +124,30 @@ export default function GameScreen({ route, navigation }) {
       if (game?.id && elapsedMs > 2000) {
         updateRecentGameSession(game.id, elapsedMs).catch(() => { });
       }
-      ScreenOrientation.unlockAsync().catch(() => { });
+      // Always restore portrait + unlock when leaving GameScreen
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP).catch(() => { });
       StatusBar.setHidden(false);
       if (hideControlsTimerRef.current) clearTimeout(hideControlsTimerRef.current);
     };
   }, [game]);
+
+  // Deep Linking fetch logic
+  useEffect(() => {
+    if (!game && deepLinkGameId) {
+      (async () => {
+        try {
+          const snap = await getDoc(doc(db, 'games', deepLinkGameId));
+          if (snap.exists()) {
+            setGame({ id: snap.id, ...snap.data() });
+          } else {
+            showAlert(t('error') || 'Not Found', t('game_not_found') || 'The requested game could not be found.', [{ text: 'OK', onPress: () => navigation.goBack() }]);
+          }
+        } catch (e) {
+          showAlert(t('error') || 'Error', t('failed_load_game') || 'Failed to load game.', [{ text: 'OK', onPress: () => navigation.goBack() }]);
+        }
+      })();
+    }
+  }, [game, deepLinkGameId]);
 
   useEffect(() => {
     (async () => {
@@ -158,11 +179,12 @@ export default function GameScreen({ route, navigation }) {
   }, [loading]);
 
   const handleBack = () => {
-    showBackNavInterstitial(() => navigation.goBack());
+    showBackNavInterstitial(() => navigation.goBack(), 'GameScreen', 'Exit Game');
   };
 
   const handleReload = () => {
     setMenuModalVisible(false);
+    isInitialLoadRef.current = true;
     setLoading(true);
     setLoadProgress(15);
     setStatusIndex(0);
@@ -179,42 +201,42 @@ export default function GameScreen({ route, navigation }) {
 
   const handleOpenReportModal = () => {
     setMenuModalVisible(false);
-    setReportModalVisible(true);
+    navigation.navigate('ReportIssue', { game });
   };
+
+  // Cycle: auto → landscape → portrait → auto
+  const handleRotate = async () => {
+    setMenuModalVisible(false);
+    try {
+      if (orientation === 'auto') {
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+        setOrientation('landscape');
+      } else if (orientation === 'landscape') {
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+        setOrientation('portrait');
+      } else {
+        await ScreenOrientation.unlockAsync();
+        setOrientation('auto');
+      }
+    } catch (err) {
+      console.warn('ScreenOrientation rotate error:', err);
+    }
+  };
+
+  // Icon & label based on current orientation state
+  const rotateIcon = orientation === 'landscape' ? 'phone-landscape-outline'
+    : orientation === 'portrait' ? 'phone-portrait-outline'
+    : 'phone-landscape-outline';
+  const rotateLabel = orientation === 'landscape' ? (t('switch_portrait') || 'Switch to Portrait')
+    : orientation === 'portrait' ? (t('auto_rotate') || 'Auto Rotate')
+    : (t('switch_landscape') || 'Switch to Landscape');
 
   const handleOpenRatingModal = () => {
     setMenuModalVisible(false);
     setRatingModalVisible(true);
   };
 
-  const handleSubmitReport = async () => {
-    if (!game?.id) return;
-    setIsSubmittingReport(true);
-    try {
-      if (db) {
-        await addDoc(collection(db, 'game_reports'), {
-          gameId: game.id,
-          gameTitle: game.title || 'Unknown',
-          gameUrl: game.url || '',
-          category: selectedReportCategory,
-          notes: reportNotes.trim(),
-          createdAt: serverTimestamp(),
-          platform: 'android',
-        });
-      }
-    } catch (e) {
-      console.warn('Firestore report submit error:', e);
-    } finally {
-      setIsSubmittingReport(false);
-      setReportModalVisible(false);
-      setReportNotes('');
-      Alert.alert(
-        t('report_submitted_title'),
-        t('report_submitted_msg'),
-        [{ text: 'OK' }]
-      );
-    }
-  };
+
 
   const handleSubmitRating = async () => {
     if (!game?.id) return;
@@ -227,9 +249,9 @@ export default function GameScreen({ route, navigation }) {
     } finally {
       setIsSubmittingRating(false);
       setRatingModalVisible(false);
-      Alert.alert(
-        'Thank You!',
-        t('rating_submitted_msg'),
+      showAlert(
+        t('thank_you') || 'Thank You!',
+        t('rating_submitted_msg') || 'Your rating has been submitted successfully.',
         [{ text: 'OK' }]
       );
     }
@@ -264,69 +286,92 @@ export default function GameScreen({ route, navigation }) {
     </View>
   );
 
-  const mainContent = (
-    <View style={styles.container} {...(isFullscreen ? panResponder.panHandlers : {})}>
-      {/* Modular Full-bleed Game Loading Overlay */}
-      {loading && (
-        <GameLoadingOverlay
-          game={game}
-          loadProgress={loadProgress}
-          statusIndex={statusIndex}
+  // Single stable return — WebView stays in one position in the tree, never remounts.
+  // Fullscreen is achieved by an absolutely-positioned transparent overlay covering the screen.
+  return (
+    <AppLayout
+      title={game?.title || 'Game Player'}
+      showBack={true}
+      onBack={handleBack}
+      rightAction={rightAction}
+      scrollable={false}
+    >
+      {/* Game WebView Container — 100% constant position in React tree */}
+      <View style={[styles.container, isFullscreen && styles.fullscreenContainer, { backgroundColor: theme.bg }]}>
+        <WebView
+          ref={webviewRef}
+          source={webViewSource}
+          style={[styles.webview, { backgroundColor: theme.bg }]}
+          onLoadStart={() => {
+            if (isInitialLoadRef.current) {
+              setLoading(true);
+            }
+          }}
+          onLoadProgress={({ nativeEvent }) => {
+            if (isInitialLoadRef.current) {
+              const p = Math.max(15, nativeEvent.progress * 100);
+              setLoadProgress(p);
+            }
+          }}
+          onLoadEnd={() => {
+            if (isInitialLoadRef.current) {
+              setLoadProgress(100);
+              setTimeout(() => {
+                setLoading(false);
+                isInitialLoadRef.current = false;
+              }, 250);
+            }
+          }}
+          allowsInlineMediaPlayback={true}
+          mediaPlaybackRequiresUserAction={false}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          scalesPageToFit={true}
         />
-      )}
 
-      {/* Real Game WebView */}
-      <WebView
-        ref={webviewRef}
-        source={{ uri: game?.url }}
-        style={styles.webview}
-        onLoadStart={() => setLoading(true)}
-        onLoadProgress={({ nativeEvent }) => {
-          const p = Math.max(15, nativeEvent.progress * 100);
-          setLoadProgress(p);
-        }}
-        onLoadEnd={() => {
-          setLoadProgress(100);
-          setTimeout(() => setLoading(false), 250);
-        }}
-        allowsInlineMediaPlayback={true}
-        mediaPlaybackRequiresUserAction={false}
-        javaScriptEnabled={true}
-        domStorageEnabled={true}
-        scalesPageToFit={true}
-      />
+        {loading && (
+          <GameLoadingOverlay
+            game={game}
+            loadProgress={loadProgress}
+            statusIndex={statusIndex}
+          />
+        )}
+      </View>
 
-      {/* Fullscreen Touch Area to trigger reveal on tap/swipe anywhere */}
-      {isFullscreen && !showFullscreenControls && (
-        <TouchableOpacity
-          style={styles.fullscreenGestureOverlay}
-          onPress={triggerShowFullscreenControls}
-          activeOpacity={1}
-        />
-      )}
-
-      {/* Auto-Hiding Controls in Fullscreen Mode */}
-      {isFullscreen && showFullscreenControls && (
-        <>
-          {/* Top Glass Exit Back Button */}
-          <TouchableOpacity
-            style={styles.floatingTopExitBtn}
-            onPress={toggleFullscreen}
-            activeOpacity={0.75}
-          >
-            <SafeIcon name="arrow-back" size={20} color="#ffffff" />
-          </TouchableOpacity>
-
-          {/* Bottom Floating Exit Fullscreen Button */}
-          <TouchableOpacity
-            style={styles.floatingExitFullscreenBtn}
-            onPress={toggleFullscreen}
-            activeOpacity={0.75}
-          >
-            <SafeIcon name="contract" size={20} color="#ffffff" style={{ marginRight: 6 }} />
-            <Text style={styles.floatingExitText}>{t('exit_fullscreen')}</Text>
-          </TouchableOpacity>
-        </>
+      {/* Fullscreen Overlay — covers entire screen (including AppLayout header) via absoluteFill.
+          Only mounts/unmounts this lightweight View, never the WebView. */}
+      {isFullscreen && (
+        <View style={styles.fullscreenOverlay} {...panResponder.panHandlers}>
+          {!showFullscreenControls && (
+            <AnimatedTouch
+              style={StyleSheet.absoluteFillObject}
+              onPress={triggerShowFullscreenControls}
+            />
+          )}
+          {showFullscreenControls && (
+            <>
+              <AnimatedTouch
+                style={[
+                  styles.floatingTopExitBtn,
+                  { top: Math.max(insets.top + 14, 44) }
+                ]}
+                onPress={toggleFullscreen}
+              >
+                <SafeIcon name="arrow-back" size={20} color={theme.onPrimary} />
+              </AnimatedTouch>
+              <AnimatedTouch
+                style={[
+                  styles.floatingExitFullscreenBtn,
+                  { bottom: Math.max(insets.bottom + 18, 36) }
+                ]}
+                onPress={toggleFullscreen}
+              >
+                <SafeIcon name="contract" size={20} color={theme.onPrimary} style={{ marginRight: 6 }} />
+                <Text style={[styles.floatingExitText, { color: theme.onPrimary }]}>{t('exit_fullscreen')}</Text>
+              </AnimatedTouch>
+            </>
+          )}
+        </View>
       )}
 
       {/* Menu Sheet Modal */}
@@ -341,7 +386,7 @@ export default function GameScreen({ route, navigation }) {
             <TouchableWithoutFeedback>
               <View style={[styles.menuSheet, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
                 {/* Add to Favorites */}
-                <TouchableOpacity
+                <AnimatedTouch
                   style={[styles.menuSheetRow, { borderBottomColor: theme.border }]}
                   onPress={handleToggleFavorite}
                 >
@@ -354,10 +399,10 @@ export default function GameScreen({ route, navigation }) {
                   <Text style={[styles.menuSheetLabel, { color: theme.text }]}>
                     {isFav ? t('remove_from_favorites') : t('add_to_favorites')}
                   </Text>
-                </TouchableOpacity>
+                </AnimatedTouch>
 
-                {/* Rate / Update Rating Option */}
-                <TouchableOpacity
+                {/* Rate / Update Rating */}
+                <AnimatedTouch
                   style={[styles.menuSheetRow, { borderBottomColor: theme.border }]}
                   onPress={handleOpenRatingModal}
                 >
@@ -370,32 +415,51 @@ export default function GameScreen({ route, navigation }) {
                   <Text style={[styles.menuSheetLabel, { color: theme.text }]}>
                     {userExistingRating ? `${t('your_rating')}: ★ ${userExistingRating}` : t('rate_game')}
                   </Text>
-                </TouchableOpacity>
+                </AnimatedTouch>
+
+                {/* Rotate / Orientation */}
+                <AnimatedTouch
+                  style={[styles.menuSheetRow, { borderBottomColor: theme.border }]}
+                  onPress={handleRotate}
+                >
+                  <SafeIcon name={rotateIcon} size={20} color={theme.text} style={{ marginRight: 14 }} />
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.menuSheetLabel, { color: theme.text }]}>{rotateLabel}</Text>
+                    <Text style={{ fontSize: 11, color: theme.subText, marginTop: 1 }}>
+                      {t('current') || 'Current:'} {orientation === 'auto' ? (t('auto') || 'Auto') : orientation === 'landscape' ? (t('landscape') || 'Landscape') : (t('portrait') || 'Portrait')}
+                    </Text>
+                  </View>
+                  {orientation !== 'auto' && (
+                    <View style={{ backgroundColor: 'rgba(233,69,96,0.15)', borderRadius: 8, paddingHorizontal: 7, paddingVertical: 2 }}>
+                      <Text style={{ fontSize: 10, color: '#E94560', fontWeight: '700' }}>{t('locked')}</Text>
+                    </View>
+                  )}
+                </AnimatedTouch>
 
                 {/* Reload Game */}
-                <TouchableOpacity
+                <AnimatedTouch
                   style={[styles.menuSheetRow, { borderBottomColor: theme.border }]}
                   onPress={handleReload}
                 >
                   <SafeIcon name="refresh-outline" size={20} color={theme.text} style={{ marginRight: 14 }} />
                   <Text style={[styles.menuSheetLabel, { color: theme.text }]}>{t('reload_game')}</Text>
-                </TouchableOpacity>
+                </AnimatedTouch>
 
                 {/* Report Problem */}
-                <TouchableOpacity
+                <AnimatedTouch
                   style={styles.menuSheetRow}
                   onPress={handleOpenReportModal}
                 >
                   <SafeIcon name="warning-outline" size={20} color="#E94560" style={{ marginRight: 14 }} />
                   <Text style={[styles.menuSheetLabel, { color: '#E94560' }]}>{t('report_problem')}</Text>
-                </TouchableOpacity>
+                </AnimatedTouch>
               </View>
             </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>
       </Modal>
 
-      {/* Interactive 5-Star Game Rating Modal */}
+      {/* Rating Modal */}
       <Modal
         visible={ratingModalVisible}
         transparent
@@ -410,23 +474,19 @@ export default function GameScreen({ route, navigation }) {
                   <Text style={[styles.reportTitle, { color: theme.text }]}>
                     {userExistingRating ? t('update_rating_title') : t('rate_game_title')}
                   </Text>
-                  <TouchableOpacity onPress={() => setRatingModalVisible(false)}>
+                  <AnimatedTouch onPress={() => setRatingModalVisible(false)}>
                     <SafeIcon name="close" size={22} color={theme.subText} />
-                  </TouchableOpacity>
+                  </AnimatedTouch>
                 </View>
-
                 <Text style={[styles.ratingGameTitle, { color: theme.text }]}>{game?.title}</Text>
                 <Text style={[styles.reportSub, { color: theme.subText }]}>
-                  {userExistingRating ? 'Edit your score or review:' : 'How would you rate this game?'}
+                  {userExistingRating ? (t('edit_rating_sub') || 'Edit your score or review:') : (t('rate_game_sub') || 'How would you rate this game?')}
                 </Text>
-
-                {/* Interactive 5-Star Row */}
                 <View style={styles.starRow}>
                   {[1, 2, 3, 4, 5].map((starNum) => (
-                    <TouchableOpacity
+                    <AnimatedTouch
                       key={starNum}
                       onPress={() => setSelectedStars(starNum)}
-                      activeOpacity={0.7}
                       style={{ padding: 6 }}
                     >
                       <SafeIcon
@@ -434,15 +494,12 @@ export default function GameScreen({ route, navigation }) {
                         size={36}
                         color={starNum <= selectedStars ? '#FFC107' : theme.subText}
                       />
-                    </TouchableOpacity>
+                    </AnimatedTouch>
                   ))}
                 </View>
-
                 <Text style={[styles.starRatingHint, { color: theme.primary }]}>
-                  {RATING_LABELS[selectedStars]}
+                  {getRatingLabel(selectedStars, t)}
                 </Text>
-
-                {/* Review Text Input */}
                 <TextInput
                   style={[styles.notesInput, { backgroundColor: theme.subBg, color: theme.text, borderColor: theme.border }]}
                   placeholder={t('write_review_placeholder')}
@@ -452,8 +509,6 @@ export default function GameScreen({ route, navigation }) {
                   value={ratingReviewText}
                   onChangeText={setRatingReviewText}
                 />
-
-                {/* Modular Primary Submit Action Button */}
                 <PrimaryButton
                   title={userExistingRating ? t('update_rating_title') : t('submit_rating')}
                   onPress={handleSubmitRating}
@@ -467,262 +522,9 @@ export default function GameScreen({ route, navigation }) {
         </TouchableWithoutFeedback>
       </Modal>
 
-      {/* Functional Interactive Report Problem Modal */}
-      <Modal
-        visible={reportModalVisible}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setReportModalVisible(false)}
-      >
-        <TouchableWithoutFeedback onPress={() => setReportModalVisible(false)}>
-          <View style={styles.modalCenterOverlay}>
-            <TouchableWithoutFeedback>
-              <View style={[styles.reportCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
-                <View style={styles.reportHeader}>
-                  <Text style={[styles.reportTitle, { color: theme.text }]}>{t('report_a_problem')}</Text>
-                  <TouchableOpacity onPress={() => setReportModalVisible(false)}>
-                    <SafeIcon name="close" size={22} color={theme.subText} />
-                  </TouchableOpacity>
-                </View>
-
-                <Text style={[styles.reportSub, { color: theme.subText }]}>
-                  {t('report_issue_with')} "{game?.title}":
-                </Text>
-
-                {/* Category Radio Pills */}
-                {REPORT_CATEGORIES.map((cat) => {
-                  const isSelected = cat === selectedReportCategory;
-                  return (
-                    <TouchableOpacity
-                      key={cat}
-                      style={[
-                        styles.radioRow,
-                        {
-                          backgroundColor: isSelected ? 'rgba(233,69,96,0.12)' : theme.subBg,
-                          borderColor: isSelected ? theme.primary : theme.border,
-                        },
-                      ]}
-                      onPress={() => setSelectedReportCategory(cat)}
-                      activeOpacity={0.8}
-                    >
-                      <SafeIcon
-                        name={isSelected ? 'radio-button-on' : 'radio-button-off'}
-                        size={18}
-                        color={isSelected ? theme.primary : theme.subText}
-                        style={{ marginRight: 10 }}
-                      />
-                      <Text style={[styles.radioLabel, { color: isSelected ? theme.text : theme.subText }]}>
-                        {cat}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
-
-                {/* Notes Input */}
-                <TextInput
-                  style={[styles.notesInput, { backgroundColor: theme.subBg, color: theme.text, borderColor: theme.border }]}
-                  placeholder={t('describe_issue_placeholder')}
-                  placeholderTextColor={theme.subText}
-                  multiline
-                  numberOfLines={3}
-                  value={reportNotes}
-                  onChangeText={setReportNotes}
-                />
-
-                {/* Modular Primary Submit Action Button */}
-                <PrimaryButton
-                  title={t('submit_report')}
-                  onPress={handleSubmitReport}
-                  loading={isSubmittingReport}
-                  height={46}
-                  borderRadius={14}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-    </View>
-  );
-
-  if (isFullscreen) {
-    return <View style={styles.fullscreenRoot}>{mainContent}</View>;
-  }
-
-  return (
-    <AppLayout
-      title={game?.title || 'Game Player'}
-      showBack={true}
-      onBack={handleBack}
-      rightAction={loadProgress ? null : rightAction}
-      scrollable={false}
-    >
-      {mainContent}
     </AppLayout>
   );
 }
 
-const styles = StyleSheet.create({
-  fullscreenRoot: {
-    flex: 1,
-    backgroundColor: '#1D1011',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#1D1011',
-    position: 'relative',
-  },
-  webview: {
-    flex: 1,
-    backgroundColor: '#1D1011',
-  },
-  headerRightRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  headerBtn: {
-    padding: 6,
-  },
-  fullscreenGestureOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 60,
-    zIndex: 90,
-  },
-  floatingTopExitBtn: {
-    position: 'absolute',
-    top: 24,
-    left: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 99,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
-  },
-  floatingExitFullscreenBtn: {
-    position: 'absolute',
-    bottom: 24,
-    alignSelf: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    paddingHorizontal: 18,
-    paddingVertical: 10,
-    borderRadius: 22,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 99,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.25)',
-  },
-  floatingExitText: {
-    color: '#ffffff',
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    justifyContent: 'flex-end',
-  },
-  menuSheet: {
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    borderTopWidth: 1,
-    padding: 16,
-    paddingBottom: 28,
-  },
-  menuSheetRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 14,
-    paddingHorizontal: 8,
-    borderBottomWidth: 1,
-  },
-  menuSheetLabel: {
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  modalCenterOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  reportCard: {
-    width: '100%',
-    borderRadius: 20,
-    borderWidth: 1,
-    padding: 18,
-  },
-  ratingCard: {
-    width: '100%',
-    borderRadius: 20,
-    borderWidth: 1,
-    padding: 18,
-    alignItems: 'center',
-  },
-  ratingGameTitle: {
-    fontSize: 16,
-    fontWeight: '800',
-    marginTop: 4,
-    marginBottom: 2,
-    textAlign: 'center',
-  },
-  starRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  starRatingHint: {
-    fontSize: 14,
-    fontWeight: '700',
-    marginBottom: 12,
-  },
-  reportHeader: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 6,
-  },
-  reportTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-  },
-  reportSub: {
-    fontSize: 13,
-    marginBottom: 14,
-  },
-  radioRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    marginBottom: 8,
-  },
-  radioLabel: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  notesInput: {
-    width: '100%',
-    borderRadius: 12,
-    borderWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 13,
-    textAlignVertical: 'top',
-    marginTop: 6,
-    marginBottom: 14,
-  },
-});
+import styles from '../styles/GameScreen.styles.js';
+import { useCustomAlert } from '../context/AlertContext';

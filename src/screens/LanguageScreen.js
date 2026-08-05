@@ -1,12 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  FlatList,
 } from 'react-native';
+import AnimatedTouch from '../components/AnimatedTouch';
 import AppLayout from '../components/AppLayout';
 import SafeIcon from '../components/SafeIcon';
 import { useTranslation, SUPPORTED_LANGUAGES } from '../i18n/i18n';
@@ -17,6 +14,7 @@ export default function LanguageScreen({ navigation }) {
   const { theme } = useTheme();
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchMode, setIsSearchMode] = useState(false);
 
   const suggestedLanguages = useMemo(() => {
     return [
@@ -57,151 +55,91 @@ export default function LanguageScreen({ navigation }) {
   };
 
   return (
-    <AppLayout title={t('select_language')} showBack navigation={navigation}>
+    <AppLayout
+      heroTitle={t('select_language')}
+      heroSubtitle="Choose your preferred language"
+      showBack
+      showSearchBtn={true}
+      searchPlaceholder="Search languages..."
+      isHeaderSearching={isSearchMode}
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      onOpenSearch={() => setIsSearchMode(true)}
+      onCloseSearch={() => {
+        setIsSearchMode(false);
+        setSearchQuery('');
+      }}
+      navigation={navigation}
+      scrollable={true}
+    >
       <View style={[styles.container, { backgroundColor: theme.bg }]}>
-        {/* Rounded Pill Search Bar matching Image 3 */}
-        <View style={[styles.pillSearchBox, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
-          <SafeIcon name="search-outline" size={18} color={theme.subText} style={{ marginRight: 10 }} />
-          <TextInput
-            style={[styles.pillSearchInput, { color: theme.text }]}
-            placeholder="Search languages..."
-            placeholderTextColor={theme.subText}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          {searchQuery ? (
-            <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <SafeIcon name="close-circle" size={18} color={theme.subText} />
-            </TouchableOpacity>
-          ) : null}
-        </View>
-
-        <FlatList
-          data={filteredLanguages}
-          keyExtractor={(item) => item.code}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            !searchQuery ? (
-              <>
-                {/* SUGGESTED SECTION */}
-                <Text style={[styles.sectionHeader, { color: theme.subText }]}>SUGGESTED</Text>
-                {suggestedLanguages.map((sug) => {
-                  const isSelected = sug.code === currentLanguage;
-                  return (
-                    <TouchableOpacity
-                      key={sug.code}
-                      style={[
-                        styles.langCard,
-                        {
-                          backgroundColor: theme.cardBg,
-                          borderColor: isSelected ? theme.primary : theme.border,
-                        },
-                      ]}
-                      onPress={() => handleSelectLanguage(sug.code)}
-                      activeOpacity={0.8}
-                    >
-                      <View style={{ flex: 1 }}>
-                        <Text style={[styles.langCardTitle, { color: theme.text }]}>{sug.label}</Text>
-                        <Text style={[styles.langCardSub, { color: theme.subText }]}>{sug.nativeLabel}</Text>
-                      </View>
-                      {isSelected && (
-                        <View style={[styles.checkCircleBadge, { backgroundColor: 'rgba(233,69,96,0.18)', borderColor: theme.primary }]}>
-                          <SafeIcon name="checkmark" size={14} color={theme.primary} />
-                        </View>
-                      )}
-                    </TouchableOpacity>
-                  );
-                })}
-
-                {/* ALL LANGUAGES SECTION */}
-                <Text style={[styles.sectionHeader, { color: theme.subText, marginTop: 18 }]}>ALL LANGUAGES</Text>
-              </>
-            ) : null
-          }
-          renderItem={({ item }) => {
-            const isSelected = item.code === currentLanguage;
-            return (
-              <TouchableOpacity
-                style={[
-                  styles.langCard,
-                  {
-                    backgroundColor: theme.cardBg,
-                    borderColor: isSelected ? theme.primary : theme.border,
-                  },
-                ]}
-                onPress={() => handleSelectLanguage(item.code)}
-                activeOpacity={0.8}
-              >
-                <View style={{ flex: 1 }}>
-                  <Text style={[styles.langCardTitle, { color: theme.text }]}>{item.mainName}</Text>
-                  <Text style={[styles.langCardSub, { color: theme.subText }]}>{item.nativeName}</Text>
-                </View>
-                {isSelected && (
-                  <View style={[styles.checkCircleBadge, { backgroundColor: 'rgba(233,69,96,0.18)', borderColor: theme.primary }]}>
-                    <SafeIcon name="checkmark" size={14} color={theme.primary} />
+        {!searchQuery ? (
+          <>
+            {/* SUGGESTED SECTION */}
+            <Text style={[styles.sectionHeader, { color: theme.subText }]}>{t('suggested')}</Text>
+            {suggestedLanguages.map((sug) => {
+              const isSelected = sug.code === currentLanguage;
+              return (
+                <AnimatedTouch
+                  key={sug.code}
+                  style={[
+                    styles.langCard,
+                    {
+                      backgroundColor: theme.cardBg,
+                      borderColor: isSelected ? theme.primary : theme.border,
+                    },
+                  ]}
+                  onPress={() => handleSelectLanguage(sug.code)}
+                >
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.langCardTitle, { color: theme.text }]}>{sug.nativeLabel}</Text>
+                    <Text style={[styles.langCardSub, { color: theme.subText }]}>{sug.label}</Text>
                   </View>
-                )}
-              </TouchableOpacity>
-            );
-          }}
-        />
+
+                  <SafeIcon
+                    name={isSelected ? 'radio-button-on' : 'radio-button-off'}
+                    size={22}
+                    color={isSelected ? theme.primary : theme.subText}
+                  />
+                </AnimatedTouch>
+              );
+            })}
+
+            {/* ALL LANGUAGES SECTION */}
+            <Text style={[styles.sectionHeader, { color: theme.subText, marginTop: 18 }]}>{t('all_languages')}</Text>
+          </>
+        ) : null}
+
+        {filteredLanguages.filter((item) => item.code !== 'en' && item.code !== 'es').map((item) => {
+          const isSelected = item.code === currentLanguage;
+          return (
+            <AnimatedTouch
+              key={item.code}
+              style={[
+                styles.langCard,
+                {
+                  backgroundColor: theme.cardBg,
+                  borderColor: isSelected ? theme.primary : theme.border,
+                },
+              ]}
+              onPress={() => handleSelectLanguage(item.code)}
+            >
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.langCardTitle, { color: theme.text }]}>{item.mainName}</Text>
+                <Text style={[styles.langCardSub, { color: theme.subText }]}>{item.nativeName}</Text>
+              </View>
+
+              <SafeIcon
+                name={isSelected ? 'radio-button-on' : 'radio-button-off'}
+                size={22}
+                color={isSelected ? theme.primary : theme.subText}
+              />
+            </AnimatedTouch>
+          );
+        })}
       </View>
     </AppLayout>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 16,
-  },
-  pillSearchBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 22,
-    borderWidth: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    marginBottom: 16,
-  },
-  pillSearchInput: {
-    flex: 1,
-    fontSize: 14,
-  },
-  listContent: {
-    paddingBottom: 32,
-  },
-  sectionHeader: {
-    fontSize: 11,
-    fontWeight: '800',
-    letterSpacing: 1,
-    marginBottom: 12,
-  },
-  langCard: {
-    borderRadius: 16,
-    borderWidth: 1,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  langCardTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  langCardSub: {
-    fontSize: 13,
-    marginTop: 2,
-  },
-  checkCircleBadge: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 12,
-  },
-});
+import styles from '../styles/LanguageScreen.styles.js';

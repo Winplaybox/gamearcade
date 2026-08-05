@@ -2,23 +2,58 @@
   "expo": {
     "name": "Game Arcade",
     "slug": "game-arcade",
-    "version": "1.0.1",
+    "scheme": "gamearcade",
+    "version": "1.0.19",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#1D1011",
     "splash": {
-      "image": "./assets/icon.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1D1011"
+      "backgroundColor": "#1D1011",
+      "imageWidth": 642
     },
     "android": {
       "package": "com.winplaybox.gamearcade",
-      "versionCode": 2,
+      "versionCode": 20,
+      "usesCleartextTraffic": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1D1011"
-      }
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "gamearcade"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        },
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "play.winplaybox.in",
+              "pathPrefix": "/game"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-localization",
@@ -29,7 +64,10 @@
           "iosAppId": "ca-app-pub-2699537002342677~7598338278",
           "delayAppMeasurementInit": true
         }
-      ]
+      ],
+      "expo-font",
+      "expo-secure-store",
+      "expo-background-task"
     ]
   }
 }

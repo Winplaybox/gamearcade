@@ -51,19 +51,4 @@ export default function PrimaryButton({
   );
 }
 
-const styles = StyleSheet.create({
-  button: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  titleText: {
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  icon: {
-    marginLeft: 8,
-  },
-});
+import styles from '../../styles/PrimaryButton.styles.js';

@@ -9,6 +9,7 @@ export const DARK_THEME = {
   subText: '#E2BEBF',
   border: 'rgba(226, 190, 191, 0.12)',
   primary: '#E94560',
+  onPrimary: '#FFFFFF',
   accent: '#E94560',
   accentLight: 'rgba(233, 69, 96, 0.16)',
   secondary: '#C3C6D5',

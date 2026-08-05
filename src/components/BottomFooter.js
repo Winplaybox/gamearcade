@@ -1,39 +1,68 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from '../i18n/i18n';
 import { useTheme } from '../theme/ThemeContext';
+import AnimatedTouch from './AnimatedTouch';
+import styles from '../styles/BottomFooter.styles.js';
 
-export default function BottomFooter({ currentTab, navigation }) {
+export default function BottomFooter(props) {
   const { t } = useTranslation();
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
+
+  const { state, navigation, currentTab: propCurrentTab } = props;
 
   const TABS = [
     { key: 'Home', label: t('tab_home') || 'Home', icon: 'home' },
-    { key: 'Browse', label: t('tab_browse') || 'Browse', icon: 'grid' },
+    { key: 'Browse', label: t('tab_browse') || 'Browse', icon: 'compass' },
     { key: 'Favorites', label: t('tab_favorites') || 'Favorites', icon: 'heart' },
     { key: 'Settings', label: t('tab_settings') || 'Settings', icon: 'settings' },
   ];
 
+  // Determine active tab key from React Navigation Tab State or direct prop
+  let activeTabKey = propCurrentTab;
+  if (state && typeof state.index === 'number' && Array.isArray(state.routes)) {
+    activeTabKey = state.routes[state.index]?.name;
+  }
+
   const handleTabPress = (tabKey) => {
-    if (currentTab !== tabKey) {
-      navigation.navigate(tabKey);
+    if (navigation) {
+      if (tabKey === 'Browse') {
+        navigation.navigate('Browse', { category: null, selectedCategory: null, filter: null, reset: Date.now() });
+      } else {
+        navigation.navigate(tabKey);
+      }
     }
   };
 
+  const bottomPadding = Math.max(insets.bottom, 10);
+
   return (
-    <View style={[styles.footerContainer, { backgroundColor: theme.cardBg, borderTopColor: theme.border }]}>
+    <View
+      style={[
+        styles.footerContainer,
+        {
+          backgroundColor: theme.cardBg,
+          borderTopColor: theme.border,
+          paddingTop: 6,
+          paddingBottom: bottomPadding,
+          height: 54 + bottomPadding,
+        },
+      ]}
+    >
       {TABS.map((tab) => {
-        const isActive = currentTab === tab.key;
+        const isActive = activeTabKey === tab.key;
         const iconName = isActive ? tab.icon : `${tab.icon}-outline`;
         const iconColor = isActive ? theme.primary : theme.subText;
 
         return (
-          <TouchableOpacity
+          <AnimatedTouch
             key={tab.key}
             style={styles.tabBtn}
             onPress={() => handleTabPress(tab.key)}
-            activeOpacity={0.7}
+            activeScale={0.92}
           >
             <Ionicons name={iconName} size={22} color={iconColor} />
             <Text
@@ -45,34 +74,9 @@ export default function BottomFooter({ currentTab, navigation }) {
             >
               {tab.label}
             </Text>
-          </TouchableOpacity>
+          </AnimatedTouch>
         );
       })}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  footerContainer: {
-    height: 58,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    borderTopWidth: 1,
-    elevation: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-  },
-  tabBtn: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 6,
-  },
-  tabLabel: {
-    fontSize: 11,
-    marginTop: 2,
-  },
-});

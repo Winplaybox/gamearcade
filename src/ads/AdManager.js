@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
-import { AdUnitIds } from './adUnitIds';
+import AppConfig from '../config/AppConfig';
+import { logAdImpression } from '../services/adMetricsService';
 
 let mobileAdsInstance = null;
 let RewardedAd = null;
@@ -36,8 +37,8 @@ let lastInterstitialTime = 0;
 const APP_OPEN_COOLDOWN_MS = 120000;
 const INTERSTITIAL_COOLDOWN_MS = 60000;
 
-export function maybeShowAppOpenAd(onClose = () => {}) {
-  if (!AppOpenAd || !AdUnitIds.appOpen) {
+export function maybeShowAppOpenAd(onClose = () => {}, screen = 'App Initialization', activity = 'App Start') {
+  if (!AppOpenAd || !AppConfig.ads.appOpen) {
     onClose();
     return;
   }
@@ -49,13 +50,14 @@ export function maybeShowAppOpenAd(onClose = () => {}) {
   }
 
   try {
-    const appOpenAd = AppOpenAd.createForAdRequest(AdUnitIds.appOpen, {
+    const appOpenAd = AppOpenAd.createForAdRequest(AppConfig.ads.appOpen, {
       requestNonPersonalizedAdsOnly: false,
     });
 
     const unsubscribeLoaded = appOpenAd.addAdEventListener(AdEventType.LOADED, () => {
       lastAppOpenTime = Date.now();
       appOpenAd.show();
+      logAdImpression('appOpen', screen, activity);
     });
 
     const unsubscribeClosed = appOpenAd.addAdEventListener(AdEventType.CLOSED, () => {
@@ -70,8 +72,8 @@ export function maybeShowAppOpenAd(onClose = () => {}) {
   }
 }
 
-export function showBackNavInterstitial(onClose = () => {}) {
-  if (!InterstitialAd || !AdUnitIds.interstitial) {
+export function showBackNavInterstitial(onClose = () => {}, screen = 'Unknown', activity = 'Back Navigation') {
+  if (!InterstitialAd || !AppConfig.ads.interstitial) {
     onClose();
     return;
   }
@@ -83,13 +85,14 @@ export function showBackNavInterstitial(onClose = () => {}) {
   }
 
   try {
-    const interstitial = InterstitialAd.createForAdRequest(AdUnitIds.interstitial, {
+    const interstitial = InterstitialAd.createForAdRequest(AppConfig.ads.interstitial, {
       requestNonPersonalizedAdsOnly: false,
     });
 
     const unsubscribeLoaded = interstitial.addAdEventListener(AdEventType.LOADED, () => {
       lastInterstitialTime = Date.now();
       interstitial.show();
+      logAdImpression('interstitial', screen, activity);
     });
 
     const unsubscribeClosed = interstitial.addAdEventListener(AdEventType.CLOSED, () => {
@@ -104,8 +107,8 @@ export function showBackNavInterstitial(onClose = () => {}) {
   }
 }
 
-export function showRewardedAd(onSuccess, onCancel = () => {}) {
-  const targetAdUnit = AdUnitIds.rewarded || AdUnitIds.rewardedInterstitial;
+export function showRewardedAd(onSuccess, onCancel = () => {}, screen = 'Unknown', activity = 'Watch Ad') {
+  const targetAdUnit = AppConfig.ads.rewarded || AppConfig.ads.rewardedInterstitial;
   if (!RewardedAd || !RewardedAdEventType || !targetAdUnit) {
     onSuccess();
     return;
@@ -120,6 +123,7 @@ export function showRewardedAd(onSuccess, onCancel = () => {}) {
 
     const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
       rewarded.show();
+      logAdImpression('rewarded', screen, activity);
     });
 
     const unsubscribeEarned = rewarded.addAdEventListener(RewardedAdEventType.EARNED_REWARD, () => {
@@ -144,4 +148,4 @@ export function showRewardedAd(onSuccess, onCancel = () => {}) {
   }
 }
 
-export const BannerAdUnitId = AdUnitIds.banner;
+export const BannerAdUnitId = AppConfig.ads.banner;

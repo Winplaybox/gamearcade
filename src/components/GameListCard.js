@@ -1,25 +1,49 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Animated } from 'react-native';
 import SafeIcon from './SafeIcon';
 import AnimatedTouch from './AnimatedTouch';
 import { useTheme } from '../theme/ThemeContext';
+import { useTranslation } from '../i18n/i18n';
 
-export default function GameListCard({
+function GameListCardComponent({
   game,
   onPress,
   onLongPress,
   onRightAction,
   subText,
   timeStampText,
-  rightActionType = 'play', // 'play' | 'trash' | 'select'
+  rightActionType = 'play', // 'play' | 'trash' | 'select' | 'playText'
   selectionMode = false,
   isSelected = false,
   ratingScore = '4.6',
+  rankNumber = null,
+  useTextPlayBtn = false,
 }) {
   const { theme } = useTheme();
+  const { t } = useTranslation();
+  
+  const scaleAnim = useRef(new Animated.Value(0.5)).current;
+  const opacityAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        useNativeDriver: true,
+        tension: 50,
+        friction: 7,
+      }),
+      Animated.timing(opacityAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      })
+    ]).start();
+  }, []);
 
   return (
-    <AnimatedTouch
+    <Animated.View style={{ transform: [{ scale: scaleAnim }], opacity: opacityAnim }}>
+      <AnimatedTouch
       style={[
         styles.listCard,
         {
@@ -32,8 +56,26 @@ export default function GameListCard({
       onLongPress={onLongPress}
       activeScale={0.97}
     >
-      {/* 54x54 Thumbnail Image */}
-      <Image source={{ uri: game.iconUrl }} style={styles.thumbnail} />
+      {/* Rank Index Number (Bigger 26px rank number matching Stitch) */}
+      {rankNumber ? (
+        <View style={styles.rankContainer}>
+          <Text style={[styles.rankText, { color: '#E85F6B' }]}>
+            {rankNumber}
+          </Text>
+        </View>
+      ) : null}
+
+      {/* 52x52 Thumbnail Container with Background Logo Placeholder */}
+      <View style={styles.thumbnailWrapper}>
+        <View style={[styles.placeholderBg, { backgroundColor: theme.isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)' }]}>
+          <Image
+            source={require('../../assets/icon.png')}
+            style={styles.logoBgIcon}
+            resizeMode="contain"
+          />
+        </View>
+        <Image source={{ uri: game.iconUrl }} style={styles.thumbnail} />
+      </View>
 
       {/* Meta Text Info */}
       <View style={styles.metaContainer}>
@@ -73,6 +115,20 @@ export default function GameListCard({
         >
           <SafeIcon name="trash-outline" size={20} color="#E94560" />
         </TouchableOpacity>
+      ) : rightActionType === 'playText' || useTextPlayBtn ? (
+        <TouchableOpacity
+          style={[
+            styles.playPillBtn,
+            {
+              backgroundColor: theme.isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)',
+              borderColor: theme.isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)',
+            },
+          ]}
+          onPress={onPress}
+          activeOpacity={0.7}
+        >
+          <Text style={[styles.playPillText, { color: theme.text }]}>{t('play')}</Text>
+        </TouchableOpacity>
       ) : (
         <TouchableOpacity
           style={[styles.playCircleBtn, { backgroundColor: 'rgba(233, 69, 96, 0.15)' }]}
@@ -83,47 +139,10 @@ export default function GameListCard({
         </TouchableOpacity>
       )}
     </AnimatedTouch>
+    </Animated.View>
   );
 }
 
-const styles = StyleSheet.create({
-  listCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 16,
-    padding: 10,
-    marginBottom: 10,
-  },
-  thumbnail: {
-    width: 54,
-    height: 54,
-    borderRadius: 14,
-  },
-  metaContainer: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  title: {
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  subText: {
-    fontSize: 12,
-    marginTop: 2,
-  },
-  timeStampText: {
-    fontSize: 11,
-    fontWeight: '600',
-    marginTop: 3,
-  },
-  actionBtn: {
-    padding: 8,
-  },
-  playCircleBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+export default React.memo(GameListCardComponent);
+
+import styles from '../styles/GameListCard.styles.js';

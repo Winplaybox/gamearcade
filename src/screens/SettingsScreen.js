@@ -1,31 +1,34 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
-  StyleSheet,
   Share,
   Linking,
-  Alert,
-  Modal,
-  FlatList,
-  TouchableWithoutFeedback,
-  TextInput,
   ActivityIndicator,
+  InteractionManager,
+  Image,
+  Switch,
 } from 'react-native';
+import * as StoreReview from 'expo-store-review';
 import { useFocusEffect } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AnimatedTouch from '../components/AnimatedTouch';
 import AppLayout from '../components/AppLayout';
 import SafeIcon from '../components/SafeIcon';
 import AppUpdateModal from '../components/ui/AppUpdateModal';
+import SafeBannerAd from '../components/ui/SafeBannerAd';
 import { useTranslation, SUPPORTED_LANGUAGES } from '../i18n/i18n';
 import { useTheme } from '../theme/ThemeContext';
+import AppConfig from '../config/AppConfig';
 import { getPromotedAppsList, launchAppOrPlayStore } from '../utils/crossAppPromoter';
 import { getRecentGames, clearAllRecentGames, formatDuration } from '../storage/recentGamesStorage';
 import { checkForAppUpdate } from '../services/appUpdateService';
+import { SYNC_STORAGE_KEY } from '../services/authService';
+import { auth, getProfileFromPHP, updateProfileOnPHP, resetProfileOnPHP } from '../config/firebase';
 
 export default function SettingsScreen({ navigation }) {
+  const { showAlert } = useCustomAlert();
   const { t, currentLanguage, setLanguage } = useTranslation();
   const { theme } = useTheme();
 
@@ -42,20 +45,41 @@ export default function SettingsScreen({ navigation }) {
   const [gamesStartedCount, setGamesStartedCount] = useState(0);
   const [totalPlayTimeMs, setTotalPlayTimeMs] = useState(0);
 
+  // App Security
+  const [appLockEnabled, setAppLockEnabled] = useState(false);
+  const APP_LOCK_STORAGE_KEY = 'winplaybox_app_lock_enabled';
+
   useEffect(() => {
     (async () => {
       const apps = await getPromotedAppsList();
       setPromotedApps(apps);
+      
+      const lockState = await AsyncStorage.getItem(APP_LOCK_STORAGE_KEY);
+      if (lockState === 'true') {
+        setAppLockEnabled(true);
+      }
+      
+      const uid = auth.currentUser?.uid;
+      if (uid) {
+        const profile = await getProfileFromPHP(uid);
+        if (profile) {
+          setAppLockEnabled(profile.appLockEnabled);
+          await AsyncStorage.setItem(APP_LOCK_STORAGE_KEY, profile.appLockEnabled ? 'true' : 'false');
+        }
+      }
     })();
   }, []);
 
   useFocusEffect(
     useCallback(() => {
-      getRecentGames().then((history) => {
-        setGamesStartedCount(history.length);
-        const sumMs = history.reduce((acc, item) => acc + (item.durationMs || 120000), 0);
-        setTotalPlayTimeMs(sumMs);
+      const task = InteractionManager.runAfterInteractions(() => {
+        getRecentGames().then((history) => {
+          setGamesStartedCount(history.length);
+          const sumMs = history.reduce((acc, item) => acc + (item.durationMs || 0), 0);
+          setTotalPlayTimeMs(sumMs);
+        });
       });
+      return () => task.cancel();
     }, [])
   );
 
@@ -106,7 +130,7 @@ export default function SettingsScreen({ navigation }) {
       setUpdateInfo(res);
       setUpdateModalVisible(true);
     } else {
-      Alert.alert(
+      showAlert(
         t('app_up_to_date') || 'App Up to Date',
         `You are running the latest version of Game Arcade (v${appVersion}).`,
         [{ text: 'OK' }]
@@ -117,46 +141,43 @@ export default function SettingsScreen({ navigation }) {
   const handleShare = async () => {
     try {
       await Share.share({
-        message: `Play instant HTML5 mini games on Game Arcade without installation!\nhttps://play.google.com/store/apps/details?id=${appPackage}`,
+        message: `Play instant HTML5 mini games on Game Arcade without installation!\n${AppConfig.playStoreUrl}`,
       });
-    } catch (e) {}
+    } catch (e) { }
   };
 
-  const handleRating = () => {
-    const playStoreUrl = `https://play.google.com/store/apps/details?id=${appPackage}`;
-    Linking.openURL(playStoreUrl).catch(() => {});
+  const handleRating = async () => {
+    try {
+      if (await StoreReview.hasAction()) {
+        await StoreReview.requestReview();
+      } else {
+        Linking.openURL(AppConfig.playStoreUrl).catch(() => { });
+      }
+    } catch (error) {
+      Linking.openURL(AppConfig.playStoreUrl).catch(() => { });
+    }
   };
 
   const handleAbout = () => {
-    Alert.alert(
-      t('about_app'),
-      `Game Arcade\nVersion ${appVersion} (Build ${buildCode})\nPackage: ${appPackage}\n\nPlay instant HTML5 mini games online without installation.`,
+    showAlert(
+      'Welcome to Game Arcade! 🎮',
+      `Dive into a world of instant fun with hundreds of premium HTML5 mini-games. No downloads, no installations, just tap and play! Challenge yourself, discover new favorites, and share the joy with friends.\n\nReady to play your next favorite game?\n\nVersion ${appVersion} (Build ${buildCode})`,
       [{ text: 'OK' }]
     );
   };
 
-  const handleClearLocalData = () => {
-    Alert.alert(
-      t('clear_local_cache') || 'Clear Local Data',
-      'Are you sure you want to clear your local game history & cache?',
-      [
-        { text: t('cancel'), style: 'cancel' },
-        {
-          text: t('clear_all') || 'Clear Data',
-          style: 'destructive',
-          onPress: async () => {
-            await clearAllRecentGames();
-            setGamesStartedCount(0);
-            setTotalPlayTimeMs(0);
-            Alert.alert('Success', 'Local data and cache cleared.');
-          },
-        },
-      ]
-    );
+  const toggleAppLock = async (value) => {
+    setAppLockEnabled(value);
+    await AsyncStorage.setItem(APP_LOCK_STORAGE_KEY, value ? 'true' : 'false');
+    
+    const uid = auth.currentUser?.uid;
+    if (uid) {
+      await updateProfileOnPHP(uid, { appLockEnabled: value });
+    }
   };
 
   const handleResetProfileAndData = () => {
-    Alert.alert(
+    showAlert(
       t('reset_profile') || 'Reset Profile & Anonymous Data',
       t('reset_warning') || 'This action will permanently delete your anonymous session data, history, and favorites. This cannot be undone.',
       [
@@ -165,10 +186,16 @@ export default function SettingsScreen({ navigation }) {
           text: t('remove') || 'Permanently Reset',
           style: 'destructive',
           onPress: async () => {
-            await AsyncStorage.clear();
+            const uid = auth.currentUser?.uid;
+            if (uid) {
+              await resetProfileOnPHP(uid);
+            }
+            await clearAllRecentGames();
+            setAppLockEnabled(false);
+            await AsyncStorage.setItem(APP_LOCK_STORAGE_KEY, 'false');
             setGamesStartedCount(0);
             setTotalPlayTimeMs(0);
-            Alert.alert('Profile Reset', 'Your anonymous session data has been completely reset.');
+            showAlert('Profile Reset', 'Your game history, favorites, and app lock have been reset.');
           },
         },
       ]
@@ -177,7 +204,8 @@ export default function SettingsScreen({ navigation }) {
 
   return (
     <AppLayout
-      title={t('tab_settings')}
+      heroTitle={t('tab_settings')}
+      heroSubtitle="Customize your arcade experience"
       currentTab="Settings"
       navigation={navigation}
       scrollable
@@ -192,74 +220,96 @@ export default function SettingsScreen({ navigation }) {
             <Text style={[styles.guestTitle, { color: theme.text }]}>{t('guest_explorer')}</Text>
             <Text style={[styles.guestBadgeText, { color: theme.subText }]}>{t('anonymous_session')}</Text>
           </View>
-          <View style={[styles.activeStatusTag, { backgroundColor: 'rgba(103,220,159,0.15)' }]}>
-            <View style={styles.greenPulseDot} />
-            <Text style={styles.activeStatusText}>{t('active')}</Text>
+          <View style={[styles.activeStatusTag, { backgroundColor: theme.tertiary + '26' }]}>
+            <View style={[styles.greenPulseDot, { backgroundColor: theme.tertiary }]} />
+            <Text style={[styles.activeStatusText, { color: theme.tertiary }]}>
+              Online
+            </Text>
           </View>
         </View>
 
         {/* Your Activity Section */}
         <Text style={[styles.sectionHeader, { color: theme.subText }]}>{t('your_activity')}</Text>
+
         <View style={styles.activityStatsRow}>
-          <View style={[styles.statBox, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
+          <AnimatedTouch
+            style={[styles.statBox, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
+            onPress={() => navigation.navigate('ContinuePlaying')}
+          >
             <SafeIcon name="game-controller" size={22} color={theme.primary} style={{ marginBottom: 4 }} />
             <Text style={[styles.statValueText, { color: theme.text }]}>{gamesStartedCount}</Text>
             <Text style={[styles.statLabelText, { color: theme.subText }]}>{t('games_started')}</Text>
-          </View>
+          </AnimatedTouch>
 
-          <View style={[styles.statBox, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
-            <SafeIcon name="time" size={22} color="#67DC9F" style={{ marginBottom: 4 }} />
+          <AnimatedTouch
+            style={[styles.statBox, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
+            onPress={() => navigation.navigate('ContinuePlaying')}
+          >
+            <SafeIcon name="time" size={22} color={theme.tertiary} style={{ marginBottom: 4 }} />
             <Text style={[styles.statValueText, { color: theme.text }]}>
               {formatDuration(totalPlayTimeMs)}
             </Text>
             <Text style={[styles.statLabelText, { color: theme.subText }]}>{t('total_playtime')}</Text>
-          </View>
+          </AnimatedTouch>
         </View>
 
         {/* Contribute & Support Section */}
         <Text style={[styles.sectionHeader, { color: theme.subText }]}>{t('contribute_feedback')}</Text>
 
         {/* Missing a Game? Submit Game Screen link */}
-        <TouchableOpacity
+        <AnimatedTouch
           style={[styles.menuRow, { borderBottomColor: theme.border }]}
           onPress={() => navigation.navigate('SubmitGame')}
-          activeOpacity={0.7}
         >
-          <SafeIcon name="add-circle-outline" size={24} color={theme.primary} style={styles.menuIcon} />
+          <SafeIcon name="add-circle-outline" size={24} color={theme.text} style={styles.menuIcon} />
           <View style={{ flex: 1 }}>
             <Text style={[styles.menuLabel, { color: theme.text }]}>{t('missing_game')}</Text>
             <Text style={{ fontSize: 12, color: theme.subText, marginTop: 1 }}>{t('contribute_sub')}</Text>
           </View>
           <SafeIcon name="chevron-forward" size={18} color={theme.subText} />
-        </TouchableOpacity>
+        </AnimatedTouch>
 
         {/* Report an Issue Screen link */}
-        <TouchableOpacity
+        <AnimatedTouch
           style={[styles.menuRow, { borderBottomColor: theme.border }]}
           onPress={() => navigation.navigate('ReportIssue')}
-          activeOpacity={0.7}
         >
-          <SafeIcon name="warning-outline" size={24} color="#E94560" style={styles.menuIcon} />
+          <SafeIcon name="warning-outline" size={24} color={theme.text} style={styles.menuIcon} />
           <View style={{ flex: 1 }}>
             <Text style={[styles.menuLabel, { color: theme.text }]}>{t('report_issue_menu')}</Text>
             <Text style={{ fontSize: 12, color: theme.subText, marginTop: 1 }}>{t('report_issue_sub_menu')}</Text>
           </View>
           <SafeIcon name="chevron-forward" size={18} color={theme.subText} />
-        </TouchableOpacity>
+        </AnimatedTouch>
 
         {/* Account & General Preferences Section */}
         <Text style={[styles.sectionHeader, { color: theme.subText }]}>{t('preferences_about')}</Text>
 
+        {/* Biometric App Lock Toggle */}
+        <View style={[styles.menuRow, { borderBottomColor: theme.border }]}>
+          <SafeIcon name="lock-closed-outline" size={24} color={theme.text} style={styles.menuIcon} />
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.menuLabel, { color: theme.text }]}>{t('biometric_app_lock') || 'Biometric App Lock'}</Text>
+            <Text style={{ fontSize: 12, color: theme.subText, marginTop: 1 }}>{t('biometric_app_lock_sub') || 'Require Fingerprint/FaceID to open app'}</Text>
+          </View>
+          <Switch
+            trackColor={{ false: theme.border, true: theme.primary }}
+            thumbColor={theme.onPrimary}
+            ios_backgroundColor={theme.border}
+            onValueChange={toggleAppLock}
+            value={appLockEnabled}
+          />
+        </View>
+
         {/* Manual Check for App Updates Row */}
-        <TouchableOpacity
+        <AnimatedTouch
           style={[styles.menuRow, { borderBottomColor: theme.border }]}
           onPress={handleManualUpdateCheck}
           disabled={checkingUpdate}
-          activeOpacity={0.7}
         >
-          <SafeIcon name="rocket-outline" size={24} color={theme.primary} style={styles.menuIcon} />
+          <SafeIcon name="rocket-outline" size={24} color={theme.text} style={styles.menuIcon} />
           <Text style={[styles.menuLabel, { color: theme.text, flex: 1 }]}>
-            {t('check_for_updates') || 'Check for Updates'}
+            {t('check_for_updates')}
           </Text>
           {checkingUpdate ? (
             <ActivityIndicator size="small" color={theme.primary} />
@@ -268,66 +318,49 @@ export default function SettingsScreen({ navigation }) {
               <Text style={[styles.versionBadgeText, { color: theme.primary }]}>v{appVersion}</Text>
             </View>
           )}
-        </TouchableOpacity>
+        </AnimatedTouch>
 
         {/* Language Selection */}
-        <TouchableOpacity
+        <AnimatedTouch
           style={[styles.menuRow, { borderBottomColor: theme.border }]}
           onPress={() => navigation.navigate('Language')}
-          activeOpacity={0.7}
         >
           <SafeIcon name="globe-outline" size={24} color={theme.text} style={styles.menuIcon} />
-          <Text style={[styles.menuLabel, { color: theme.text }]}>{t('select_language')}</Text>
+          <Text style={[styles.menuLabel, { color: theme.text, flex: 1 }]}>{t('select_language')}</Text>
           <View style={styles.langValueBadge}>
             <Text style={[styles.langValueText, { color: theme.primary }]}>
               {activeLangObj.flag} {activeLangObj.label}
             </Text>
             <SafeIcon name="chevron-forward" size={16} color={theme.subText} style={{ marginLeft: 4 }} />
           </View>
-        </TouchableOpacity>
-
-        {/* Clear Local Data */}
-        <TouchableOpacity
-          style={[styles.menuRow, { borderBottomColor: theme.border }]}
-          onPress={handleClearLocalData}
-          activeOpacity={0.7}
-        >
-          <SafeIcon name="trash-outline" size={24} color={theme.text} style={styles.menuIcon} />
-          <Text style={[styles.menuLabel, { color: theme.text }]}>{t('clear_local_cache')}</Text>
-        </TouchableOpacity>
+        </AnimatedTouch>
 
         {/* About App */}
-        <TouchableOpacity
+        <AnimatedTouch
           style={[styles.menuRow, { borderBottomColor: theme.border }]}
           onPress={handleAbout}
-          activeOpacity={0.7}
         >
           <SafeIcon name="information-circle-outline" size={24} color={theme.text} style={styles.menuIcon} />
           <Text style={[styles.menuLabel, { color: theme.text }]}>{t('about_app')}</Text>
-          <View style={styles.versionBadge}>
-            <Text style={[styles.versionBadgeText, { color: theme.primary }]}>v{appVersion}</Text>
-          </View>
-        </TouchableOpacity>
+        </AnimatedTouch>
 
         {/* Share App */}
-        <TouchableOpacity
+        <AnimatedTouch
           style={[styles.menuRow, { borderBottomColor: theme.border }]}
           onPress={handleShare}
-          activeOpacity={0.7}
         >
           <SafeIcon name="share-social-outline" size={24} color={theme.text} style={styles.menuIcon} />
           <Text style={[styles.menuLabel, { color: theme.text }]}>{t('share_app')}</Text>
-        </TouchableOpacity>
+        </AnimatedTouch>
 
         {/* Rate App */}
-        <TouchableOpacity
+        <AnimatedTouch
           style={[styles.menuRow, { borderBottomColor: theme.border }]}
           onPress={handleRating}
-          activeOpacity={0.7}
         >
           <SafeIcon name="star-outline" size={24} color={theme.text} style={styles.menuIcon} />
           <Text style={[styles.menuLabel, { color: theme.text }]}>{t('rate_app')}</Text>
-        </TouchableOpacity>
+        </AnimatedTouch>
 
         {/* Dynamic More Apps by Winplaybox Section */}
         {promotedApps.length > 0 && (
@@ -337,32 +370,30 @@ export default function SettingsScreen({ navigation }) {
             </Text>
 
             {promotedApps.map((app) => (
-              <TouchableOpacity
+              <AnimatedTouch
                 key={app.id}
                 style={[styles.menuRow, { borderBottomColor: theme.border }]}
                 onPress={() => launchAppOrPlayStore(app)}
-                activeOpacity={0.7}
               >
-                <SafeIcon name={app.icon || 'apps-outline'} size={24} color={app.iconColor || theme.primary} style={styles.menuIcon} />
+                <SafeIcon name={app.icon || 'grid-outline'} size={24} color={app.iconColor || theme.primary} style={styles.menuIcon} />
                 <View style={{ flex: 1 }}>
                   <Text style={[styles.menuLabel, { color: theme.text }]}>{app.name}</Text>
                   <Text style={{ fontSize: 12, color: theme.subText, marginTop: 2 }}>{app.description}</Text>
                 </View>
                 <SafeIcon name="open-outline" size={18} color={theme.subText} />
-              </TouchableOpacity>
+              </AnimatedTouch>
             ))}
           </>
         )}
 
         {/* Reset Profile & Anonymous Data Danger Button */}
-        <TouchableOpacity
-          style={[styles.resetDangerBtn, { backgroundColor: 'rgba(233,69,96,0.12)', borderColor: 'rgba(233,69,96,0.3)' }]}
+        <AnimatedTouch
+          style={[styles.resetDangerBtn, { backgroundColor: theme.accentLight, borderColor: theme.primary + '4D' }]}
           onPress={handleResetProfileAndData}
-          activeOpacity={0.8}
         >
-          <SafeIcon name="alert-circle-outline" size={20} color="#E94560" style={{ marginRight: 8 }} />
-          <Text style={styles.resetDangerText}>{t('reset_profile')}</Text>
-        </TouchableOpacity>
+          <SafeIcon name="alert-circle-outline" size={20} color={theme.primary} style={{ marginRight: 8 }} />
+          <Text style={[styles.resetDangerText, { color: theme.primary }]}>{t('reset_profile')}</Text>
+        </AnimatedTouch>
         <Text style={[styles.resetWarningSubText, { color: theme.subText }]}>
           {t('reset_warning')}
         </Text>
@@ -377,6 +408,7 @@ export default function SettingsScreen({ navigation }) {
             © {new Date().getFullYear()} Winplaybox. All rights reserved.
           </Text>
         </View>
+        <SafeBannerAd />
       </View>
 
       {/* Manual In-App Update Modal */}
@@ -389,221 +421,5 @@ export default function SettingsScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    paddingVertical: 8,
-  },
-  guestCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: 14,
-    marginHorizontal: 20,
-    marginTop: 8,
-    marginBottom: 12,
-  },
-  guestAvatarCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  guestTitle: {
-    fontSize: 16,
-    fontWeight: '800',
-  },
-  guestBadgeText: {
-    fontSize: 12,
-    marginTop: 2,
-  },
-  activeStatusTag: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  greenPulseDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#67DC9F',
-    marginRight: 5,
-  },
-  activeStatusText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#67DC9F',
-  },
-  sectionHeader: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    letterSpacing: 1,
-    marginTop: 20,
-    marginBottom: 8,
-    paddingHorizontal: 20,
-  },
-  activityStatsRow: {
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    marginBottom: 8,
-    justifyContent: 'space-between',
-  },
-  statBox: {
-    width: '48%',
-    borderRadius: 16,
-    borderWidth: 1,
-    padding: 14,
-    alignItems: 'flex-start',
-  },
-  statValueText: {
-    fontSize: 20,
-    fontWeight: '800',
-    marginTop: 2,
-  },
-  statLabelText: {
-    fontSize: 12,
-    fontWeight: '500',
-    marginTop: 2,
-  },
-  menuRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-  },
-  menuIcon: {
-    marginRight: 16,
-  },
-  menuLabel: {
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  langValueBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  langValueText: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  versionBadge: {
-    backgroundColor: 'rgba(233, 69, 96, 0.1)',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  versionBadgeText: {
-    fontSize: 13,
-    fontWeight: 'bold',
-  },
-  resetDangerBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: 20,
-    marginTop: 28,
-    paddingVertical: 14,
-    borderRadius: 16,
-    borderWidth: 1,
-  },
-  resetDangerText: {
-    color: '#E94560',
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  resetWarningSubText: {
-    fontSize: 11,
-    textAlign: 'center',
-    marginTop: 8,
-    paddingHorizontal: 30,
-    lineHeight: 16,
-  },
-  versionFooter: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 32,
-    paddingHorizontal: 20,
-  },
-  versionFooterTitle: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    marginBottom: 2,
-  },
-  versionFooterSub: {
-    fontSize: 13,
-    fontWeight: '500',
-    marginBottom: 4,
-  },
-  versionFooterCopy: {
-    fontSize: 11,
-  },
-  langScreenContainer: {
-    flex: 1,
-    paddingTop: 48,
-    paddingHorizontal: 20,
-  },
-  langScreenHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  langBackBtn: {
-    padding: 6,
-    marginRight: 12,
-  },
-  langScreenTitle: {
-    fontSize: 22,
-    fontWeight: '800',
-  },
-  langPillSearchBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 22,
-    borderWidth: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    marginBottom: 20,
-  },
-  langPillSearchInput: {
-    flex: 1,
-    fontSize: 14,
-  },
-  langListContent: {
-    paddingBottom: 32,
-  },
-  langSectionHeader: {
-    fontSize: 11,
-    fontWeight: '800',
-    letterSpacing: 1,
-    marginBottom: 12,
-  },
-  langCard: {
-    borderRadius: 16,
-    borderWidth: 1,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  langCardTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  langCardSub: {
-    fontSize: 13,
-    marginTop: 2,
-  },
-  checkCircleBadge: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 12,
-  },
-});
+import styles from '../styles/SettingsScreen.styles.js';
+import { useCustomAlert } from '../context/AlertContext';
