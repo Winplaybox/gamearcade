@@ -68,6 +68,12 @@
       "expo-font",
       "expo-secure-store",
       "expo-background-task"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c825b1fc-b90b-46bc-8020-125ba3af233e"
+      }
+    },
+    "owner": "winplaybox"
   }
 }
