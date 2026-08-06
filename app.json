@@ -67,7 +67,15 @@
       ],
       "expo-font",
       "expo-secure-store",
-      "expo-background-task"
+      "expo-background-task",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "gradleJvmArgs": "-Xmx4096m -XX:MaxMetaspaceSize=1024m"
+          }
+        }
+      ]
     ],
     "extra": {
       "eas": {
