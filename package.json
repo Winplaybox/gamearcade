@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@expo-google-fonts/outfit": "^0.4.3",
-    "@expo/config-plugins": "54.0.5",
     "@expo/env": "^2.4.2",
     "@firebase/app": "^0.15.1",
     "@firebase/firestore": "^4.16.0",
@@ -27,7 +26,7 @@
     "@react-navigation/native-stack": "^6.9.26",
     "expo": "~54.0.0",
     "expo-background-task": "~1.0.10",
-    "expo-blur": "^57.0.2",
+    "expo-blur": "~15.0.8",
     "expo-build-properties": "~1.0.10",
     "expo-clipboard": "~8.0.8",
     "expo-font": "~14.0.12",
