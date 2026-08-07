@@ -222,7 +222,7 @@ export default function SubmitGameScreen({ route, navigation }) {
           borderRadius={26}
         />
 
-        {/* Bottom Back to Settings Link */}
+        {/* Bottom Back Link */}
         <AnimatedTouch
           style={styles.backLinkBtn}
           onPress={() => {

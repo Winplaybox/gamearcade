@@ -3,7 +3,7 @@
     "name": "Game Arcade",
     "slug": "game-arcade",
     "scheme": "gamearcade",
-    "version": "1.0.19",
+    "version": "1.0.20",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -16,7 +16,7 @@
     },
     "android": {
       "package": "com.winplaybox.gamearcade",
-      "versionCode": 20,
+      "versionCode": 21,
       "usesCleartextTraffic": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

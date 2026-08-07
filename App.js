@@ -51,8 +51,10 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
-        // Prevent users from taking screenshots or screen recording
-        await ScreenCapture.preventScreenCaptureAsync();
+        // Prevent users from taking screenshots or screen recording (Production only)
+        if (!__DEV__) {
+          await ScreenCapture.preventScreenCaptureAsync();
+        }
 
         // Check for biometrics if enabled in settings
         const lockEnabledStr = await AsyncStorage.getItem('winplaybox_app_lock_enabled');

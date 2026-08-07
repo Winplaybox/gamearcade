@@ -14,6 +14,7 @@ Comprehensive Google Play Console store listing specifications, keywords, graphi
 - **Developer Name**: Winplaybox
 - **Contact Email**: `admin@winplaybox.com`
 - **Privacy Policy URL**: `https://winplaybox.in/privacy-policy.html`
+- **Store Tags (Max 5)**: Arcade, Casual, Action, Puzzle, Racing
 
 ---
 
