@@ -67,27 +67,34 @@ Experience pure arcade fun anytime, anywhere! Download Game Arcade today and sta
 • Fullscreen immersive game engine with mute & reload controls.
 • Sleek obsidian dark theme (#0B0D12) with multi-language support.
 </en-US>
-<hi>
-🎉 गेम आर्केड v1.0.0 का पहला रिलीज़!
-• बिना डाउनलोड या इंस्टॉल किए 100+ तुरंत खेले जाने वाले मिनी-गेम्स खेलें।
-• एक्शन, आर्केड, पज़ल, स्पोर्ट्स और रेसिंग कैटगरी।
-• पसंदीदा गेम्स को 1-टैप में सेव करें।
-• फुलस्क्रीन गेमिंग इंजन और डार्क मोड।
-</hi>
-<es>
+<es-ES>
 🎉 ¡Lanzamiento inicial de Game Arcade v1.0.0!
 • Juega a más de 100 minijuegos HTML5 instantáneos sin descargas ni instalaciones.
 • Categorías: Acción, Arcade, Puzzles, Deportes y Carreras.
 • Guarda tus juegos favoritos con un solo toque.
 • Modo pantalla completa y tema oscuro elegante (#0B0D12).
-</es>
-<pt>
+</es-ES>
+<fr-FR>
+🎉 Lancement initial de Game Arcade v1.0.0 !
+• Jouez à plus de 100 mini-jeux HTML5 instantanés sans téléchargement ni installation.
+• Catégories: Action, Arcade, Puzzle, Sports et Course.
+• Sauvegardez vos jeux préférés en un clic.
+• Moteur de jeu immersif en plein écran et thème sombre élégant.
+</fr-FR>
+<hi-IN>
+🎉 गेम आर्केड v1.0.0 का पहला रिलीज़!
+• बिना डाउनलोड या इंस्टॉल किए 100+ तुरंत खेले जाने वाले मिनी-गेम्स खेलें।
+• एक्शन, आर्केड, पज़ल, स्पोर्ट्स और रेसिंग कैटगरी।
+• पसंदीदा गेम्स को 1-टैप में सेव करें।
+• फुलस्क्रीन गेमिंग इंजन और डार्क मोड।
+</hi-IN>
+<pt-BR>
 🎉 Lançamento inicial do Game Arcade v1.0.0!
 • Jogue mais de 100 minijogos HTML5 instantâneos sem downloads nem instalações.
 • Categorias: Ação, Arcade, Puzzle, Esportes e Corrida.
 • Salve seus jogos favoritos com 1 toque.
 • Modo tela cheia e tema escuro elegante.
-</pt>
+</pt-BR>
 <id>
 🎉 Rilis Perdana Game Arcade v1.0.0!
 • Mainkan 100+ game mini HTML5 instan tanpa unduh atau instal.

@@ -1,6 +1,6 @@
 {
   "name": "gamearcade",
-  "version": "1.0.20",
+  "version": "1.0.0",
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
